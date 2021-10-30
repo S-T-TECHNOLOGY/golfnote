@@ -15,7 +15,7 @@ class CreateMailOtpsTable extends Migration
     {
         Schema::create('mail_otps', function (Blueprint $table) {
             $table->id();
-            $table->string('otp',10);
+            $table->string('code');
             $table->bigInteger('user_id');
             $table->string('type');
             $table->boolean('verified')->default(false);

@@ -4,19 +4,21 @@
 namespace App\Mail;
 
 
+use App\Constants\MailOtpType;
 use App\Definitions\OTPType;
 use Carbon\Carbon;
 use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\URL;
 
 class SendOTP extends Mailable
 {
     private $email;
-    private $otp;
+    private $code;
     private $type;
-    public function __construct($email, $otp, $type)
+    public function __construct($email, $code, $type)
     {
         $this->email = $email;
-        $this->otp = $otp;
+        $this->code = $code;
         $this->type = $type;
     }
 
@@ -26,17 +28,10 @@ class SendOTP extends Mailable
         $title = '';
         $content = '';
         switch ($this->type) {
-            case OTPType::TYPE_REGISTER:
-                $title = 'OTP Đăng ký';
-                $content = 'Bạn đã đăng ký thành công, đây là mã kích hoạt tài khoản của bạn :';
-                break;
-            case OTPType::TYPE_FORGOT_PASSWORD:
-                $title = 'OTP Quên mật khẩu';
-                $content = 'Bạn dùng mã này để lấy lại mật khẩu :';
-                break;
-            case OTPType::TYPE_UPDATE_PROFILE:
-                $title = 'OTP cập nhập email';
-                $content = 'Bạn dùng mã này để cập nhật email :';
+            case MailOtpType::TYPE_REGISTER:
+                $title = 'Kích hoạt tài khoản';
+                $header = 'Chào mừng bạn đến với GoflNote';
+                $content = 'Nhấp vào liên kết bên dưới để kích hoạt tài khoản của bạn';
                 break;
 
 
@@ -45,8 +40,8 @@ class SendOTP extends Mailable
             ->subject($title . ' ' . $date )
             ->to($this->email)
             ->with([
-                'otp' => $this->otp,
-                'title' => $title,
+                'code' => $this->code,
+                'header' => $header,
                 'content'  => $content,
             ]);
     }

@@ -8,7 +8,6 @@ use App\Constants\ActiveStatus;
 use App\Models\MailOtp;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 
 class ActiveAccountController extends Controller
@@ -21,6 +20,7 @@ class ActiveAccountController extends Controller
             $user->active = ActiveStatus::ACTIVE;
             $user->save();
             $mailOtp->verified = ActiveStatus::ACTIVE;
+            $mailOtp->save();
         }
         return view('users.active');
     }

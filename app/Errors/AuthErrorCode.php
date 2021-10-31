@@ -6,6 +6,7 @@ namespace App\Errors;
 
 class AuthErrorCode
 {
-    const USER_NOT_ACTIVE = 'user_not_active';
-    const ACCOUNT_INVALID = 'account_invalid';
+    const PASSWORD_WRONG = 2;
+    const EMAIL_WRONG = 1;
+    const USER_NOT_ACTIVE = 3;
 }

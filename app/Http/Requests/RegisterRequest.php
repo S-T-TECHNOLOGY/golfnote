@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Errors\RegisterErrorCode;
 use App\Exceptions\BusinessException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -39,7 +40,7 @@ class RegisterRequest extends FormRequest
     {
         $failedRules = $validator->failed();
         if (isset($failedRules['email']['Unique'])) {
-            throw  new BusinessException('Email đã được đăng ký', 'email_exists');
+            throw  new BusinessException('Email đã được đăng ký', RegisterErrorCode::EMAIL_EXISTS);
         }
         parent::failedValidation($validator);
     }

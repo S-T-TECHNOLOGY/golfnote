@@ -34,9 +34,14 @@ class AuthService
 
     public function login($params)
     {
+        $user = User::where('email', $params['email'])->first();
+        if (!$user) {
+            throw new BusinessException('Email không hợp lệ', AuthErrorCode::EMAIL_WRONG);
+        }
+
         $token = JWTAuth::attempt($params);
         if (!$token) {
-            throw new BusinessException('Email hoặc password không đúng', AuthErrorCode::ACCOUNT_INVALID);
+            throw new BusinessException('Password không đúng', AuthErrorCode::PASSWORD_WRONG);
         }
 
         $user = JWTAuth::user();

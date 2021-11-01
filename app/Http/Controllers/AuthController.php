@@ -16,12 +16,14 @@ class AuthController extends AppBaseController
         $this->authService = $authService;
     }
 
-    public function register(RegisterRequest $request) {
+    public function register(RegisterRequest $request)
+    {
         $user = $this->authService->register($request->all());
         return $this->sendResponse($user);
     }
 
-    public function login(LoginRequest $request) {
+    public function login(LoginRequest $request)
+    {
         $params = $request->only('email', 'password');
         $data = $this->authService->login($params);
         return $this->sendResponse($data);

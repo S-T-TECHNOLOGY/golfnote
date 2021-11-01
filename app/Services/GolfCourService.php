@@ -13,7 +13,8 @@ use App\Models\GolfCourse;
 
 class GolfCourService
 {
-    public function getGolfCourse($params) {
+    public function getGolfCourse($params)
+    {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
         $golfCourses = GolfCourse::when(!empty($key), function ($query) use ($key) {
@@ -23,7 +24,8 @@ class GolfCourService
         return new GolfCourseCollection($golfCourses);
     }
 
-    public function getGolfCourseDetail($id) {
+    public function getGolfCourseDetail($id)
+    {
         $golfCourse = GolfCourse::where('id', $id)->first();
         if (!$golfCourse) {
             throw new BusinessException('Không tìm thấy sân golf', GolfCourseErrorCode::GOLF_COURSE_NOT_FOUND);

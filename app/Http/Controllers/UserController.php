@@ -6,7 +6,8 @@ use JWTAuth;
 
 class UserController extends AppBaseController
 {
-    public function getUser() {
+    public function getUser()
+    {
         $user = JWTAuth::user();
         return $this->sendResponse($user);
     }

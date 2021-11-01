@@ -12,6 +12,7 @@
         "laravel/passport": "^10.1",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "nesbot/carbon": "^2.53",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

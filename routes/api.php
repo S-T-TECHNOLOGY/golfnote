@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GolfCourseController;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +23,6 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/golfs', [GolfCourseController::class, 'getGolfCourses']);
     Route::get('/golf/{id}', [GolfCourseController::class, 'getGolfCourseDetail']);
+    Route::get('/events', [EventController::class, 'getAll']);
+    Route::get('/event/{id}', [EventController::class, 'getEventDetail']);
 });

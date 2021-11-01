@@ -17,12 +17,14 @@ class GolfCourseController extends AppBaseController
         $this->golfCourseService = $golfCourService;
     }
 
-    public function getGolfCourses(Request $request) {
+    public function getGolfCourses(Request $request)
+    {
         $data = $this->golfCourseService->getGolfCourse($request->all());
         return $this->sendResponse($data);
     }
 
-    public function getGolfCourseDetail($id) {
+    public function getGolfCourseDetail($id)
+    {
         $golfCourse = $this->golfCourseService->getGolfCourseDetail($id);
         return $this->sendResponse($golfCourse);
     }

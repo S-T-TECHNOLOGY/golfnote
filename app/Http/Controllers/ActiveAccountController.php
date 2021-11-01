@@ -12,7 +12,8 @@ use Illuminate\Http\Request;
 
 class ActiveAccountController extends Controller
 {
-    public function activate(Request $request) {
+    public function activate(Request $request)
+    {
         $code = $request->code;
         $mailOtp = MailOtp::where('code', $code)->where('verified', ActiveStatus::INACTIVE)->first();
         if ($mailOtp) {

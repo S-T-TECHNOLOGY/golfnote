@@ -24,6 +24,7 @@ class CreateGolfCoursesTable extends Migration
             $table->integer('price');
             $table->integer('number_hole');
             $table->text('description');
+            $table->boolean('is_open')->default(1);
             $table->timestamps();
         });
     }

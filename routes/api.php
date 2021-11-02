@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GolfCourseController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\CityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ use App\Http\Controllers\EventController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/cities', [CityController::class, 'getCities']);
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/golfs', [GolfCourseController::class, 'getGolfCourses']);

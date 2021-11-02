@@ -17,7 +17,7 @@ class EventService
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $now = date('Y-m-d H:i:s');
-        $events = Event::where('end_date', '>=', $now)->paginate($limit);
+        $events = Event::where('end_date', '>=', $now)->orderBy('id', 'desc')->paginate($limit);
 
         return new EventCollection($events);
     }

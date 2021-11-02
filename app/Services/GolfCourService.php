@@ -19,7 +19,7 @@ class GolfCourService
         $key = isset($params['key']) ? $params['key'] : '';
         $golfCourses = GolfCourse::when(!empty($key), function ($query) use ($key) {
             return $query->where('name', 'like', '%'.$key.'%' );
-        })->paginate($limit);
+        })->orderBy('id', 'desc')->paginate($limit);
 
         return new GolfCourseCollection($golfCourses);
     }

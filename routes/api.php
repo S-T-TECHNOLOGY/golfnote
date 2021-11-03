@@ -7,6 +7,7 @@ use App\Http\Controllers\GolfCourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\OldThingController;
+use App\Http\Controllers\MarketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,6 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/event/{id}', [EventController::class, 'getEventDetail']);
     Route::get('/old_things', [OldThingController::class, 'getAll']);
     Route::get('/old_thing/{id}', [OldThingController::class, 'getDetail']);
+    Route::get('/markets', [MarketController::class, 'getAll']);
+    Route::get('/market/{id}', [MarketController::class, 'getDetail']);
 });

@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Constants\MailOtpType;
 use App\Errors\AuthErrorCode;
 use App\Exceptions\BusinessException;
+use App\Mail\ForgotPassword;
 use App\Mail\SendOTP;
 use App\Models\MailOtp;
 use App\Models\User;
@@ -53,6 +54,18 @@ class AuthService
             'access_token' => $token,
             'user' => $user
         ];
+    }
 
+    public function forgotPassword($params)
+    {
+        $email = $params['email'];
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            throw new BusinessException('Email không đúng', AuthErrorCode::USER_NOT_ACTIVE);
+        }
+        $password = Str::random(8);
+        Mail::queue(new ForgotPassword($email, $password));
+
+        return new \stdClass();
     }
 }

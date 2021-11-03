@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Services\AuthService;
@@ -26,6 +27,12 @@ class AuthController extends AppBaseController
     {
         $params = $request->only('email', 'password');
         $data = $this->authService->login($params);
+        return $this->sendResponse($data);
+    }
+
+    public function forgotPassword(ForgotPasswordRequest $request)
+    {
+        $data = $this->authService->forgotPassword($request->all());
         return $this->sendResponse($data);
     }
 

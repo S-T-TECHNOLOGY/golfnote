@@ -8,7 +8,6 @@ use App\Constants\MailOtpType;
 use App\Definitions\OTPType;
 use Carbon\Carbon;
 use Illuminate\Mail\Mailable;
-use Illuminate\Support\Facades\URL;
 
 class SendOTP extends Mailable
 {

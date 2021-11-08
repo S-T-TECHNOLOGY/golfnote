@@ -4,7 +4,6 @@
 namespace App\Mail;
 
 
-use App\Constants\MailOtpType;
 use Carbon\Carbon;
 use Illuminate\Mail\Mailable;
 

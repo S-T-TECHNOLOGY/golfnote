@@ -26,6 +26,7 @@ Route::get('/cities', [CityController::class, 'getCities']);
 Route::post('/forgot_pass', [AuthController::class, 'forgotPassword']);
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/user', [UserController::class, 'getUser']);
+    Route::get('/users', [UserController::class, 'find']);
     Route::get('/golfs', [GolfCourseController::class, 'getGolfCourses']);
     Route::get('/golf/{id}', [GolfCourseController::class, 'getGolfCourseDetail']);
     Route::get('/events', [EventController::class, 'getAll']);

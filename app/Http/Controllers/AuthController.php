@@ -25,8 +25,7 @@ class AuthController extends AppBaseController
 
     public function login(LoginRequest $request)
     {
-        $params = $request->only('email', 'password');
-        $data = $this->authService->login($params);
+        $data = $this->authService->login($request->all());
         return $this->sendResponse($data);
     }
 

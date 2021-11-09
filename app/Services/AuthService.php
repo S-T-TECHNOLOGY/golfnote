@@ -41,15 +41,23 @@ class AuthService
             throw new BusinessException('Email không hợp lệ', AuthErrorCode::EMAIL_WRONG);
         }
 
-        $token = JWTAuth::attempt($params);
+        if (!$user->active) {
+            throw new BusinessException('Tài khoản chưa được kích hoạt', AuthErrorCode::USER_NOT_ACTIVE);
+        }
+
+        $attempt = [
+            'email' => $params['email'],
+            'password' =>$params['password']
+        ];
+
+        $token = JWTAuth::attempt($attempt);
         if (!$token) {
             throw new BusinessException('Password không đúng', AuthErrorCode::PASSWORD_WRONG);
         }
 
-        $user = JWTAuth::user();
-        if (!$user->active) {
-            throw new BusinessException('Tài khoản chưa được kích hoạt', AuthErrorCode::USER_NOT_ACTIVE);
-        }
+        $user->fcm_token = $params['fcm_token'];
+        $user->device = $params['device'];
+        $user->save();
 
         return [
             'access_token' => $token,
@@ -62,7 +70,7 @@ class AuthService
         $email = $params['email'];
         $user = User::where('email', $email)->first();
         if (!$user) {
-            throw new BusinessException('Email không đúng', AuthErrorCode::USER_NOT_ACTIVE);
+            throw new BusinessException('Email không đúng', AuthErrorCode::USER_NOT_FOUND);
         }
         $password = Str::random(8);
         Mail::queue(new ForgotPassword($email, $password));

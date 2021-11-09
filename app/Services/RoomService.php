@@ -1,0 +1,70 @@
+<?php
+
+
+namespace App\Services;
+
+
+use App\Constants\Consts;
+use App\Constants\RoomStatus;
+use App\Errors\RoomErrorCode;
+use App\Exceptions\BusinessException;
+use App\Models\Room;
+use App\Models\RoomPlayer;
+use App\Models\User;
+use App\Traists\PushNotificationTraist;
+
+class RoomService
+{
+    use PushNotificationTraist;
+    public function createRoom($params, $user)
+    {
+        $players = $params['players'];
+        if (!sizeof($players)) {
+            throw new BusinessException('Phòng chơi phải có ít nhất 2 người', RoomErrorCode::MIN_SLOT_IN_ROOM_ERROR);
+        }
+
+        if (sizeof($players) > Consts::NUMBER_SLOT_MAX_ROOM - 1) {
+            throw new BusinessException('Tối đa được 5 người chơi trong một phòng', RoomErrorCode::MAXIMUM_SLOT_IN_ROOM_ERROR);
+        }
+
+        $roomParams = [
+            'owner_id' => $user->id,
+            'status' => RoomStatus::GOING_ON_STATUS
+        ];
+
+        $room = Room::create($roomParams);
+        $userIds = collect($players)->filter(function ($player) {
+            return $player['user_id'] > 0;
+        })->pluck('user_id')->all();
+        array_unshift($userIds, $user->id);
+
+        $guests = collect($players)->filter(function ($player) {
+            return $player['user_id'] === 0;
+        })->map(function ($player) use ($room) {
+            $player['room_id'] = $room->id;
+            return $player;
+        })->all();
+
+        $users = User::whereIn('id', $userIds)->get();
+        $members = collect($users)->map(function ($user) use ($room) {
+            $member = [
+                'room_id' => $room->id,
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'phone' => $user->phone
+            ];
+
+            return $member;
+        })->all();
+
+        $players = array_merge($members, $guests);
+        RoomPlayer::insert($players);
+        $data = [
+            'id' => $room->id,
+            'players' => $players
+        ];
+
+        return $data;
+    }
+
+}

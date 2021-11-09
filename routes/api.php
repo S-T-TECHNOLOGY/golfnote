@@ -8,6 +8,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\OldThingController;
 use App\Http\Controllers\MarketController;
+use App\Http\Controllers\RoomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +36,5 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/old_thing/{id}', [OldThingController::class, 'getDetail']);
     Route::get('/markets', [MarketController::class, 'getAll']);
     Route::get('/market/{id}', [MarketController::class, 'getDetail']);
+    Route::post('/room', [RoomController::class, 'createRoom']);
 });

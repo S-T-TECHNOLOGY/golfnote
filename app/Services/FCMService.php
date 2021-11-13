@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class FCMService
 {
@@ -21,30 +22,42 @@ class FCMService
         ];
     }
 
-    public function send($token, $notification, $data)
+    public function send($token, $data, $device)
     {
-        if ($data['device'] === $this->apiConfig['device']['ios']) {
+        $content = [
+            "title" => "Golfnote",
+            "body" => "Send Notification",
+            'sound' => config('firebase.sound')
+        ];
+
+        if ($device === $this->apiConfig['device']['ios']) {
             $fields = [
                 'to'   => $token,
-                'notification' => $notification,
+                'notification' => $content,
                 'data' => $data
             ];
         } else {
             $fields = [
                 'to'   => $token,
-                'data' => array_merge($data, $notification)
+                'data' => array_merge($data, $content)
             ];
         }
 
         return $this->sendPushNotification($fields);
     }
 
-    public function sendMultiple($device_tokens, $notification, $data)
+    public function sendMultiple($device_tokens, $data)
     {
+        $content = [
+            "title" => "Golfnote",
+            "body" => "Send Notification",
+            'sound' => config('firebase.sound')
+        ];
+
         $fields = [
             'registration_ids' => $device_tokens,
             'data' => $data,
-            'notification' => $notification
+            'notification' => $content
         ];
 
         return $this->sendPushNotification($fields);
@@ -59,6 +72,7 @@ class FCMService
                 'Authorization' => 'key='. $this->apiConfig['server_key'],
             ]
         ]);
+
         $res = $client->post(
             $this->apiConfig['url'],
             ['body' => json_encode($fields)]

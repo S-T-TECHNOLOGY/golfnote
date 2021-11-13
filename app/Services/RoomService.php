@@ -8,6 +8,7 @@ use App\Constants\Consts;
 use App\Constants\RoomStatus;
 use App\Errors\RoomErrorCode;
 use App\Exceptions\BusinessException;
+use App\Jobs\SendNotificationCreateRoom;
 use App\Models\Room;
 use App\Models\RoomPlayer;
 use App\Models\User;
@@ -59,11 +60,25 @@ class RoomService
 
         $players = array_merge($members, $guests);
         RoomPlayer::insert($players);
+
+        $players = collect($players)->filter(function ($player) use ($user) {
+            return $player['user_id'] !== $user->id;
+        })->map(function ($player) {
+            return collect($player)->only(['user_id', 'name', 'phone'])->all();
+        })->values();
+
         $data = [
-            'id' => $room->id,
+            'room_id' => $room->id,
+            'owner' => [
+              'user_id' => $user->id,
+              'name' => $user->name,
+              'phone' => $user->phone
+            ],
             'players' => $players
         ];
 
+        $users = collect($users)->where('id', '!=', $user->id)->values();
+        SendNotificationCreateRoom::dispatch($user, $users, $room);
         return $data;
     }
 

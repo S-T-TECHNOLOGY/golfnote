@@ -8,17 +8,17 @@ use App\Services\FCMService;
 
 trait PushNotificationTraist
 {
-    public function pushMessage($deviceToken, array $notification, array $data)
+    public function pushMessage($deviceToken, array $data, $device)
     {
         $pushNotificationService = new FCMService();
 
-        return $pushNotificationService->send($deviceToken, $notification, $data);
+        return $pushNotificationService->send($deviceToken, $data, $device);
     }
 
-    public function pushMultMessages(array $deviceTokens, array $notification, array $data)
+    public function pushMultMessages(array $deviceTokens, array $data)
     {
         $pushNotificationService = new FCMService();
 
-        return $pushNotificationService->sendMultiple($deviceTokens, $notification, $data);
+        return $pushNotificationService->sendMultiple($deviceTokens, $data);
     }
 }

@@ -14,6 +14,9 @@ class UserService
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
+        if (empty($key)) {
+            return [];
+        }
         $users = User::when(!empty($key), function ($query) use ($key) {
             return $query->where(function ($query) use ($key) {
                 return $query->where('account_name', 'like', '%' . $key . '%')

@@ -21,9 +21,6 @@ class RoomService
     public function createRoom($params, $user)
     {
         $players = $params['players'];
-        if (!sizeof($players)) {
-            throw new BusinessException('Phòng chơi phải có ít nhất 2 người', RoomErrorCode::MIN_SLOT_IN_ROOM_ERROR);
-        }
 
         if (sizeof($players) > Consts::NUMBER_SLOT_MAX_ROOM - 1) {
             throw new BusinessException('Tối đa được 5 người chơi trong một phòng', RoomErrorCode::MAXIMUM_SLOT_IN_ROOM_ERROR);

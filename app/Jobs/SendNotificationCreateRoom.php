@@ -54,7 +54,9 @@ class SendNotificationCreateRoom implements ShouldQueue
                 ],
                 'golf' => $this->golfCourse
             ];
-            $this->pushMessage($token, $data, $device);
+            if (!empty($token)) {
+                $this->pushMessage($token, $data, $device);
+            }
         }
     }
 }

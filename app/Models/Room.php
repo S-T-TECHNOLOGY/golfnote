@@ -11,6 +11,7 @@ class Room extends Model
     protected $table = 'rooms';
     protected $fillable = [
         'owner_id',
-        'status'
+        'status',
+        'golf_id'
     ];
 }

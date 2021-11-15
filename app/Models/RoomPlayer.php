@@ -12,6 +12,7 @@ class RoomPlayer extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'phone'
+        'phone',
+        'room_id'
     ];
 }

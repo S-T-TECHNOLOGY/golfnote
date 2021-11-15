@@ -25,6 +25,7 @@ class CreatRoomRequest extends FormRequest
     {
         return [
             'players' => 'array | required',
+            'golf_id' => 'required | integer'
         ];
     }
 }

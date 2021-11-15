@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Constants\NotificationType;
 use App\Traists\PushNotificationTraist;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -24,13 +23,15 @@ class SendNotificationCreateRoom implements ShouldQueue
     protected $ownerUser;
     protected $players;
     protected $room;
+    protected $golfCourse;
     use PushNotificationTraist;
 
-    public function __construct($ownerUser, $players, $room)
+    public function __construct($ownerUser, $players, $room, $golfCourse)
     {
         $this->ownerUser = $ownerUser;
         $this->players = $players;
         $this->room = $room;
+        $this->golfCourse = $golfCourse;
     }
 
     /**
@@ -50,7 +51,8 @@ class SendNotificationCreateRoom implements ShouldQueue
                     'user_id' => $this->ownerUser->id,
                     'name' => $this->ownerUser->name,
                     'phone' => $this->ownerUser->phone
-                ]
+                ],
+                'golf' => $this->golfCourse
             ];
             $this->pushMessage($token, $data, $device);
         }

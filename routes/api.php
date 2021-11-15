@@ -9,6 +9,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\OldThingController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\GolfHoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/cities', [CityController::class, 'getCities']);
 Route::post('/forgot_pass', [AuthController::class, 'forgotPassword']);
+Route::get('/golf_hole/{type}', [GolfHoleController::class, 'getHoleByType']);
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/users', [UserController::class, 'find']);

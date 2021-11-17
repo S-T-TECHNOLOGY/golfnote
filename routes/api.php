@@ -10,6 +10,7 @@ use App\Http\Controllers\OldThingController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GolfHoleController;
+use App\Http\Controllers\ScoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +40,5 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/markets', [MarketController::class, 'getAll']);
     Route::get('/market/{id}', [MarketController::class, 'getDetail']);
     Route::post('/room', [RoomController::class, 'createRoom']);
+    Route::post('/room/{id}/score', [ScoreController::class, 'calculateScore']);
 });

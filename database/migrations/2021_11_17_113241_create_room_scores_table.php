@@ -19,7 +19,7 @@ class CreateRoomScoresTable extends Migration
             $table->string('name');
             $table->string('phone');
             $table->bigInteger('room_id');
-            $table->string('infor');
+            $table->text('infor');
             $table->bigInteger('score');
             $table->timestamps();
         });

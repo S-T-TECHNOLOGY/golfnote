@@ -41,4 +41,5 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/market/{id}', [MarketController::class, 'getDetail']);
     Route::post('/room', [RoomController::class, 'createRoom']);
     Route::post('/room/{id}/score', [ScoreController::class, 'calculateScore']);
+    Route::put('/user/password', [UserController::class, 'changePassword']);
 });

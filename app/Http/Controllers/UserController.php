@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserChangePasswordRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -9,6 +10,7 @@ use JWTAuth;
 class UserController extends AppBaseController
 {
     protected $userService;
+
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
@@ -27,5 +29,12 @@ class UserController extends AppBaseController
         $params['user_id'] = $user->id;
         $users = $this->userService->find($params);
         return $this->sendResponse($users);
+    }
+
+    public function changePassword(UserChangePasswordRequest $request)
+    {
+        $user = JWTAuth::user();
+        $data = $this->userService->changePassword($request->all(), $user);
+        return $this->sendResponse($data);
     }
 }

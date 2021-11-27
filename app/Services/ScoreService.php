@@ -69,9 +69,7 @@ class ScoreService
             if ($item['user_id']) {
                 $userScores = RoomScore::where('room_id', '!=', $room->id)
                     ->where('user_id', $item['user_id'])->orderBy('id', 'desc')->limit(5)->get();
-                $avgScore = sizeof($userScores) ? collect($userScores)->avg('score') : 0;
-                $scoreLatest = collect($userScores)->first();
-                $scoreLatest = $scoreLatest ? $scoreLatest->score : 0;
+                $avgScore = sizeof($userScores) ? ceil(collect($userScores)->avg('score')) : 0;
             }
             $result = new \stdClass();
             $result->user_id = $item['user_id'];
@@ -80,10 +78,10 @@ class ScoreService
             $result->avatar = $item['avatar'];
             $result->score = $item['score'];
             $result->avg_score = $item['user_id'] ? $avgScore : 0;
-            $result->latest_score = $item['user_id'] ? $scoreLatest : 0;
+            $result->gap_score = $item['user_id'] ? ($item['score'] - $avgScore) : 0;
             return $result;
          })->sortBy([
-             ['score', 'desc']
+             ['score', 'asc']
         ])->values();
 
         CalculateUserScoreSummary::dispatch($scores);

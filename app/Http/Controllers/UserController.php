@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserChangePasswordRequest;
+use App\Http\Resources\UserProfileResource;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -19,7 +20,7 @@ class UserController extends AppBaseController
     public function getUser()
     {
         $user = JWTAuth::user();
-        return $this->sendResponse($user);
+        return $this->sendResponse(new UserProfileResource($user));
     }
 
     public function find(Request $request)

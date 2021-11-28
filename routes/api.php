@@ -11,6 +11,7 @@ use App\Http\Controllers\MarketController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GolfHoleController;
 use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\UserFriendController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +43,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/room', [RoomController::class, 'createRoom']);
     Route::post('/room/{id}/score', [ScoreController::class, 'calculateScore']);
     Route::put('/user/password', [UserController::class, 'changePassword']);
+    Route::post('/user/friend', [UserFriendController::class, 'addFriend']);
+    Route::put('/user/friend/{id}/accept', [UserFriendController::class, 'acceptRequest']);
+    Route::put('/user/friend/{id}/cancel', [UserFriendController::class, 'cancelRequest']);
 });

@@ -8,9 +8,12 @@ use App\Constants\RoomStatus;
 use App\Errors\RoomErrorCode;
 use App\Exceptions\BusinessException;
 use App\Jobs\CalculateUserScoreSummary;
+use App\Models\GolfCourse;
 use App\Models\Room;
 use App\Models\RoomScore;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ScoreService
 {
@@ -86,5 +89,29 @@ class ScoreService
 
         CalculateUserScoreSummary::dispatch($scores);
         return $results;
+    }
+
+    public function history($user)
+    {
+        $scoreHistories = DB::table('room_scores')->join('rooms', 'room_scores.room_id', 'rooms.id')
+            ->where('room_scores.user_id', $user->id)
+            ->orderBy('rooms.created_at', 'desc')
+            ->select('rooms.created_at', 'room_scores.score', 'rooms.golf_id')
+            ->get();
+        $golfIds = collect($scoreHistories)->pluck('golf_id')->values();
+        $golfCourses = GolfCourse::whereIn('id', $golfIds)->get();
+        $data = collect($scoreHistories)->map(function ($item) use ($golfCourses) {
+           $history = new \stdClass();
+           $history->score = $item->score;
+           $golfCourse = collect($golfCourses)->first(function ($golf) use ($item) {
+               return $golf->id === $item->golf_id;
+           });
+           $history->time = Carbon::parse($item->created_at)->format('Y/m/d');
+           $history->golf_name = $golfCourse->name;
+           $history->golf_image = $golfCourse->image;
+           return $history;
+        });
+
+        return $data;
     }
 }

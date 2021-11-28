@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserAcceptFriendRequest;
 use App\Http\Requests\UserAddFriendRequest;
 use App\Services\UserFriendService;
 use JWTAuth;

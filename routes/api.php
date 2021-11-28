@@ -31,6 +31,7 @@ Route::post('/forgot_pass', [AuthController::class, 'forgotPassword']);
 Route::get('/golf_hole/{type}', [GolfHoleController::class, 'getHoleByType']);
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/user', [UserController::class, 'getUser']);
+    Route::get('/user/score/histories', [ScoreController::class, 'history']);
     Route::get('/users', [UserController::class, 'find']);
     Route::get('/golfs', [GolfCourseController::class, 'getGolfCourses']);
     Route::get('/golf/{id}', [GolfCourseController::class, 'getGolfCourseDetail']);

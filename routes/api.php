@@ -32,7 +32,7 @@ Route::get('/golf_hole/{type}', [GolfHoleController::class, 'getHoleByType']);
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/user/score/histories', [ScoreController::class, 'history']);
-    Route::get('/users', [UserController::class, 'find']);
+    Route::post('/users', [UserController::class, 'find']);
     Route::get('/golfs', [GolfCourseController::class, 'getGolfCourses']);
     Route::get('/golf/{id}', [GolfCourseController::class, 'getGolfCourseDetail']);
     Route::get('/events', [EventController::class, 'getAll']);
@@ -45,6 +45,6 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/room/{id}/score', [ScoreController::class, 'calculateScore']);
     Route::put('/user/password', [UserController::class, 'changePassword']);
     Route::post('/user/friend', [UserFriendController::class, 'addFriend']);
-    Route::put('/user/friend/{id}/accept', [UserFriendController::class, 'acceptRequest']);
-    Route::put('/user/friend/{id}/cancel', [UserFriendController::class, 'cancelRequest']);
+    Route::put('/user/friend/accept', [UserFriendController::class, 'acceptRequest']);
+    Route::put('/user/friend/cancel', [UserFriendController::class, 'cancelRequest']);
 });

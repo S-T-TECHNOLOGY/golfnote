@@ -50,7 +50,7 @@ class UserFriendService
 
     private function getAddFriendRequest($params)
     {
-        $requestAddFriend = UserRequestFriend::where('id', $params['id'])->where('received_id', $params['user_id'])
+        $requestAddFriend = UserRequestFriend::where('sender_id', $params['sender_id'])->where('received_id', $params['user_id'])
             ->where('status', UserAddFriendStatus::PENDING_STATUS)->first();
         if (!$requestAddFriend) {
             throw new BusinessException('Không tìm thấy yêu cầu kết bạn', UserFriendErrorCode::REQUEST_ADD_FRIEND_NOT_FOUND);

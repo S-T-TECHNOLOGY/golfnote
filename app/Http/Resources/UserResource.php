@@ -20,7 +20,8 @@ class UserResource extends JsonResource
             'gender' => $this->gender,
             'avatar' => $this->avatar,
             'phone' => $this->phone,
-            'address' => $this->address
+            'address' => $this->address,
+            'friend_status' => !empty($this->friend_status) ? $this->friend_status : 0
         ];
     }
 }

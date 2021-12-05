@@ -23,7 +23,7 @@ class UserService
         $phones = isset($params['phones']) ? $params['phones'] : [];
 
         if (empty($key) && !sizeof($phones)) {
-            return [];
+            return new \stdClass();
         }
 
         $users = User::when(!empty($key), function ($query) use ($key) {

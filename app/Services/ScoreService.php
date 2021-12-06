@@ -30,27 +30,32 @@ class ScoreService
         })->map(function ($item) {
             return $item['user_id'];
         })->values();
-
+        $guestNumber = 0;
         $users = User::whereIn('id', $userIds)->get();
-        $records = collect($scores)->map(function ($item) use ($users, $params) {
+        $records = [];
+        foreach ($scores as $item) {
             if ($item['user_id']) {
                 $user = collect($users)->first(function ($user) use ($item) {
                     return $user->id === $item['user_id'];
                 });
             }
             $score = collect($item['holes'])->sum('total');
+            if (!$item['user_id']) {
+                ++$guestNumber;
+            }
 
             $record = [
                 'room_id' => $params['id'],
                 'user_id' => $item['user_id'],
-                'name' => $item['user_id'] ? $user->name : $item['name'],
-                'phone' => $item['user_id'] ? $user->phone : $item['phone'],
+                'name' => $item['user_id'] ? $user->name : 'Guest ' . $guestNumber,
+                'phone' => $item['user_id'] ? $user->phone : '',
                 'avatar' => $item['user_id'] ? $user->avatar : '',
                 'infor' => json_encode($item['holes']),
                 'score' => $score
             ];
-            return $record;
-        })->all();
+
+            array_push($records, $record);
+        };
 
         $datas = collect($records)->map(function ($item)  {
             $record = [

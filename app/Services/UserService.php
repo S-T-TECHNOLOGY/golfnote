@@ -7,10 +7,13 @@ namespace App\Services;
 use App\Constants\Consts;
 use App\Constants\UserAddFriendStatus;
 use App\Errors\AuthErrorCode;
+use App\Errors\GolfCourseErrorCode;
 use App\Exceptions\BusinessException;
 use App\Http\Resources\UserCollection;
+use App\Models\GolfCourse;
 use App\Models\User;
 use App\Models\UserRequestFriend;
+use App\Models\UserReservation;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 
@@ -82,5 +85,17 @@ class UserService
             'access_token' => $token,
             'user' => $user
         ];
+    }
+
+    public function reservationGolf($params)
+    {
+        $golf = GolfCourse::where('id', $params['golf_id'])->where('is_open', 1)->first();
+        if (!$golf) {
+            throw new BusinessException('Không tìm thấy sân golf', GolfCourseErrorCode::GOLF_COURSE_NOT_FOUND);
+        }
+
+        UserReservation::create($params);
+
+        return new \stdClass();
     }
 }

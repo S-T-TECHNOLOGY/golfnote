@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserChangePasswordRequest;
+use App\Http\Requests\UserEventReservationRequest;
 use App\Http\Requests\UserReservationRequest;
 use App\Http\Resources\UserProfileResource;
 use App\Services\UserService;
@@ -46,6 +47,15 @@ class UserController extends AppBaseController
         $params = $request->all();
         $params['user_id'] = $user->id;
         $data = $this->userService->reservationGolf($params);
+        return $this->sendResponse($data);
+    }
+
+    public function reservationEvent(UserEventReservationRequest $request)
+    {
+        $user = JWTAuth::user();
+        $params = $request->all();
+        $params['user_id'] = $user->id;
+        $data = $this->userService->reservationEvent($params);
         return $this->sendResponse($data);
     }
 }

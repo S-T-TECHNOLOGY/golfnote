@@ -7,11 +7,14 @@ namespace App\Services;
 use App\Constants\Consts;
 use App\Constants\UserAddFriendStatus;
 use App\Errors\AuthErrorCode;
+use App\Errors\EventErrorCode;
 use App\Errors\GolfCourseErrorCode;
 use App\Exceptions\BusinessException;
 use App\Http\Resources\UserCollection;
+use App\Models\Event;
 use App\Models\GolfCourse;
 use App\Models\User;
+use App\Models\UserEventReservation;
 use App\Models\UserRequestFriend;
 use App\Models\UserReservation;
 use Illuminate\Support\Facades\Hash;
@@ -93,6 +96,19 @@ class UserService
         }
 
         UserReservation::create($params);
+
+        return new \stdClass();
+    }
+
+    public function reservationEvent($params)
+    {
+        $now = date('Y-m-d H:i:s');
+        $event = Event::where('end_date', '>=', $now)->where('id', $params['event_id'])->first();
+        if (!$event) {
+            throw new BusinessException('Không tìm thấy sự kiện', EventErrorCode::EVENT_NOT_FOUND);
+        }
+
+        UserEventReservation::create($params);
 
         return new \stdClass();
     }

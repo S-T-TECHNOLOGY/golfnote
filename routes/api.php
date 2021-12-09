@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/room', [RoomController::class, 'createRoom']);
     Route::post('/room/{id}/score', [ScoreController::class, 'calculateScore']);
     Route::post('/user/reservation', [UserController::class, 'reservationGolf']);
+    Route::post('/user/reservation-event', [UserController::class, 'reservationEvent']);
     Route::put('/user/password', [UserController::class, 'changePassword']);
     Route::post('/user/friend', [UserFriendController::class, 'addFriend']);
     Route::put('/user/friend/accept', [UserFriendController::class, 'acceptRequest']);

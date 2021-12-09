@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserReservationRequest extends FormRequest
+class UserEventReservationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,10 @@ class UserReservationRequest extends FormRequest
     public function rules()
     {
         return [
-            'golf_id' => 'required',
+            'event_id' => 'required',
             'email' => 'required | email',
             'phone' => 'string | required',
-            'total_player' => 'integer | required',
-            'user_name' => 'string | required',
-            'date' => 'required'
+            'user_name' => 'string | required'
         ];
     }
 }

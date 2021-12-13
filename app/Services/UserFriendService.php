@@ -43,7 +43,7 @@ class UserFriendService
 
     public function cancelRequest($params)
     {
-        $requestAddFriend = $this->getAddFriendRequest($params);
+        $requestAddFriend = $this->getAddFriendRequestToCancel($params);
         $requestAddFriend->delete();
         return new \stdClass();
     }
@@ -58,4 +58,16 @@ class UserFriendService
 
         return $requestAddFriend;
     }
+    private function getAddFriendRequestToCancel($params)
+    {
+        $requestAddFriend = UserRequestFriend::where('sender_id', $params['user_id'])->where('received_id', $params['received_id'])
+            ->where('status', UserAddFriendStatus::PENDING_STATUS)->first();
+        if (!$requestAddFriend) {
+            throw new BusinessException('Không tìm thấy yêu cầu kết bạn', UserFriendErrorCode::REQUEST_ADD_FRIEND_NOT_FOUND);
+        }
+
+        return $requestAddFriend;
+    }
+
+
 }

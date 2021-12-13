@@ -41,7 +41,7 @@ class UserFriendController extends AppBaseController
     {
         $user = JWTAuth::user();
         $params = [
-            'sender_id' => $request->user_id,
+            'received_id' => $request->user_id,
             'user_id' => $user->id
         ];
         $data = $this->userFriendService->cancelRequest($params);

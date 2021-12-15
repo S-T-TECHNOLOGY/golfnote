@@ -9,7 +9,7 @@ use App\Errors\GolfCourseErrorCode;
 use App\Exceptions\BusinessException;
 use App\Http\Resources\GolfCourseCollection;
 use App\Http\Resources\GolfCourseResource;
-use App\Models\GolfCourse;
+use App\Models\Golf;
 
 class GolfCourService
 {
@@ -17,7 +17,7 @@ class GolfCourService
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
-        $golfCourses = GolfCourse::when(!empty($key), function ($query) use ($key) {
+        $golfCourses = Golf::when(!empty($key), function ($query) use ($key) {
             return $query->where('name', 'like', '%'.$key.'%' );
         })->orderBy('id', 'desc')->paginate($limit);
 
@@ -26,7 +26,7 @@ class GolfCourService
 
     public function getGolfCourseDetail($id)
     {
-        $golfCourse = GolfCourse::where('id', $id)->first();
+        $golfCourse = Golf::where('id', $id)->first();
         if (!$golfCourse) {
             throw new BusinessException('Không tìm thấy sân golf', GolfCourseErrorCode::GOLF_COURSE_NOT_FOUND);
         }

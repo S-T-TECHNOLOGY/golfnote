@@ -12,6 +12,7 @@ class Room extends Model
     protected $fillable = [
         'owner_id',
         'status',
-        'golf_id'
+        'golf_id',
+        'golf_courses'
     ];
 }

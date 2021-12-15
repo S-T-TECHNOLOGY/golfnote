@@ -8,7 +8,7 @@ use App\Constants\RoomStatus;
 use App\Errors\RoomErrorCode;
 use App\Exceptions\BusinessException;
 use App\Jobs\CalculateUserScoreSummary;
-use App\Models\GolfCourse;
+use App\Models\Golf;
 use App\Models\Room;
 use App\Models\RoomScore;
 use App\Models\User;
@@ -104,7 +104,7 @@ class ScoreService
             ->select('rooms.created_at', 'room_scores.score', 'rooms.golf_id')
             ->get();
         $golfIds = collect($scoreHistories)->pluck('golf_id')->values();
-        $golfCourses = GolfCourse::whereIn('id', $golfIds)->get();
+        $golfCourses = Golf::whereIn('id', $golfIds)->get();
         $data = collect($scoreHistories)->map(function ($item) use ($golfCourses) {
            $history = new \stdClass();
            $history->score = $item->score;

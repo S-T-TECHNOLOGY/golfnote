@@ -13,7 +13,7 @@ use App\Exceptions\BusinessException;
 use App\Http\Resources\OldThingResource;
 use App\Http\Resources\UserCollection;
 use App\Models\Event;
-use App\Models\GolfCourse;
+use App\Models\Golf;
 use App\Models\OldThing;
 use App\Models\User;
 use App\Models\UserEventReservation;
@@ -93,7 +93,7 @@ class UserService
 
     public function reservationGolf($params)
     {
-        $golf = GolfCourse::where('id', $params['golf_id'])->where('is_open', 1)->first();
+        $golf = Golf::where('id', $params['golf_id'])->where('is_open', 1)->first();
         if (!$golf) {
             throw new BusinessException('Không tìm thấy sân golf', GolfCourseErrorCode::GOLF_COURSE_NOT_FOUND);
         }

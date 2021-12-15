@@ -10,13 +10,16 @@ use App\Errors\AuthErrorCode;
 use App\Errors\EventErrorCode;
 use App\Errors\GolfCourseErrorCode;
 use App\Exceptions\BusinessException;
+use App\Http\Resources\OldThingResource;
 use App\Http\Resources\UserCollection;
 use App\Models\Event;
 use App\Models\GolfCourse;
+use App\Models\OldThing;
 use App\Models\User;
 use App\Models\UserEventReservation;
 use App\Models\UserRequestFriend;
 use App\Models\UserReservation;
+use App\Utils\UploadUtil;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 
@@ -111,5 +114,22 @@ class UserService
         UserEventReservation::create($params);
 
         return new \stdClass();
+    }
+
+    public function sellOldThing($params)
+    {
+        $images = [];
+        foreach ($params['images'] as $image) {
+            $urlImage = UploadUtil::saveBase64ImageToStorage($image, 'thing');
+            array_push($images, $urlImage);
+        }
+        $params['image'] = json_encode($images);
+        $params['quantity'] = 1;
+        $params['quantity_remain'] = 1;
+        $params['sale_off'] = 0;
+
+        $oldThing = OldThing::create($params);
+
+        return new OldThingResource($oldThing);
     }
 }

@@ -17,7 +17,7 @@ class OldThingResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => $this->image,
+            'image' => json_decode($this->image),
             'status' => !$this->quantity_remain ? 0 : 1,
             'price' => $this->price,
             'sale_off' => $this->sale_off,

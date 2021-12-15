@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App;
+namespace App\Utils;
 
 
 use Illuminate\Support\Facades\Storage;
@@ -25,5 +25,6 @@ class UploadUtil
         @list(, $file_data) = explode(',', $file_data);
         $imageName = $disk.'_'.time().'.'.'png';
         Storage::disk($disk)->put($imageName, base64_decode($file_data));
+        return '/storage/' . $disk . '/' . $imageName;
     }
 }

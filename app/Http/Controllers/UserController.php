@@ -62,6 +62,10 @@ class UserController extends AppBaseController
 
     public function sellOldThing(UserSellOldThingRequest $request)
     {
-
+        $user = JWTAuth::user();
+        $params = $request->all();
+        $params['user_id'] = $user->id;
+        $data = $this->userService->sellOldThing($params);
+        return $this->sendResponse($data);
     }
 }

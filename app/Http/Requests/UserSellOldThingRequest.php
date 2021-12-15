@@ -13,7 +13,7 @@ class UserSellOldThingRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class UserSellOldThingRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'string | required',
+            'description' => 'string | required',
+            'price' => 'integer | required',
+            'images' => 'array | max: 4 | required'
         ];
     }
 }

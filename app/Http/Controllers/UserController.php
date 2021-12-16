@@ -7,6 +7,7 @@ use App\Http\Requests\UserEventReservationRequest;
 use App\Http\Requests\UserReservationRequest;
 use App\Http\Requests\UserSellOldThingRequest;
 use App\Http\Resources\UserProfileResource;
+use App\Services\RoomService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -14,10 +15,12 @@ use JWTAuth;
 class UserController extends AppBaseController
 {
     protected $userService;
+    protected $roomService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, RoomService $roomService)
     {
         $this->userService = $userService;
+        $this->roomService = $roomService;
     }
 
     public function getUser()
@@ -67,5 +70,12 @@ class UserController extends AppBaseController
         $params['user_id'] = $user->id;
         $data = $this->userService->sellOldThing($params);
         return $this->sendResponse($data);
+    }
+
+    public function getRoomPlaying()
+    {
+        $user = JWTAuth::user();
+        $room = $this->roomService->getRoomPlayingByUser($user->id);
+        return $this->sendResponse($room);
     }
 }

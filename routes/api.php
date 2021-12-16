@@ -42,10 +42,13 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/markets', [MarketController::class, 'getAll']);
     Route::get('/market/{id}', [MarketController::class, 'getDetail']);
     Route::post('/room', [RoomController::class, 'createRoom']);
+    Route::get('/room/{id}', [RoomController::class, 'getRoomDetail']);
     Route::post('/room/{id}/score', [ScoreController::class, 'calculateScore']);
+    Route::post('/room/{id}/draft-score', [ScoreController::class, 'logDraftScore']);
     Route::post('/user/reservation', [UserController::class, 'reservationGolf']);
     Route::post('/user/reservation-event', [UserController::class, 'reservationEvent']);
     Route::post('/user/old-thing', [UserController::class, 'sellOldThing']);
+    Route::get('/user/room-playing', [UserController::class, 'getRoomPlaying']);
     Route::put('/user/password', [UserController::class, 'changePassword']);
     Route::post('/user/friend', [UserFriendController::class, 'addFriend']);
     Route::put('/user/friend/accept', [UserFriendController::class, 'acceptRequest']);

@@ -15,6 +15,7 @@ class Golf extends Model
         'address',
         'description',
         'time_start',
-        'time_close'
+        'time_close',
+        'golf_courses'
     ];
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddGolfCoursesRoom extends Migration
+class CreateRoomDraftScoresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddGolfCoursesRoom extends Migration
      */
     public function up()
     {
-        Schema::table('rooms', function (Blueprint $table) {
-            $table->string('golf_courses')->after('golf_id');
+        Schema::create('room_draft_scores', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('room_id');
+            $table->text('infor');
+            $table->timestamps();
         });
     }
 
@@ -25,6 +28,6 @@ class AddGolfCoursesRoom extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('room_draft_scores');
     }
 }

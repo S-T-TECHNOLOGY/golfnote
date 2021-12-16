@@ -20,4 +20,10 @@ class RoomController extends AppBaseController
         $room = $this->roomService->createRoom($request->all(), $user);
         return $this->sendResponse($room);
     }
+
+    public function getRoomDetail($id)
+    {
+        $roomDetail = $this->roomService->getRoomDetail($id);
+        return $this->sendResponse($roomDetail);
+    }
 }

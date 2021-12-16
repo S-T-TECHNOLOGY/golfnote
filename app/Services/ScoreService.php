@@ -10,6 +10,7 @@ use App\Exceptions\BusinessException;
 use App\Jobs\CalculateUserScoreSummary;
 use App\Models\Golf;
 use App\Models\Room;
+use App\Models\RoomDraftScore;
 use App\Models\RoomScore;
 use App\Models\User;
 use Carbon\Carbon;
@@ -19,7 +20,7 @@ class ScoreService
 {
     public function calculateScore($params)
     {
-        $room = Room::where('id', $params['id'])->where('status', RoomStatus::GOING_ON_STATUS)->first();
+        $room = Room::where('id', $params['id'])->where('owner_id', $params['user_id'])->where('status', RoomStatus::GOING_ON_STATUS)->first();
         if (!$room) {
             throw new BusinessException('Không tìm thấy phòng chơi',RoomErrorCode::ROOM_NOT_FOUND);
         }
@@ -118,5 +119,17 @@ class ScoreService
         });
 
         return $data;
+    }
+
+    public function logDraftScore($params)
+    {
+        $room = Room::where('id', $params['room_id'])->where('owner_id', $params['user_id'])->where('status', RoomStatus::GOING_ON_STATUS)->first();
+        if (!$room) {
+            throw new BusinessException('Không tìm thấy phòng chơi',RoomErrorCode::ROOM_NOT_FOUND);
+        }
+
+        $params['infor'] = json_encode($params['scores']);
+        RoomDraftScore::create($params);
+        return new \stdClass();
     }
 }

@@ -11,6 +11,7 @@ use App\Exceptions\BusinessException;
 use App\Jobs\SendNotificationCreateRoom;
 use App\Models\Golf;
 use App\Models\Room;
+use App\Models\RoomDraftScore;
 use App\Models\RoomPlayer;
 use App\Models\User;
 use App\Traists\PushNotificationTraist;
@@ -87,6 +88,34 @@ class RoomService
         $users = collect($users)->where('id', '!=', $user->id)->values();
         SendNotificationCreateRoom::dispatch($user, $users, $room, $golfCourse);
         return $data;
+    }
+
+    public function getRoomDetail($id)
+    {
+        $room = Room::find($id);
+        if (!$room) {
+            throw new BusinessException('Không tìm thấy phòng chơi', RoomErrorCode::ROOM_NOT_FOUND);
+        }
+        $ownerRoom = User::where('id', $room->owner_id)->select('id', 'name', 'phone')->first();
+
+        $players = RoomPlayer::select('user_id', 'name', 'phone')->where('room_id', $id)->get();
+        $draftScore = RoomDraftScore::where('room_id', $id)->first();
+        return [
+            'owner_room' => $ownerRoom,
+            'players' => $players,
+            'scores' => empty($draftScore) ? [] : json_decode($draftScore->infor)
+        ];
+    }
+
+    public function getRoomPlayingByUser($userId)
+    {
+        $roomPlayings = Room::where('status', RoomStatus::GOING_ON_STATUS)->pluck('id')->toArray();
+        $userRoomPlaying = RoomPlayer::whereIn('room_id', $roomPlayings)->where('user_id', $userId)->orderBy('id', 'desc')->first();
+        if (!$userRoomPlaying) {
+            return new \stdClass();
+        }
+
+        return $this->getRoomDetail($userRoomPlaying->room_id);
     }
 
 }

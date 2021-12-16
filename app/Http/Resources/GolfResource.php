@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use App\Utils\FormatTime;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GolfCourseResource extends JsonResource
+class GolfResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -24,6 +24,7 @@ class GolfCourseResource extends JsonResource
             'image' => $this->image,
             'address' => $this->address,
             'price' => $this->price,
+            'golf_courses' => json_decode($this->golf_courses),
             'description' => $this->description,
             'number_hole' => $this->number_hole
         ];

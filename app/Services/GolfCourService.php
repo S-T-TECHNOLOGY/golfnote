@@ -7,8 +7,8 @@ namespace App\Services;
 use App\Constants\Consts;
 use App\Errors\GolfCourseErrorCode;
 use App\Exceptions\BusinessException;
-use App\Http\Resources\GolfCourseCollection;
-use App\Http\Resources\GolfCourseResource;
+use App\Http\Resources\GolfCollection;
+use App\Http\Resources\GolfResource;
 use App\Models\Golf;
 
 class GolfCourService
@@ -21,7 +21,7 @@ class GolfCourService
             return $query->where('name', 'like', '%'.$key.'%' );
         })->orderBy('id', 'desc')->paginate($limit);
 
-        return new GolfCourseCollection($golfCourses);
+        return new GolfCollection($golfCourses);
     }
 
     public function getGolfCourseDetail($id)
@@ -31,6 +31,6 @@ class GolfCourService
             throw new BusinessException('Không tìm thấy sân golf', GolfCourseErrorCode::GOLF_COURSE_NOT_FOUND);
         }
 
-        return new GolfCourseResource($golfCourse);
+        return new GolfResource($golfCourse);
     }
 }

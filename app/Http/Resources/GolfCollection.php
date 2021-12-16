@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class GolfCourseCollection extends ResourceCollection
+class GolfCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -19,7 +19,7 @@ class GolfCourseCollection extends ResourceCollection
             $next_page = 0;
         }
         return [
-            'datas' => GolfCourseResource::collection($this->collection),
+            'datas' => GolfResource::collection($this->collection),
             'next_page' => $next_page,
         ];
     }

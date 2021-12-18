@@ -12,6 +12,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GolfHoleController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\UserFriendController;
+use App\Http\Controllers\ClubController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/user/score/histories', [ScoreController::class, 'history']);
     Route::get('/users', [UserController::class, 'find']);
     Route::get('/golfs', [GolfCourseController::class, 'getGolfCourses']);
+    Route::get('/clubs', [ClubController::class, 'getAll']);
     Route::get('/golf/{id}', [GolfCourseController::class, 'getGolfCourseDetail']);
     Route::get('/events', [EventController::class, 'getAll']);
     Route::get('/event/{id}', [EventController::class, 'getEventDetail']);
@@ -48,6 +50,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/user/reservation', [UserController::class, 'reservationGolf']);
     Route::post('/user/reservation-event', [UserController::class, 'reservationEvent']);
     Route::post('/user/old-thing', [UserController::class, 'sellOldThing']);
+    Route::post('/user/club', [UserController::class, 'createClub']);
     Route::get('/user/room-playing', [UserController::class, 'getRoomPlaying']);
     Route::put('/user/password', [UserController::class, 'changePassword']);
     Route::post('/user/friend', [UserFriendController::class, 'addFriend']);

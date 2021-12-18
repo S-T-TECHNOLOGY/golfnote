@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserChangePasswordRequest;
+use App\Http\Requests\UserCreateClubRequest;
 use App\Http\Requests\UserEventReservationRequest;
 use App\Http\Requests\UserReservationRequest;
 use App\Http\Requests\UserSellOldThingRequest;
@@ -78,4 +79,14 @@ class UserController extends AppBaseController
         $room = $this->roomService->getRoomPlayingByUser($user->id);
         return $this->sendResponse($room);
     }
+
+    public function createClub(UserCreateClubRequest $request)
+    {
+        $params = $request->all();
+        $user = JWTAuth::user();
+        $params['user_id'] = $user->id;
+        $data = $this->userService->createClub($params);
+        return $this->sendResponse($data);
+    }
+
 }

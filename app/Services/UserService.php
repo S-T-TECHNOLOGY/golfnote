@@ -11,11 +11,13 @@ use App\Errors\EventErrorCode;
 use App\Errors\GolfCourseErrorCode;
 use App\Exceptions\BusinessException;
 use App\Http\Resources\OldThingResource;
+use App\Http\Resources\UserClubResource;
 use App\Http\Resources\UserCollection;
 use App\Models\Event;
 use App\Models\Golf;
 use App\Models\OldThing;
 use App\Models\User;
+use App\Models\UserClub;
 use App\Models\UserEventReservation;
 use App\Models\UserRequestFriend;
 use App\Models\UserReservation;
@@ -131,5 +133,18 @@ class UserService
         $oldThing = OldThing::create($params);
 
         return new OldThingResource($oldThing);
+    }
+
+    public function createClub($params)
+    {
+        $images = [];
+        foreach ($params['images'] as $image) {
+            $urlImage = UploadUtil::saveBase64ImageToStorage($image, 'thing');
+            array_push($images, $urlImage);
+        }
+        $params['images'] = json_encode($images);
+        $club = UserClub::create($params);
+
+        return new UserClubResource($club);
     }
 }

@@ -24,7 +24,7 @@ class GolfCourseRequest extends FormRequest
     public function rules()
     {
         return [
-            'courses' => 'string | required'
+            'courses' => 'array | required'
         ];
     }
 }

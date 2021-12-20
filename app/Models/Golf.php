@@ -11,11 +11,14 @@ class Golf extends Model
     protected $table = 'golfs';
     protected $fillable = [
         'image',
+        'name',
+        'price',
         'phone',
         'address',
         'description',
         'time_start',
         'time_close',
-        'golf_courses'
+        'golf_courses',
+        'number_hole'
     ];
 }

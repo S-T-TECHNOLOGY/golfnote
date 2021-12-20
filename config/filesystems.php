@@ -57,6 +57,12 @@ return [
             'root' => storage_path('app/public/thing'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
+        ],
+        'golf' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/golf'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
         ]
 
     ],

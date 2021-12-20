@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\GolfCourseController;
+use App\Http\Controllers\GolfController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\OldThingController;
@@ -34,10 +34,11 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/user/score/histories', [ScoreController::class, 'history']);
     Route::get('/users', [UserController::class, 'find']);
-    Route::get('/golfs', [GolfCourseController::class, 'getGolfs']);
-    Route::get('/golf/{id}/courses', [GolfCourseController::class, 'getGolfCourses']);
+    Route::get('/golfs', [GolfController::class, 'getGolfs']);
+    Route::post('/golf', [GolfController::class, 'createGolf']);
+    Route::get('/golf/{id}/courses', [GolfController::class, 'getGolfCourses']);
     Route::get('/clubs', [ClubController::class, 'getAll']);
-    Route::get('/golf/{id}', [GolfCourseController::class, 'getGolfCourseDetail']);
+    Route::get('/golf/{id}', [GolfController::class, 'getGolfCourseDetail']);
     Route::get('/events', [EventController::class, 'getAll']);
     Route::get('/event/{id}', [EventController::class, 'getEventDetail']);
     Route::get('/old_things', [OldThingController::class, 'getAll']);

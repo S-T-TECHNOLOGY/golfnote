@@ -4,12 +4,13 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\CreateGolfRequest;
 use App\Http\Requests\GolfCourseRequest;
 use App\Services\GolfCourService;
 use Illuminate\Http\Request;
 
 
-class GolfCourseController extends AppBaseController
+class GolfController extends AppBaseController
 {
     protected $golfCourseService;
 
@@ -36,6 +37,13 @@ class GolfCourseController extends AppBaseController
         $params['id'] = $id;
         $golfCourse = $this->golfCourseService->getGolfCourses($params);
         return $this->sendResponse($golfCourse);
+    }
+
+    public function createGolf(CreateGolfRequest $request)
+    {
+        $params = $request->all();
+        $data = $this->golfCourseService->createGolf($params);
+        return $this->sendResponse($data);
     }
 
 }

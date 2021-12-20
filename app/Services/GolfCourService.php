@@ -40,7 +40,8 @@ class GolfCourService
     public function getGolfCourses($params)
     {
         $golfCourses = [];
-        foreach ($params['courses'] as $course) {
+        $courses = json_decode($params['courses']);
+        foreach ($courses as $course) {
             $courses = HoleImage::select('image', 'course', 'number_hole')->where('golf_id', $params['id'])->where('course', $course)->get();
             $golfCourses = array_merge($golfCourses, $courses->toArray());
         }

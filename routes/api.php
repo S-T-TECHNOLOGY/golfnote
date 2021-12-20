@@ -34,7 +34,8 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/user/score/histories', [ScoreController::class, 'history']);
     Route::get('/users', [UserController::class, 'find']);
-    Route::get('/golfs', [GolfCourseController::class, 'getGolfCourses']);
+    Route::get('/golfs', [GolfCourseController::class, 'getGolfs']);
+    Route::get('/golf/{id}/courses', [GolfCourseController::class, 'getGolfCourses']);
     Route::get('/clubs', [ClubController::class, 'getAll']);
     Route::get('/golf/{id}', [GolfCourseController::class, 'getGolfCourseDetail']);
     Route::get('/events', [EventController::class, 'getAll']);

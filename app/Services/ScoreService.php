@@ -129,7 +129,9 @@ class ScoreService
         }
 
         $params['infor'] = json_encode($params['scores']);
-        RoomDraftScore::create($params);
+        RoomDraftScore::updateOrCreate(
+            ['room_id' => $params['room_id']],
+            $params);
         return new \stdClass();
     }
 }

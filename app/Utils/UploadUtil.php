@@ -23,7 +23,7 @@ class UploadUtil
     {
         @list($type, $file_data) = explode(';', $base64);
         @list(, $file_data) = explode(',', $file_data);
-        $imageName = $disk.'_'.time().'.'.'png';
+        $imageName = $disk . '_' . time() .  '_'  . uniqid() . '.png';
         Storage::disk($disk)->put($imageName, base64_decode($file_data));
         return '/storage/' . $disk . '/' . $imageName;
     }

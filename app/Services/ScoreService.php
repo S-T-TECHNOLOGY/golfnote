@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Constants\RoomStatus;
 use App\Errors\RoomErrorCode;
+use App\Events\RoomDraftScoreEvent;
 use App\Exceptions\BusinessException;
 use App\Jobs\CalculateUserScoreSummary;
 use App\Models\Golf;
@@ -132,6 +133,7 @@ class ScoreService
         RoomDraftScore::updateOrCreate(
             ['room_id' => $params['room_id']],
             $params);
+        event(new RoomDraftScoreEvent($params['scores'], $params['room_id']));
         return new \stdClass();
     }
 }

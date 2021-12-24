@@ -8,6 +8,7 @@ use App\Constants\Consts;
 use App\Constants\RoomStatus;
 use App\Errors\RoomErrorCode;
 use App\Exceptions\BusinessException;
+use App\Http\Resources\GolfResource;
 use App\Jobs\SendNotificationCreateRoom;
 use App\Models\Golf;
 use App\Models\Room;
@@ -27,7 +28,7 @@ class RoomService
             throw new BusinessException('Tối đa được 5 người chơi trong một phòng', RoomErrorCode::MAXIMUM_SLOT_IN_ROOM_ERROR);
         }
 
-        $golfCourse = Golf::select('id', 'image', 'phone', 'address', 'description')->where('id', $params['golf_id'])->first();
+        $golfCourse = Golf::where('id', $params['golf_id'])->first();
         if (!$golfCourse) {
             throw new BusinessException('Sân golf không tìm thấy', RoomErrorCode::GOLF_NOT_FOUND);
         }
@@ -75,7 +76,7 @@ class RoomService
 
         $data = [
             'room_id' => $room->id,
-            'golf' => $golfCourse,
+            'golf' => new GolfResource($golfCourse),
             'owner' => [
               'user_id' => $user->id,
               'name' => $user->name,
@@ -86,7 +87,7 @@ class RoomService
         ];
 
         $users = collect($users)->where('id', '!=', $user->id)->values();
-        SendNotificationCreateRoom::dispatch($user, $users, $room, $golfCourse);
+        SendNotificationCreateRoom::dispatch($user, $users, $room, new GolfResource($golfCourse));
         return $data;
     }
 

@@ -23,7 +23,7 @@ class RoomDraftScoreEvent implements ShouldBroadcast
     protected $roomId;
     public function __construct($data, $roomId)
     {
-        $data = $data;
+        $this->data = $data;
         $this->roomId = $roomId;
 
     }

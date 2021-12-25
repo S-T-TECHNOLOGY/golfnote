@@ -44,7 +44,7 @@ class RankingService
         }
 
         $rankingUsers = UserSummary::when(true, function ($query) {
-            return $query->selectRaw('*, RANK () OVER ( ORDER BY handicap_score) rank_no');
+            return $query->selectRaw('*, RANK () OVER ( ORDER BY handicap_score) as rank_no');
         })->when(sizeof($userIds), function ($query) use ($userIds) {
             return $query->whereIn('user_id', $userIds);
         })->with('user')->paginate($limit);

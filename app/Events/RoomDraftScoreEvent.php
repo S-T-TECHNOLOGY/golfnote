@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class RoomDraftScoreEvent
+class RoomDraftScoreEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -23,7 +23,7 @@ class RoomDraftScoreEvent
     protected $roomId;
     public function __construct($data, $roomId)
     {
-        $this->data = $data;
+        $data = $data;
         $this->roomId = $roomId;
 
     }
@@ -36,6 +36,11 @@ class RoomDraftScoreEvent
     public function broadcastOn()
     {
         return new PrivateChannel('room-score.' .$this->roomId);
+    }
+
+    public function broadcastWith()
+    {
+        return ['data' => $this->data];
     }
 
     /**

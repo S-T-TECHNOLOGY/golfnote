@@ -33,9 +33,7 @@ class RoomDraftScoreEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return [
-            'room-score.' . $this->roomId
-        ];
+        return new Channel('room-score.' .$this->roomId);
     }
 
     public function broadcastWith()

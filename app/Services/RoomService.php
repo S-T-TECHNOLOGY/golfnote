@@ -11,6 +11,7 @@ use App\Exceptions\BusinessException;
 use App\Http\Resources\GolfResource;
 use App\Jobs\SendNotificationCreateRoom;
 use App\Models\Golf;
+use App\Models\GolfHole;
 use App\Models\Room;
 use App\Models\RoomDraftScore;
 use App\Models\RoomPlayer;
@@ -101,10 +102,18 @@ class RoomService
 
         $players = RoomPlayer::select('user_id', 'name', 'phone')->where('room_id', $id)->get();
         $draftScore = RoomDraftScore::where('room_id', $id)->first();
+        $holes = GolfHole::select('id', 'number_hole', 'standard')->where('type', 18)->get();
+        $scores = [];
+        if (!$draftScore) {
+            $scores = collect($players)->map(function ($player) use ($holes) {
+                $player['holes'] = $holes;
+                return $player;
+            })->toArray();
+        }
         return [
             'owner_room' => $ownerRoom,
             'players' => $players,
-            'scores' => empty($draftScore) ? [] : json_decode($draftScore->infor)
+            'scores' => empty($draftScore) ? $scores : json_decode($draftScore->infor)
         ];
     }
 

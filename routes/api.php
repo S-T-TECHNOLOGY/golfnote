@@ -14,6 +14,7 @@ use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\UserFriendController;
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\BannerController;
+use App\Http\Controllers\RankingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,7 @@ Route::get('/golf_hole/{type}', [GolfHoleController::class, 'getHoleByType']);
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/banners', [BannerController::class, 'getBanner']);
+    Route::get('/ranking', [RankingController::class, 'getRanking']);
     Route::post('/banners', [BannerController::class, 'create']);
     Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/user/score/histories', [ScoreController::class, 'history']);

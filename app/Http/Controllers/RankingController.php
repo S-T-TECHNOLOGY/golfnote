@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\RankingService;
 use Illuminate\Http\Request;
+use JWTAuth;
 
 class RankingController extends AppBaseController
 {
@@ -15,7 +16,8 @@ class RankingController extends AppBaseController
 
     public function getRanking(Request $request)
     {
-        $data = $this->rankingService->getRanking($request->all());
+        $user = JWTAuth::user();
+        $data = $this->rankingService->getRanking($request->all(), $user);
         return $this->sendResponse($data);
     }
 }

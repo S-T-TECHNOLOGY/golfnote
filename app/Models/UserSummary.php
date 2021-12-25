@@ -19,7 +19,12 @@ class UserSummary extends Model
         'total_fail',
         'total_punish',
         'visited_score',
-        'handicap_score'
+        'handicap_score',
     ];
     use HasFactory;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

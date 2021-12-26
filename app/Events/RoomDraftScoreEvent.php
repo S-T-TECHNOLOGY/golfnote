@@ -38,7 +38,7 @@ class RoomDraftScoreEvent implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        return ['data' => $this->data];
+        return ['data' => json_encode($this->data)];
     }
 
     /**

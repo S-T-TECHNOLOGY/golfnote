@@ -22,8 +22,12 @@ class UserFriendService
 
         $requestFriend = UserRequestFriend::where('sender_id', $params['sender_id'])
             ->where('received_id', $params['received_id'])->first();
-        if ($requestFriend) {
+        if ($requestFriend->status == UserAddFriendStatus::PENDING_STATUS) {
             throw new BusinessException('Bạn đã gửi yêu cầu kết bạn cho người này', UserFriendErrorCode::USER_ADDED_REQUEST);
+        }
+
+        if ($requestFriend->status == UserAddFriendStatus::ACCEPTED_STATUS) {
+            throw new BusinessException('Bạn và người đó là bạn bè', UserFriendErrorCode::USER_IS_FRIEND);
         }
 
         $params['status'] = UserAddFriendStatus::PENDING_STATUS;

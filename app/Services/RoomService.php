@@ -113,6 +113,7 @@ class RoomService
         return [
             'owner_room' => $ownerRoom,
             'players' => $players,
+            'hole_current' => empty($draftScore) ? 0 : $draftScore->hole_current,
             'scores' => empty($draftScore) ? $scores : json_decode($draftScore->infor)
         ];
     }

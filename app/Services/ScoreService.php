@@ -133,7 +133,7 @@ class ScoreService
         RoomDraftScore::updateOrCreate(
             ['room_id' => $params['room_id']],
             $params);
-        event(new RoomDraftScoreEvent($params['scores'], $params['room_id']));
+        event(new RoomDraftScoreEvent($params['scores'], $params['room_id'], $params['hole_current']));
         return new \stdClass();
     }
 }

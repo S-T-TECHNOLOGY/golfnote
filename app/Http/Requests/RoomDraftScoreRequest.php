@@ -24,7 +24,8 @@ class RoomDraftScoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'scores' => 'array | required'
+            'scores' => 'array | required',
+            'hole_current' => 'required'
         ];
     }
 }

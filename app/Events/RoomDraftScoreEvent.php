@@ -19,11 +19,12 @@ class RoomDraftScoreEvent implements ShouldBroadcast
      */
     protected $data;
     protected $roomId;
-    public function __construct($data, $roomId)
+    protected $holeCurent;
+    public function __construct($data, $roomId, $holeCurent)
     {
         $this->data = $data;
         $this->roomId = $roomId;
-
+        $this->holeCurent = $holeCurent;
     }
 
     /**
@@ -38,7 +39,10 @@ class RoomDraftScoreEvent implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        return ['data' => $this->data];
+        return [
+            'data' => $this->data,
+            'hole_current' => $this->holeCurent
+        ];
     }
 
     /**

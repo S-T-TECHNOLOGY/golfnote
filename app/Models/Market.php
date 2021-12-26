@@ -15,6 +15,7 @@ class Market extends Model
         'image',
         'description',
         'price',
-        'sale_off'
+        'sale_off',
+        'phone'
     ];
 }

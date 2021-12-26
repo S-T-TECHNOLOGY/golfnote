@@ -119,7 +119,7 @@ class RoomService
             'room_id' => $id,
             'golf' => $golf,
             'golf_courses' => json_decode($room->golf_courses),
-            'time_updated' => empty($draftScore) ? Carbon::now()->format('h:m, d/m/Y') : Carbon::parse($draftScore->updated_at)->format('h:m, d/m/Y'),
+            'time_updated' => empty($draftScore) ? Carbon::now()->format('H:m, d/m/Y') : Carbon::parse($draftScore->updated_at)->format('H:m, d/m/Y'),
             'hole_current' => empty($draftScore) ? 0 : $draftScore->hole_current,
             'scores' => empty($draftScore) ? $scores : json_decode($draftScore->infor)
         ];

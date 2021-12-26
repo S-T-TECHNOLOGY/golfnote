@@ -14,5 +14,11 @@
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14"
+    },
+    "dependencies": {
+        "express": "^4.17.2",
+        "http": "0.0.1-security",
+        "ioredis": "^4.28.2",
+        "socket.io": "^4.4.0"
     }
 }

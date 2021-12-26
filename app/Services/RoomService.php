@@ -17,6 +17,7 @@ use App\Models\RoomDraftScore;
 use App\Models\RoomPlayer;
 use App\Models\User;
 use App\Traists\PushNotificationTraist;
+use Carbon\Carbon;
 
 class RoomService
 {
@@ -99,20 +100,26 @@ class RoomService
             throw new BusinessException('Không tìm thấy phòng chơi', RoomErrorCode::ROOM_NOT_FOUND);
         }
         $ownerRoom = User::where('id', $room->owner_id)->select('id', 'name', 'phone')->first();
-
+        $golf = Golf::select('name', 'id')->where('id', $room->golf_id)->first();
         $players = RoomPlayer::select('user_id', 'name', 'phone')->where('room_id', $id)->get();
         $draftScore = RoomDraftScore::where('room_id', $id)->first();
         $holes = GolfHole::select('id', 'number_hole', 'standard')->where('type', 18)->get();
         $scores = [];
         if (!$draftScore) {
-            $scores = collect($players)->map(function ($player) use ($holes) {
+            $scores = $players->toArray();
+            $scores = collect($scores)->map(function ($player) use ($holes) {
                 $player['holes'] = $holes;
                 return $player;
             })->toArray();
         }
+
         return [
             'owner_room' => $ownerRoom,
             'players' => $players,
+            'room_id' => $id,
+            'golf' => $golf,
+            'golf_courses' => json_decode($room->golf_courses),
+            'time_updated' => empty($draftScore) ? Carbon::now()->format('h:m:s, d/m/Y') : Carbon::parse($draftScore->updated_at)->format('h:m, d/m/Y'),
             'hole_current' => empty($draftScore) ? 0 : $draftScore->hole_current,
             'scores' => empty($draftScore) ? $scores : json_decode($draftScore->infor)
         ];

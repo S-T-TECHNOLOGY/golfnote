@@ -9,8 +9,10 @@ use App\Errors\AuthErrorCode;
 use App\Exceptions\BusinessException;
 use App\Mail\ForgotPassword;
 use App\Mail\SendOTP;
+use App\Models\Admin;
 use App\Models\MailOtp;
 use App\Models\User;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -76,5 +78,28 @@ class AuthService
         Mail::queue(new ForgotPassword($email, $password));
 
         return new \stdClass();
+    }
+
+    public function loginAdmin($params)
+    {
+
+        Config::set('auth.defaults.guard', 'admins');
+        Config::set('auth.defaults.passwords', 'admins');
+
+        $attempt = [
+            'email' => $params['email'],
+            'password' =>$params['password']
+        ];
+
+        $token = JWTAuth::attempt($attempt);
+        if (!$token) {
+            throw new BusinessException('Password không đúng', AuthErrorCode::PASSWORD_WRONG);
+        }
+        $user = Admin::select('id', 'name', 'email')->where('email', $params['email'])->first();
+
+        return [
+            'access_token' => $token,
+            'user' => $user
+        ];
     }
 }

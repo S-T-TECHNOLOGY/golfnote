@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\AdminLoginRequest;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
@@ -32,6 +33,12 @@ class AuthController extends AppBaseController
     public function forgotPassword(ForgotPasswordRequest $request)
     {
         $data = $this->authService->forgotPassword($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function loginAdmin(AdminLoginRequest $request)
+    {
+        $data = $this->authService->loginAdmin($request->all());
         return $this->sendResponse($data);
     }
 

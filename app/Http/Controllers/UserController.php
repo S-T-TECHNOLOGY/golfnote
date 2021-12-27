@@ -97,4 +97,13 @@ class UserController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function logout()
+    {
+        JWTAuth::invalidate(JWTAuth::getToken());
+        $user = JWTAuth::user();
+        $user->fcm_token = '';
+        $user->save();
+        return $this->sendResponse(new \stdClass());
+    }
+
 }

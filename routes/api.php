@@ -32,7 +32,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/cities', [CityController::class, 'getCities']);
 Route::post('/forgot_pass', [AuthController::class, 'forgotPassword']);
 Route::get('/golf_hole/{type}', [GolfHoleController::class, 'getHoleByType']);
-Route::group(['middleware' => 'auth.jwt'], function () {
+Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/banners', [BannerController::class, 'getBanner']);
     Route::get('/ranking', [RankingController::class, 'getRanking']);
@@ -65,4 +65,5 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/user/friend', [UserFriendController::class, 'addFriend']);
     Route::put('/user/friend/accept', [UserFriendController::class, 'acceptRequest']);
     Route::put('/user/friend/cancel', [UserFriendController::class, 'cancelRequest']);
+    Route::put('/logout', [UserController::class, 'logout']);
 });

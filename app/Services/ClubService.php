@@ -13,7 +13,7 @@ class ClubService
     public function getAll($params)
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
-        $key = isset($params['key']) ? $params['key'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
         $clubs = UserClub::when(!empty($key), function ($query) use ($key){
             return $query->where(function ($query) use ($key) {
                 return $query->where('name', 'like', '%'.$key.'%')

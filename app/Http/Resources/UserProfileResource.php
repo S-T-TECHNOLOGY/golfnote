@@ -31,7 +31,8 @@ class UserProfileResource extends JsonResource
             'total_punish' => !$this->userSummary ? 0 : $this->userSummary->total_punish,
             'visited_score' => !$this->userSummary ? 0 : $this->userSummary->visited_score,
             'handicap_score' => !$this->userSummary ? 0 : $this->userSummary->handicap_score,
-            'rank_no' => $this->rank_no
+            'rank_no' => $this->rank_no,
+            'total_user' => $this->total_user
         ];
     }
 }

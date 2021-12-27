@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\ActiveStatus;
 use App\Http\Requests\UserChangePasswordRequest;
 use App\Http\Requests\UserCreateClubRequest;
 use App\Http\Requests\UserEventReservationRequest;
 use App\Http\Requests\UserReservationRequest;
 use App\Http\Requests\UserSellOldThingRequest;
 use App\Http\Resources\UserProfileResource;
+use App\Models\User;
 use App\Models\UserSummary;
 use App\Services\RoomService;
 use App\Services\UserService;
@@ -34,6 +36,8 @@ class UserController extends AppBaseController
         $userRanking = collect($rankingUsers)->first(function ($item) use ($user) {
             return $item->user_id === $user->id;
         });
+        $totalUser = User::where('active', ActiveStatus::ACTIVE)->pluck('id')->toArray();
+        $user->total_user = sizeof($totalUser);
         $user->rank_no = empty($userRanking) ? 0 : $userRanking->rank_no;
         return $this->sendResponse(new UserProfileResource($user));
     }

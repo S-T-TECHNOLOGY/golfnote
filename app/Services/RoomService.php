@@ -18,6 +18,7 @@ use App\Models\RoomPlayer;
 use App\Models\User;
 use App\Traists\PushNotificationTraist;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class RoomService
 {
@@ -102,12 +103,22 @@ class RoomService
         $ownerRoom = User::where('id', $room->owner_id)->select('id', 'name', 'phone')->first();
         $golf = Golf::select('name', 'id')->where('id', $room->golf_id)->first();
         $players = RoomPlayer::select('user_id', 'name', 'phone')->where('room_id', $id)->get();
+        $userIdPlayers = collect($players)->filter(function ($player) {
+            return $player->user_id > 0;
+        })->pluck('user_id')->toArray();
+        $guestPlayer = collect($players)->filter(function ($player) {
+            return $player->user_id == 0;
+        })->map(function ($player) {
+            $player['avatar'] = '';
+            return $player;
+        })->toArray();
+        $userPlayers = DB::table('users')->selectRaw('id as user_id, name, phone, avatar')->whereIn('id', $userIdPlayers)->get();
+        $roomPlayers = array_merge($guestPlayer, $userPlayers->toArray());
         $draftScore = RoomDraftScore::where('room_id', $id)->first();
         $holes = GolfHole::select('id', 'number_hole', 'standard')->where('type', 18)->get();
         $scores = [];
         if (!$draftScore) {
-            $scores = $players->toArray();
-            $scores = collect($scores)->map(function ($player) use ($holes) {
+            $scores = collect($players)->map(function ($player) use ($holes) {
                 $player['holes'] = $holes;
                 return $player;
             })->toArray();
@@ -115,7 +126,7 @@ class RoomService
 
         return [
             'owner_room' => $ownerRoom,
-            'players' => $players,
+            'players' => $roomPlayers,
             'room_id' => $id,
             'golf' => $golf,
             'golf_courses' => json_decode($room->golf_courses),

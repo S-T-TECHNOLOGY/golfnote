@@ -15,7 +15,7 @@ use App\Http\Controllers\UserFriendController;
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\RankingController;
-
+use App\Http\Controllers\NotificationController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -60,6 +60,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/user/old-thing', [UserController::class, 'sellOldThing']);
     Route::post('/user/club', [UserController::class, 'createClub']);
     Route::get('/user/room-playing', [UserController::class, 'getRoomPlaying']);
+    Route::get('/user/notifications', [NotificationController::class, 'getAll']);
     Route::put('/user/password', [UserController::class, 'changePassword']);
     Route::post('/user/friend', [UserFriendController::class, 'addFriend']);
     Route::put('/user/friend/accept', [UserFriendController::class, 'acceptRequest']);

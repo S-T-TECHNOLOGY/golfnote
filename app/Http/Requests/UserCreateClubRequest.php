@@ -26,7 +26,7 @@ class UserCreateClubRequest extends FormRequest
         return [
             'name' => 'string | required',
             'introduction' => 'string | required',
-            'images' => 'array | max: 3 | required',
+            'images' => 'array | max: 4 | required',
             'kakaotalk_link' => 'string | required'
         ];
     }

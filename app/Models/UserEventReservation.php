@@ -14,6 +14,12 @@ class UserEventReservation extends Model
         'event_id',
         'user_name',
         'phone',
-        'email'
+        'email',
+        'status'
     ];
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
 }

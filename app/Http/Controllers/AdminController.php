@@ -25,4 +25,17 @@ class AdminController extends AppBaseController
         $data = $this->adminService->reservationGolfSuccess($id);
         return $this->sendResponse($data);
     }
+
+    public function getReservationEvent(Request $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->getReservationEvent($params);
+        return $this->sendResponse($data);
+    }
+
+    public function reservationEventSuccess($id)
+    {
+        $data = $this->adminService->reservationEventSuccess($id);
+        return $this->sendResponse($data);
+    }
 }

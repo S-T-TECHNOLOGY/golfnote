@@ -16,6 +16,12 @@ class UserReservation extends Model
         'phone',
         'email',
         'date',
-        'total_player'
+        'total_player',
+        'status'
     ];
+
+    public function golf()
+    {
+        return $this->belongsTo(Golf::class);
+    }
 }

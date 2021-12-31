@@ -164,7 +164,7 @@ class AdminService
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
         $reservations = Question::when(!empty($key), function ($query) use ($key) {
-                return $query->where('questions', 'like', '%' . $key .'%');
+                return $query->where('question', 'like', '%' . $key .'%');
             })->orderBy('created_at', 'desc')->paginate($limit);
 
         return new AdminQuestionCollection($reservations);

@@ -7,13 +7,17 @@ namespace App\Services;
 use App\Constants\Consts;
 use App\Constants\NotificationType;
 use App\Constants\ReservationStatus;
+use App\Http\Resources\AdminGolfCollection;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserEventReservationCollection;
 use App\Http\Resources\UserReservationCollection;
 use App\Jobs\SendNotificationReservationGolfSuccess;
+use App\Models\Golf;
+use App\Models\HoleImage;
 use App\Models\Notification;
 use App\Models\UserEventReservation;
 use App\Models\UserReservation;
+use App\Utils\UploadUtil;
 
 class AdminService
 {
@@ -73,5 +77,69 @@ class AdminService
 
         SendNotificationReservationGolfSuccess::dispatch($reservation->user_id, collect(new NotificationResource($notification))->toArray());
         return new \stdClass();
+    }
+
+    public function getGolfs($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $golfs = Golf::when(!empty($key), function ($query) use ($key) {
+                return $query->where('name', 'like', '%' . $key .'%');
+            })->paginate($limit);
+        return new AdminGolfCollection($golfs);
+    }
+
+    public function deleteGolf($id)
+    {
+        Golf::where('id', $id)->delete();
+        return new \stdClass();
+    }
+
+    public function createGolf($params)
+    {
+        $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'golf');
+        $courseA = isset($params['course_a']) ? $params['course_a'] :[];
+        $courseB = isset($params['course_b']) ? ($params['course_b']) :[];
+        $courseC = isset($params['course_c']) ? ($params['course_c']) :[];
+        $courseD = isset($params['course_d']) ? ($params['course_d']) :[];
+        $params['is_open'] = 1;
+        $params['number_hole'] = sizeof($courseA) + sizeof($courseB) + sizeof($courseC) + sizeof($courseD);
+        $courses = [];
+        if (sizeof($courseA)){
+            array_push($courses, 'A');
+        }
+        if (sizeof($courseB)){
+            array_push($courses, 'B');
+        }
+        if (sizeof($courseC)){
+            array_push($courses, 'C');
+        }
+        if (sizeof($courseD)){
+            array_push($courses, 'D');
+        }
+        $params['courses'] = json_encode($courses);
+        $golf = Golf::create($params);
+        $holeImagesCourseA = $this->uploadHoleImagesByCourse($courseA, 'A', $golf->id);
+        $holeImagesCourseB = $this->uploadHoleImagesByCourse($courseB, 'B', $golf->id);
+        $holeImagesCourseC = $this->uploadHoleImagesByCourse($courseC, 'C', $golf->id);
+        $holeImagesCourseD = $this->uploadHoleImagesByCourse($courseD, 'D', $golf->id);
+        $holeImages = array_merge($holeImagesCourseA, $holeImagesCourseB, $holeImagesCourseC, $holeImagesCourseD);
+        HoleImage::insert($holeImages);
+        return $golf;
+    }
+
+    private function uploadHoleImagesByCourse($images, $course, $golfId)
+    {
+        $holeImages = [];
+        foreach ($images as $index => $image) {
+
+            $holeImage['golf_id'] = $golfId;
+            $holeImage['course'] = $course;
+            $holeImage['image'] = UploadUtil::saveBase64ImageToStorage($image, 'golf');
+            $holeImage['number_hole'] = $index + 1;
+            array_push($holeImages, $holeImage);
+        }
+
+        return $holeImages;
     }
 }

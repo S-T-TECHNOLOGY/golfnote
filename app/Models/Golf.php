@@ -19,6 +19,7 @@ class Golf extends Model
         'time_start',
         'time_close',
         'golf_courses',
-        'number_hole'
+        'number_hole',
+        'is_open'
     ];
 }

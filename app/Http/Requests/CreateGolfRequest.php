@@ -31,10 +31,7 @@ class CreateGolfRequest extends FormRequest
             'time_start' => 'required',
             'time_close' => 'required',
             'description' => 'required',
-            'course_a' => 'array',
-            'course_b' => 'array',
-            'course_c' => 'array',
-            'course_d' => 'array',
+            'golf_courses' => 'array',
         ];
     }
 }

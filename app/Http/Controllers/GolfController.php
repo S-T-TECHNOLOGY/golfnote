@@ -39,11 +39,4 @@ class GolfController extends AppBaseController
         return $this->sendResponse($golfCourse);
     }
 
-    public function createGolf(CreateGolfRequest $request)
-    {
-        $params = $request->all();
-        $data = $this->golfCourseService->createGolf($params);
-        return $this->sendResponse($data);
-    }
-
 }

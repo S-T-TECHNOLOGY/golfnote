@@ -9,4 +9,7 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::put('/golf/reservations/{id}', [AdminController::class, 'reservationGolfSuccess']);
     Route::get('/event/reservations', [AdminController::class, 'getReservationEvent']);
     Route::put('/event/reservations/{id}', [AdminController::class, 'reservationEventSuccess']);
+    Route::get('/golfs', [AdminController::class, 'getGolfs']);
+    Route::delete('/golfs/{id}', [AdminController::class, 'deleteGolf']);
+    Route::post('/golf', [AdminController::class, 'createGolf']);
 });

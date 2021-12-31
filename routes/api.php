@@ -16,6 +16,7 @@ use App\Http\Controllers\ClubController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\QuestionController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -46,6 +47,7 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::get('/clubs', [ClubController::class, 'getAll']);
     Route::get('/golf/{id}', [GolfController::class, 'getGolfCourseDetail']);
     Route::get('/events', [EventController::class, 'getAll']);
+    Route::get('/questions', [QuestionController::class, 'getAll']);
     Route::get('/event/{id}', [EventController::class, 'getEventDetail']);
     Route::get('/old_things', [OldThingController::class, 'getAll']);
     Route::get('/old_thing/{id}', [OldThingController::class, 'getDetail']);

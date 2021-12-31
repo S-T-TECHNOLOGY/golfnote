@@ -9,6 +9,7 @@ use App\Constants\NotificationType;
 use App\Constants\ReservationStatus;
 use App\Http\Resources\AdminEventCollection;
 use App\Http\Resources\AdminGolfCollection;
+use App\Http\Resources\AdminQuestionCollection;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserEventReservationCollection;
 use App\Http\Resources\UserReservationCollection;
@@ -17,6 +18,7 @@ use App\Models\Event;
 use App\Models\Golf;
 use App\Models\HoleImage;
 use App\Models\Notification;
+use App\Models\Question;
 use App\Models\UserEventReservation;
 use App\Models\UserReservation;
 use App\Utils\UploadUtil;
@@ -160,5 +162,28 @@ class AdminService
         }
 
         return $holeImages;
+    }
+
+    public function getQuestions($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $reservations = Question::when(!empty($key), function ($query) use ($key) {
+                return $query->where('questions', 'like', '%' . $key .'%');
+            })->paginate($limit);
+
+        return new AdminQuestionCollection($reservations);
+    }
+
+    public function createQuestion($param)
+    {
+        Question::create($param);
+        return new \stdClass();
+    }
+
+    public function deleteQuestion($id)
+    {
+        Question::where('id', $id)->delete();
+        return new \stdClass();
     }
 }

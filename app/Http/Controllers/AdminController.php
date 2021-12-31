@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateGolfRequest;
+use App\Http\Requests\CreateQuestionRequest;
 use App\Services\AdminService;
 use Illuminate\Http\Request;
 
@@ -64,6 +65,26 @@ class AdminController extends AppBaseController
     {
         $params = $request->all();
         $data = $this->adminService->getEvents($params);
+        return $this->sendResponse($data);
+    }
+
+    public function getQuestions(Request $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->getQuestions($params);
+        return $this->sendResponse($data);
+    }
+
+    public function createQuestion(CreateQuestionRequest $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->createQuestion($params);
+        return $this->sendResponse($data);
+    }
+
+    public function deleteQuestion($id)
+    {
+        $data = $this->adminService->deleteQuestion($id);
         return $this->sendResponse($data);
     }
 }

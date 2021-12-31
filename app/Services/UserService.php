@@ -21,6 +21,7 @@ use App\Models\UserClub;
 use App\Models\UserEventReservation;
 use App\Models\UserRequestFriend;
 use App\Models\UserReservation;
+use App\Utils\Base64Utils;
 use App\Utils\UploadUtil;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
@@ -146,5 +147,15 @@ class UserService
         $club = UserClub::create($params);
 
         return new UserClubResource($club);
+    }
+
+    public function editProfile($params, $user)
+    {
+        if (Base64Utils::checkIsBase64($params['avatar'])) {
+            $params['avatar'] = UploadUtil::saveBase64ImageToStorage($params['avatar'], 'avatar');
+        }
+        $user->update($params);
+
+        return $user;
     }
 }

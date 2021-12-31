@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Constants\ActiveStatus;
 use App\Http\Requests\UserChangePasswordRequest;
 use App\Http\Requests\UserCreateClubRequest;
+use App\Http\Requests\UserEditProfileRequest;
 use App\Http\Requests\UserEventReservationRequest;
 use App\Http\Requests\UserReservationRequest;
 use App\Http\Requests\UserSellOldThingRequest;
@@ -103,11 +104,19 @@ class UserController extends AppBaseController
 
     public function logout()
     {
-        JWTAuth::invalidate(JWTAuth::getToken());
         $user = JWTAuth::user();
         $user->fcm_token = '';
         $user->save();
+        JWTAuth::invalidate(JWTAuth::getToken());
         return $this->sendResponse(new \stdClass());
+    }
+
+    public function editProfile(UserEditProfileRequest $request)
+    {
+        $params = $request->only(['name', 'avatar', 'gender', 'phone', 'address']);
+        $user = JWTAuth::user();
+        $data = $this->userService->editProfile($params, $user);
+        return $this->sendResponse($data);
     }
 
 }

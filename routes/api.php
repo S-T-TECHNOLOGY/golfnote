@@ -38,6 +38,7 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::get('/ranking', [RankingController::class, 'getRanking']);
     Route::post('/banners', [BannerController::class, 'create']);
     Route::get('/user', [UserController::class, 'getUser']);
+    Route::put('/user/profile', [UserController::class, 'editProfile']);
     Route::get('/user/score/histories', [ScoreController::class, 'history']);
     Route::get('/users', [UserController::class, 'find']);
     Route::get('/golfs', [GolfController::class, 'getGolfs']);

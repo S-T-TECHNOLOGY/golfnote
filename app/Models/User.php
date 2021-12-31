@@ -38,7 +38,9 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
         'active',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'fcm_token',
+        'device'
     ];
 
     public function getJWTIdentifier()

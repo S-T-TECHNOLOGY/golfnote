@@ -63,6 +63,7 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::post('/user/club', [UserController::class, 'createClub']);
     Route::get('/user/room-playing', [UserController::class, 'getRoomPlaying']);
     Route::get('/user/notifications', [NotificationController::class, 'getAll']);
+    Route::put('/user/notifications/{id}', [NotificationController::class, 'read']);
     Route::put('/user/password', [UserController::class, 'changePassword']);
     Route::post('/user/friend', [UserFriendController::class, 'addFriend']);
     Route::put('/user/friend/accept', [UserFriendController::class, 'acceptRequest']);

@@ -7,11 +7,13 @@ namespace App\Services;
 use App\Constants\Consts;
 use App\Constants\NotificationType;
 use App\Constants\ReservationStatus;
+use App\Http\Resources\AdminEventCollection;
 use App\Http\Resources\AdminGolfCollection;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserEventReservationCollection;
 use App\Http\Resources\UserReservationCollection;
 use App\Jobs\SendNotificationReservationGolfSuccess;
+use App\Models\Event;
 use App\Models\Golf;
 use App\Models\HoleImage;
 use App\Models\Notification;
@@ -92,6 +94,23 @@ class AdminService
     public function deleteGolf($id)
     {
         Golf::where('id', $id)->delete();
+        return new \stdClass();
+    }
+
+    public function getEvents($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $now = date('Y-m-d H:i:s');
+        $events = Event::when(!empty($key), function ($query) use ($key) {
+            return $query->where('name', 'like', '%' . $key .'%');
+        })->where('end_date', '>=', $now)->orderBy('id', 'desc')->paginate($limit);
+        return new AdminEventCollection($events);
+    }
+
+    public function deleteEvent($id)
+    {
+        Event::where('id', $id)->delete();
         return new \stdClass();
     }
 

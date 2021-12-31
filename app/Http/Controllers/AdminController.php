@@ -59,4 +59,11 @@ class AdminController extends AppBaseController
         $data = $this->adminService->createGolf($params);
         return $this->sendResponse($data);
     }
+
+    public function getEvents(Request $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->getEvents($params);
+        return $this->sendResponse($data);
+    }
 }

@@ -119,50 +119,32 @@ class AdminService
     public function createGolf($params)
     {
         $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'golf');
-        $courseA = isset($params['course_a']) ? $params['course_a'] :[];
-        $courseB = isset($params['course_b']) ? ($params['course_b']) :[];
-        $courseC = isset($params['course_c']) ? ($params['course_c']) :[];
-        $courseD = isset($params['course_d']) ? ($params['course_d']) :[];
         $params['is_open'] = 1;
-        $params['number_hole'] = sizeof($courseA) + sizeof($courseB) + sizeof($courseC) + sizeof($courseD);
+        $params['number_hole'] = sizeof($params['golf_courses']) * 9 ;
         $courses = [];
-        if (sizeof($courseA)){
-            array_push($courses, 'A');
+        $holeImages = [];
+
+        foreach ($params['golf_courses'] as  $course) {
+            array_push($courses, $course['name']);
+            $holes = collect($course['holes'])->map(function ($hole) use ($course) {
+                $hole['course'] = $course['name'];
+                return $hole;
+            })->toArray();
+            $holeImages = array_merge($holeImages, $holes);
         }
-        if (sizeof($courseB)){
-            array_push($courses, 'B');
-        }
-        if (sizeof($courseC)){
-            array_push($courses, 'C');
-        }
-        if (sizeof($courseD)){
-            array_push($courses, 'D');
-        }
-        $params['courses'] = json_encode($courses);
+
+        $params['golf_courses'] = json_encode($courses);
         $golf = Golf::create($params);
-        $holeImagesCourseA = $this->uploadHoleImagesByCourse($courseA, 'A', $golf->id);
-        $holeImagesCourseB = $this->uploadHoleImagesByCourse($courseB, 'B', $golf->id);
-        $holeImagesCourseC = $this->uploadHoleImagesByCourse($courseC, 'C', $golf->id);
-        $holeImagesCourseD = $this->uploadHoleImagesByCourse($courseD, 'D', $golf->id);
-        $holeImages = array_merge($holeImagesCourseA, $holeImagesCourseB, $holeImagesCourseC, $holeImagesCourseD);
+
+        $holeImages = collect($holeImages)->map(function ($hole) use ($golf) {
+            $hole['golf_id'] = $golf->id;
+            return $hole;
+        })->toArray();
         HoleImage::insert($holeImages);
+
         return $golf;
     }
 
-    private function uploadHoleImagesByCourse($images, $course, $golfId)
-    {
-        $holeImages = [];
-        foreach ($images as $index => $image) {
-
-            $holeImage['golf_id'] = $golfId;
-            $holeImage['course'] = $course;
-            $holeImage['image'] = UploadUtil::saveBase64ImageToStorage($image, 'golf');
-            $holeImage['number_hole'] = $index + 1;
-            array_push($holeImages, $holeImage);
-        }
-
-        return $holeImages;
-    }
 
     public function getQuestions($params)
     {

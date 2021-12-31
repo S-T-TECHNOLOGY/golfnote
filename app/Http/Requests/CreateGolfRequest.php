@@ -28,10 +28,11 @@ class CreateGolfRequest extends FormRequest
             'address' => 'required',
             'image' => 'required',
             'phone' => 'required',
+            'price' => 'required',
             'time_start' => 'required',
             'time_close' => 'required',
             'description' => 'required',
-            'golf_courses' => 'array',
+            'golf_courses' => 'array | required',
         ];
     }
 }

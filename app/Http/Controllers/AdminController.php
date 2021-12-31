@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateGolfRequest;
 use App\Http\Requests\CreateQuestionRequest;
+use App\Http\Requests\UploadImageRequest;
 use App\Services\AdminService;
 use Illuminate\Http\Request;
 
@@ -85,6 +86,12 @@ class AdminController extends AppBaseController
     public function deleteQuestion($id)
     {
         $data = $this->adminService->deleteQuestion($id);
+        return $this->sendResponse($data);
+    }
+
+    public function uploadImage(UploadImageRequest $request)
+    {
+        $data = $this->adminService->uploadImage($request->all());
         return $this->sendResponse($data);
     }
 }

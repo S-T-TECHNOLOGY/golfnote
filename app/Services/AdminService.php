@@ -186,4 +186,12 @@ class AdminService
         Question::where('id', $id)->delete();
         return new \stdClass();
     }
+
+    public function uploadImage($params)
+    {
+        $image = UploadUtil::saveBase64ImageToStorage($params['image'], $params['disk']);
+        return [
+            'image' => $image
+        ];
+    }
 }

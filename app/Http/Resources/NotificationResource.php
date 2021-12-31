@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Constants\NotificationType;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class NotificationResource extends JsonResource
@@ -15,8 +16,10 @@ class NotificationResource extends JsonResource
      */
     public function toArray($request)
     {
+        $timeCreated = Carbon::parse($this->created_at)->timestamp;
         return [
             'type' => $this->type,
+            'time_created' => $timeCreated,
             'golf' => $this->type === NotificationType::REGISTER_GOLF_SUCCESS ? new GolfResource($this->golf) : new \stdClass(),
             'event' => $this->type === NotificationType::REGISTER_EVENT_SUCCESS ? new EventResource($this->event) : new \stdClass()
         ];

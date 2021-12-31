@@ -73,7 +73,7 @@ class AdminService
         $reservation->status = ReservationStatus::SUCCESS_STATUS;
         $reservation->save();
         $data = [
-            'type' => NotificationType::REGISTER_GOLF_SUCCESS,
+            'type' => NotificationType::REGISTER_EVENT_SUCCESS,
             'user_id' => $reservation->user_id,
             'event_id' => $id
         ];

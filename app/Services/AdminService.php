@@ -10,6 +10,7 @@ use App\Constants\ReservationStatus;
 use App\Http\Resources\AdminEventCollection;
 use App\Http\Resources\AdminGolfCollection;
 use App\Http\Resources\AdminQuestionCollection;
+use App\Http\Resources\AdminUserCollection;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserEventReservationCollection;
 use App\Http\Resources\UserReservationCollection;
@@ -19,6 +20,7 @@ use App\Models\Golf;
 use App\Models\HoleImage;
 use App\Models\Notification;
 use App\Models\Question;
+use App\Models\User;
 use App\Models\UserEventReservation;
 use App\Models\UserReservation;
 use App\Utils\UploadUtil;
@@ -33,9 +35,20 @@ class AdminService
             ->when(!empty($key), function ($query) use ($key) {
                 return $query->where('email', 'like', '%' . $key .'%');
             })
-            ->with('golf')->paginate($limit);
+            ->with('golf')->orderBy('created_at', 'desc')->paginate($limit);
 
         return new UserReservationCollection($reservations);
+    }
+
+    public function getUsers($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $users = User::when(!empty($key), function ($query) use ($key) {
+                return $query->where('name', 'like', '%' . $key .'%');
+            })->paginate($limit);
+
+        return new AdminUserCollection($users);
     }
 
     public function getReservationEvent($params)
@@ -46,7 +59,7 @@ class AdminService
             ->when(!empty($key), function ($query) use ($key) {
                 return $query->where('email', 'like', '%' . $key .'%');
             })
-            ->with('event')->paginate($limit);
+            ->with('event')->orderBy('created_at', 'desc')->paginate($limit);
 
         return new UserEventReservationCollection($reservations);
     }
@@ -89,7 +102,7 @@ class AdminService
         $key = isset($params['key']) ? $params['key'] : '';
         $golfs = Golf::when(!empty($key), function ($query) use ($key) {
                 return $query->where('name', 'like', '%' . $key .'%');
-            })->paginate($limit);
+            })->orderBy('created_at', 'desc')->paginate($limit);
         return new AdminGolfCollection($golfs);
     }
 
@@ -152,7 +165,7 @@ class AdminService
         $key = isset($params['key']) ? $params['key'] : '';
         $reservations = Question::when(!empty($key), function ($query) use ($key) {
                 return $query->where('questions', 'like', '%' . $key .'%');
-            })->paginate($limit);
+            })->orderBy('created_at', 'desc')->paginate($limit);
 
         return new AdminQuestionCollection($reservations);
     }

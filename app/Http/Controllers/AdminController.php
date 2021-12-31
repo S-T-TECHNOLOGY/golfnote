@@ -94,4 +94,10 @@ class AdminController extends AppBaseController
         $data = $this->adminService->uploadImage($request->all());
         return $this->sendResponse($data);
     }
+
+    public function getUsers(Request $request)
+    {
+        $data = $this->adminService->getUsers($request->all());
+        return $this->sendResponse($data);
+    }
 }

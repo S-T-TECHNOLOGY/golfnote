@@ -107,4 +107,16 @@ class AdminController extends AppBaseController
         $data = $this->adminService->createEvent($request->all());
         return $this->sendResponse($data);
     }
+
+    public function getScoreImages(Request $request)
+    {
+        $data = $this->adminService->getScoreImages($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function getScoreImageDetail($id)
+    {
+        $data = $this->adminService->getScoreImageDetail($id);
+        return $this->sendResponse($data);
+    }
 }

@@ -56,6 +56,7 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::post('/room', [RoomController::class, 'createRoom']);
     Route::get('/room/{id}', [RoomController::class, 'getRoomDetail']);
     Route::post('/room/{id}/score', [ScoreController::class, 'calculateScore']);
+    Route::post('/user/score/image', [UserController::class, 'uploadScoreImage']);
     Route::post('/room/{id}/draft-score', [ScoreController::class, 'logDraftScore']);
     Route::post('/user/reservation', [UserController::class, 'reservationGolf']);
     Route::post('/user/reservation-event', [UserController::class, 'reservationEvent']);

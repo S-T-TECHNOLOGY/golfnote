@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Constants\Consts;
 use App\Constants\NotificationType;
 use App\Constants\ReservationStatus;
+use App\Constants\UserScoreImageStatus;
 use App\Http\Resources\AdminEventCollection;
 use App\Http\Resources\AdminGolfCollection;
 use App\Http\Resources\AdminQuestionCollection;
@@ -14,6 +15,8 @@ use App\Http\Resources\AdminUserCollection;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserEventReservationCollection;
 use App\Http\Resources\UserReservationCollection;
+use App\Http\Resources\UserScoreImageCollection;
+use App\Http\Resources\UserScoreImageResource;
 use App\Jobs\SendNotificationReservationGolfSuccess;
 use App\Models\Event;
 use App\Models\Golf;
@@ -23,6 +26,7 @@ use App\Models\Question;
 use App\Models\User;
 use App\Models\UserEventReservation;
 use App\Models\UserReservation;
+use App\Models\UserScoreImage;
 use App\Utils\UploadUtil;
 
 class AdminService
@@ -196,5 +200,19 @@ class AdminService
         return [
             'image' => $image
         ];
+    }
+
+    public function getScoreImages($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $scoreImages = UserScoreImage::where('status', UserScoreImageStatus::PENDING_STATUS)->with('user')->paginate($limit);
+
+        return new UserScoreImageCollection($scoreImages);
+    }
+
+    public function getScoreImageDetail($id)
+    {
+        $scoreImage = UserScoreImage::find($id);
+        return new UserScoreImageResource($scoreImage);
     }
 }

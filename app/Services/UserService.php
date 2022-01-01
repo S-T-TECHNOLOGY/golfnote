@@ -21,6 +21,7 @@ use App\Models\UserClub;
 use App\Models\UserEventReservation;
 use App\Models\UserRequestFriend;
 use App\Models\UserReservation;
+use App\Models\UserScoreImage;
 use App\Utils\Base64Utils;
 use App\Utils\UploadUtil;
 use Illuminate\Support\Facades\Hash;
@@ -157,5 +158,13 @@ class UserService
         $user->update($params);
 
         return $user;
+    }
+
+    public function uploadScoreImage($params, $user)
+    {
+        $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'score');
+        $params['user_id'] = $user->id;
+        UserScoreImage::create($params);
+        return new \stdClass();
     }
 }

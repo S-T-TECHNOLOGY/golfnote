@@ -81,6 +81,12 @@ return [
             'root' => storage_path('app/public/avatar'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
+        ],
+        'score' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/score'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
         ]
 
     ],

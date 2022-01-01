@@ -8,6 +8,7 @@ use App\Http\Requests\UserCreateClubRequest;
 use App\Http\Requests\UserEditProfileRequest;
 use App\Http\Requests\UserEventReservationRequest;
 use App\Http\Requests\UserReservationRequest;
+use App\Http\Requests\UserScoreImageRequest;
 use App\Http\Requests\UserSellOldThingRequest;
 use App\Http\Resources\UserProfileResource;
 use App\Models\User;
@@ -116,6 +117,13 @@ class UserController extends AppBaseController
         $params = $request->only(['name', 'avatar', 'gender', 'phone', 'address']);
         $user = JWTAuth::user();
         $data = $this->userService->editProfile($params, $user);
+        return $this->sendResponse($data);
+    }
+
+    public function uploadScoreImage(UserScoreImageRequest $request)
+    {
+        $user = JWTAuth::user();
+        $data = $this->userService->uploadScoreImage($request->all(), $user);
         return $this->sendResponse($data);
     }
 

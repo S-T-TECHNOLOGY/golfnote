@@ -29,12 +29,14 @@ class UserFriendService
                     ->where('sender_id', $params['received_id']);
             });
         })->first();
-        if ($requestFriend->status == UserAddFriendStatus::PENDING_STATUS) {
-            throw new BusinessException('Bạn đã gửi yêu cầu kết bạn cho người này', UserFriendErrorCode::USER_ADDED_REQUEST);
-        }
+        if ($requestFriend) {
+            if ($requestFriend->status == UserAddFriendStatus::PENDING_STATUS) {
+                throw new BusinessException('Bạn đã gửi yêu cầu kết bạn cho người này', UserFriendErrorCode::USER_ADDED_REQUEST);
+            }
 
-        if ($requestFriend->status == UserAddFriendStatus::ACCEPTED_STATUS) {
-            throw new BusinessException('Bạn và người đó là bạn bè', UserFriendErrorCode::USER_IS_FRIEND);
+            if ($requestFriend->status == UserAddFriendStatus::ACCEPTED_STATUS) {
+                throw new BusinessException('Bạn và người đó là bạn bè', UserFriendErrorCode::USER_IS_FRIEND);
+            }
         }
 
         $params['status'] = UserAddFriendStatus::PENDING_STATUS;

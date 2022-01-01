@@ -178,7 +178,7 @@ class AdminService
 
     public function createEvent($params)
     {
-        $params = UploadUtil::saveBase64ImageToStorage($params['image'], 'event');
+        $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'event');
         $params['quantity_remain'] = $params['quantity'];
         Event::create($params);
         return new \stdClass();

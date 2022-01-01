@@ -10,6 +10,8 @@ use App\Constants\ReservationStatus;
 use App\Constants\UserScoreImageStatus;
 use App\Http\Resources\AdminEventCollection;
 use App\Http\Resources\AdminGolfCollection;
+use App\Http\Resources\AdminMarketCollection;
+use App\Http\Resources\AdminMarketResource;
 use App\Http\Resources\AdminQuestionCollection;
 use App\Http\Resources\AdminUserCollection;
 use App\Http\Resources\NotificationResource;
@@ -21,6 +23,7 @@ use App\Jobs\SendNotificationReservationGolfSuccess;
 use App\Models\Event;
 use App\Models\Golf;
 use App\Models\HoleImage;
+use App\Models\Market;
 use App\Models\Notification;
 use App\Models\Question;
 use App\Models\User;
@@ -214,5 +217,22 @@ class AdminService
     {
         $scoreImage = UserScoreImage::find($id);
         return new UserScoreImageResource($scoreImage);
+    }
+
+    public function getMarkets($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $markets = Market::when(!empty($key), function ($query) use ($key) {
+            return $query->where('name', 'like', '%' . $key .'%');
+        })->orderBy('created_at', 'desc')->paginate($limit);
+
+        return new AdminMarketCollection($markets);
+    }
+
+    public function deleteMarket($id)
+    {
+        Market::where('id', $id)->delete();
+        return new \stdClass();
     }
 }

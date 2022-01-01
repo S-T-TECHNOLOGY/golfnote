@@ -119,4 +119,16 @@ class AdminController extends AppBaseController
         $data = $this->adminService->getScoreImageDetail($id);
         return $this->sendResponse($data);
     }
+
+    public function getMarkets(Request $request)
+    {
+        $data = $this->adminService->getMarkets($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function deleteMarket($id)
+    {
+        $data = $this->adminService->deleteMarket($id);
+        return $this->sendResponse($data);
+    }
 }

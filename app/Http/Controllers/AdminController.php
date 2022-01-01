@@ -129,7 +129,7 @@ class AdminController extends AppBaseController
 
     public function createMarket(CreateMarketRequest $request)
     {
-        $data = $this->adminService->getMarkets($request->all());
+        $data = $this->adminService->createMarket($request->all());
         return $this->sendResponse($data);
     }
 

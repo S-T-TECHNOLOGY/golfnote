@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateEventRequest;
 use App\Http\Requests\CreateGolfRequest;
 use App\Http\Requests\CreateQuestionRequest;
 use App\Http\Requests\UploadImageRequest;
@@ -98,6 +99,12 @@ class AdminController extends AppBaseController
     public function getUsers(Request $request)
     {
         $data = $this->adminService->getUsers($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function createEvent(CreateEventRequest $request)
+    {
+        $data = $this->adminService->createEvent($request->all());
         return $this->sendResponse($data);
     }
 }

@@ -18,4 +18,5 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::delete('/questions/{id}', [AdminController::class, 'deleteQuestion']);
     Route::post('/questions', [AdminController::class, 'createQuestion']);
     Route::post('/images', [AdminController::class, 'uploadImage']);
+    Route::post('/events', [AdminController::class, 'createEvent']);
 });

@@ -70,6 +70,12 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'event' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/event'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
         'avatar' => [
             'driver' => 'local',
             'root' => storage_path('app/public/avatar'),

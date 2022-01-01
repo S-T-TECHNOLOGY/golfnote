@@ -176,6 +176,14 @@ class AdminService
         return new \stdClass();
     }
 
+    public function createEvent($params)
+    {
+        $params = UploadUtil::saveBase64ImageToStorage($params['image'], 'event');
+        $params['quantity_remain'] = $params['quantity'];
+        Event::create($params);
+        return new \stdClass();
+    }
+
     public function deleteQuestion($id)
     {
         Question::where('id', $id)->delete();

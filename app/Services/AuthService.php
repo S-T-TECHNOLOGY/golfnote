@@ -75,6 +75,8 @@ class AuthService
             throw new BusinessException('Email không đúng', AuthErrorCode::USER_NOT_FOUND);
         }
         $password = Str::random(8);
+        $user->password = Hash::make($password);
+        $user->save();
         Mail::queue(new ForgotPassword($email, $password));
 
         return new \stdClass();

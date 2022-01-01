@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateEventRequest;
 use App\Http\Requests\CreateGolfRequest;
+use App\Http\Requests\CreateMarketRequest;
 use App\Http\Requests\CreateQuestionRequest;
 use App\Http\Requests\UploadImageRequest;
 use App\Services\AdminService;
@@ -121,6 +122,12 @@ class AdminController extends AppBaseController
     }
 
     public function getMarkets(Request $request)
+    {
+        $data = $this->adminService->getMarkets($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function createMarket(CreateMarketRequest $request)
     {
         $data = $this->adminService->getMarkets($request->all());
         return $this->sendResponse($data);

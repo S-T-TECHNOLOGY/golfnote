@@ -87,6 +87,12 @@ return [
             'root' => storage_path('app/public/score'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
+        ],
+        'market' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/market'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
         ]
 
     ],

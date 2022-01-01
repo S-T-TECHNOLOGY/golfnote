@@ -230,6 +230,20 @@ class AdminService
         return new AdminMarketCollection($markets);
     }
 
+    public function createMarket($params)
+    {
+        $images = [];
+        foreach ($params['images'] as $image) {
+            $url = UploadUtil::saveBase64ImageToStorage($image, 'market');
+            array_push($images, $url);
+        }
+        $params['image'] = json_encode($images);
+        $params['quantity_remain'] = $params['quantity'];
+        Market::create($params);
+
+        return new \stdClass();
+    }
+
     public function deleteMarket($id)
     {
         Market::where('id', $id)->delete();

@@ -27,7 +27,7 @@ class CreateEventRequest extends FormRequest
             'name' => 'required',
             'address' => 'required',
             'quantity' => 'required',
-            'fee_join' => 'required',
+            'join_fee' => 'required',
             'host' => 'required',
             'organizational_unit' => 'required',
             'caddie_fee' => 'required',

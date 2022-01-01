@@ -127,7 +127,7 @@ class RoomService
         return [
             'owner_room' => $ownerRoom,
             'players' => $roomPlayers,
-            'room_id' => $id,
+            'room_id' => $room->id,
             'golf' => $golf,
             'golf_courses' => json_decode($room->golf_courses),
             'time_updated' => empty($draftScore) ? Carbon::now()->format('H:m, d/m/Y') : Carbon::parse($draftScore->updated_at)->format('H:m, d/m/Y'),

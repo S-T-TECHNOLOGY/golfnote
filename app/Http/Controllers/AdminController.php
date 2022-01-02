@@ -91,6 +91,12 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function deleteEvent($id)
+    {
+        $data = $this->adminService->deleteEvent($id);
+        return $this->sendResponse($data);
+    }
+
     public function uploadImage(UploadImageRequest $request)
     {
         $data = $this->adminService->uploadImage($request->all());

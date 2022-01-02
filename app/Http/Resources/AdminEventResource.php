@@ -35,6 +35,7 @@ class AdminEventResource extends JsonResource
             'address' => $this->address,
             'status' => $status,
             'start_date' => $dateStart->format('Y-m-d H:i'),
+            'end_date' => $dateEnd->format('Y-m-d H:i'),
             'join_fee' => $this->join_fee,
             'quantity' => $this->quantity,
             'quantity_remain' => $this->quantity_remain,

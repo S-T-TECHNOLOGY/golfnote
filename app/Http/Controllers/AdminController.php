@@ -151,4 +151,10 @@ class AdminController extends AppBaseController
         $data = $this->adminService->deleteMarket($id);
         return $this->sendResponse($data);
     }
+
+    public function deleteOldMarket($id)
+    {
+        $data = $this->adminService->deleteOldMarket($id);
+        return $this->sendResponse($data);
+    }
 }

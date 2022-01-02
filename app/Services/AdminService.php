@@ -262,4 +262,10 @@ class AdminService
         Market::where('id', $id)->delete();
         return new \stdClass();
     }
+
+    public function deleteOldMarket($id)
+    {
+        OldThing::where('id', $id)->delete();
+        return new \stdClass();
+    }
 }

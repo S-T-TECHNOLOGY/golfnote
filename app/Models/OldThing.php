@@ -19,4 +19,8 @@ class OldThing extends Model
         'price',
         'sale_off'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

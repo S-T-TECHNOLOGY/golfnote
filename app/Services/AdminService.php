@@ -12,6 +12,7 @@ use App\Http\Resources\AdminEventCollection;
 use App\Http\Resources\AdminGolfCollection;
 use App\Http\Resources\AdminMarketCollection;
 use App\Http\Resources\AdminMarketResource;
+use App\Http\Resources\AdminOldThingCollection;
 use App\Http\Resources\AdminQuestionCollection;
 use App\Http\Resources\AdminUserCollection;
 use App\Http\Resources\NotificationResource;
@@ -25,6 +26,7 @@ use App\Models\Golf;
 use App\Models\HoleImage;
 use App\Models\Market;
 use App\Models\Notification;
+use App\Models\OldThing;
 use App\Models\Question;
 use App\Models\User;
 use App\Models\UserEventReservation;
@@ -228,6 +230,17 @@ class AdminService
         })->orderBy('created_at', 'desc')->paginate($limit);
 
         return new AdminMarketCollection($markets);
+    }
+
+    public function getOldMarkets($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $markets = OldThing::when(!empty($key), function ($query) use ($key) {
+            return $query->where('name', 'like', '%' . $key .'%');
+        })->with('user')->orderBy('created_at', 'desc')->paginate($limit);
+
+        return new AdminOldThingCollection($markets);
     }
 
     public function createMarket($params)

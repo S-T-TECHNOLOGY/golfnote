@@ -133,11 +133,18 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function getOldMarkets(Request $request)
+    {
+        $data = $this->adminService->getOldMarkets($request->all());
+        return $this->sendResponse($data);
+    }
+
     public function createMarket(CreateMarketRequest $request)
     {
         $data = $this->adminService->createMarket($request->all());
         return $this->sendResponse($data);
     }
+
 
     public function deleteMarket($id)
     {

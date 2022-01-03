@@ -4,9 +4,13 @@
 namespace App\Services;
 
 
+use App\Constants\NotificationType;
 use App\Constants\UserAddFriendStatus;
 use App\Errors\UserFriendErrorCode;
 use App\Exceptions\BusinessException;
+use App\Http\Resources\NotificationResource;
+use App\Jobs\SendNotificationRequestFriend;
+use App\Models\Notification;
 use App\Models\User;
 use App\Models\UserRequestFriend;
 
@@ -41,7 +45,15 @@ class UserFriendService
 
         $params['status'] = UserAddFriendStatus::PENDING_STATUS;
 
-        UserRequestFriend::create($params);
+        $requestFriend = UserRequestFriend::create($params);
+        $notificationParams = [
+            'request_friend_id' => $requestFriend->id,
+            'type' => NotificationType::RECEIVED_REQUEST_FRIEND,
+            'user_id' => $params['received_id']
+        ];
+        $notification = Notification::create($notificationParams);
+        SendNotificationRequestFriend::dispatch($params['received_id'], collect(new NotificationResource($notification))->toArray());
+
         return new \stdClass();
     }
 
@@ -51,6 +63,13 @@ class UserFriendService
         $requestAddFriend = $this->getAddFriendRequest($params);
         $requestAddFriend->status = UserAddFriendStatus::ACCEPTED_STATUS;
         $requestAddFriend->save();
+        return new \stdClass();
+    }
+
+    public function rejectRequest($params)
+    {
+        $requestAddFriend = $this->getAddFriendRequest($params);
+        $requestAddFriend->delete();
         return new \stdClass();
     }
 

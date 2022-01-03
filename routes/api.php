@@ -68,6 +68,7 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::put('/user/password', [UserController::class, 'changePassword']);
     Route::post('/user/friend', [UserFriendController::class, 'addFriend']);
     Route::put('/user/friend/accept', [UserFriendController::class, 'acceptRequest']);
+    Route::put('/user/friend/reject', [UserFriendController::class, 'rejectRequest']);
     Route::put('/user/friend/cancel', [UserFriendController::class, 'cancelRequest']);
     Route::put('/logout', [UserController::class, 'logout']);
 });

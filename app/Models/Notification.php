@@ -13,7 +13,8 @@ class Notification extends Model
         'user_id',
         'type',
         'golf_id',
-        'event_id'
+        'event_id',
+        'request_friend_id'
     ];
 
     public function golf()

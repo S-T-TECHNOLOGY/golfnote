@@ -6,6 +6,7 @@ use App\Constants\UserScoreImageStatus;
 use App\Errors\ScoreImageErrorCode;
 use App\Exceptions\BusinessException;
 use App\Http\Requests\AdminHandleScoreImageRequest;
+use App\Http\Requests\AdminPushNotificationRequest;
 use App\Http\Requests\CreateEventRequest;
 use App\Http\Requests\CreateGolfRequest;
 use App\Http\Requests\CreateMarketRequest;
@@ -163,6 +164,12 @@ class AdminController extends AppBaseController
     public function deleteOldMarket($id)
     {
         $data = $this->adminService->deleteOldMarket($id);
+        return $this->sendResponse($data);
+    }
+
+    public function pushNotification(AdminPushNotificationRequest $request)
+    {
+        $data = $this->adminService->pushNotification($request->all());
         return $this->sendResponse($data);
     }
 

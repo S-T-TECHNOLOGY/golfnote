@@ -28,4 +28,5 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::post('/markets', [AdminController::class, 'createMarket']);
     Route::delete('/markets/{id}', [AdminController::class, 'deleteMarket']);
     Route::post('/events', [AdminController::class, 'createEvent']);
+    Route::post('/notifications', [AdminController::class, 'pushNotification']);
 });

@@ -20,6 +20,7 @@ use App\Http\Resources\UserEventReservationCollection;
 use App\Http\Resources\UserReservationCollection;
 use App\Http\Resources\UserScoreImageCollection;
 use App\Http\Resources\UserScoreImageResource;
+use App\Jobs\SendNotificationAllUser;
 use App\Jobs\SendNotificationReservationGolfSuccess;
 use App\Models\Event;
 use App\Models\Golf;
@@ -274,6 +275,19 @@ class AdminService
     public function deleteOldMarket($id)
     {
         OldThing::where('id', $id)->delete();
+        return new \stdClass();
+    }
+
+    public function pushNotification($params)
+    {
+        $data = [
+            'title' => $params['title'],
+            'content' => $params['content']
+        ];
+
+        $data['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'notification');
+        $users = User::whereNotNull('fcm_token')->get();
+        SendNotificationAllUser::dispatch($users, $data);
         return new \stdClass();
     }
 }

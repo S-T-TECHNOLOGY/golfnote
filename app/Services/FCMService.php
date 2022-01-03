@@ -39,7 +39,7 @@ class FCMService
         } else {
             $fields = [
                 'to'   => $token,
-                'data' => array_merge($data, $content)
+                'data' => $data
             ];
         }
 

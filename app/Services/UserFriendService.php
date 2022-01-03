@@ -60,6 +60,27 @@ class UserFriendService
         return new \stdClass();
     }
 
+    public function unFriend($params)
+    {
+        $userFriend = User::where('id', $params['received_id'])
+            ->where('id', '!=', $params['sender_id'])->where('active', 1)->first();
+        if (!$userFriend) {
+            throw new BusinessException('User không tồn tại', UserFriendErrorCode::USER_NOT_FOUND);
+        }
+
+        UserRequestFriend::where(function ($query) use ($params) {
+            return $query->where(function ($query) use ($params) {
+                return $query->where('sender_id', $params['sender_id'])
+                    ->where('received_id', $params['received_id']);
+            })->orWhere(function ($query) use ($params) {
+                return $query->where('received_id', $params['sender_id'])
+                    ->where('sender_id', $params['received_id']);
+            });
+        })->where('status', UserAddFriendStatus::ACCEPTED_STATUS)->delete();
+
+        return new \stdClass();
+    }
+
 
     public function acceptRequest($params)
     {
@@ -81,6 +102,7 @@ class UserFriendService
     public function cancelRequest($params)
     {
         $requestAddFriend = $this->getAddFriendRequestToCancel($params);
+        Notification::where('request_friend_id', $requestAddFriend->id)->delete();
         $requestAddFriend->delete();
         return new \stdClass();
     }

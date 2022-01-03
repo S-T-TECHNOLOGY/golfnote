@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserAcceptFriendRequest;
 use App\Http\Requests\UserAddFriendRequest;
 use App\Http\Requests\UserCancelFriendRequest;
+use App\Http\Requests\UserUnFriendRequest;
 use App\Services\UserFriendService;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -24,6 +25,15 @@ class UserFriendController extends AppBaseController
         $user = JWTAuth::user();
         $params['sender_id'] = $user->id;
         $data = $this->userFriendService->addFriend($params);
+        return $this->sendResponse($data);
+    }
+
+    public function unFriend(UserUnFriendRequest $request)
+    {
+        $params['received_id'] = $request->user_id;
+        $user = JWTAuth::user();
+        $params['sender_id'] = $user->id;
+        $data = $this->userFriendService->unFriend($params);
         return $this->sendResponse($data);
     }
 

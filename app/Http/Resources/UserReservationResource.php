@@ -20,7 +20,7 @@ class UserReservationResource extends JsonResource
             'email' => $this->email,
             'date' => $this->date,
             'total_player' => $this->total_player,
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'golf' => [
                 'id' => $this->golf->id,
                 'name' => $this->golf->name,

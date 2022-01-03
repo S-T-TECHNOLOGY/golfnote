@@ -23,6 +23,7 @@ class AdminOldThingResource extends JsonResource
             'sale_off' => $this->sale_off,
             'quantity' => $this->quantity,
             'description' => $this->description,
+            'created_at' => $this->created_at,
             'user' => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,

@@ -19,6 +19,7 @@ class UserEventReservationResource extends JsonResource
             'user_name' => $this->user_name,
             'email' => $this->email,
             'phone' => $this->phone,
+            'created_at' => $this->created_at,
             'event' => [
                 'id' => $this->event->id,
                 'name' => $this->event->name,

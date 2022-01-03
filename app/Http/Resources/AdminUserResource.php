@@ -21,7 +21,8 @@ class AdminUserResource extends JsonResource
             'avatar' => $this->avatar,
             'phone' => $this->phone,
             'address' => $this->address,
-            'email' => $this->email
+            'email' => $this->email,
+            'created_at' => $this->created_at,
         ];
     }
 }

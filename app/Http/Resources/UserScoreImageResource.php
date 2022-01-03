@@ -17,6 +17,7 @@ class UserScoreImageResource extends JsonResource
         return [
             'id' => $this->id,
             'image' => $this->image,
+            'created_at' => $this->created_at,
             'user' => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,

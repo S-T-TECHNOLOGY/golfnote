@@ -19,9 +19,14 @@ use Illuminate\Support\Facades\DB;
 
 class ScoreService
 {
-    public function calculateScore($params)
+    public function calculateScore($params, $isAdmin = false)
     {
-        $room = Room::where('id', $params['id'])->where('owner_id', $params['user_id'])->where('status', RoomStatus::GOING_ON_STATUS)->first();
+        if ($isAdmin) {
+            $room = Room::where('id', $params['id'])->where('status', RoomStatus::HANDLE_SCORE)->first();
+        } else {
+            $room = Room::where('id', $params['id'])->where('owner_id', $params['user_id'])->where('status', RoomStatus::GOING_ON_STATUS)->first();
+        }
+
         if (!$room) {
             throw new BusinessException('Không tìm thấy phòng chơi',RoomErrorCode::ROOM_NOT_FOUND);
         }

@@ -2,20 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\UserScoreImageStatus;
+use App\Errors\ScoreImageErrorCode;
+use App\Exceptions\BusinessException;
+use App\Http\Requests\AdminHandleScoreImageRequest;
 use App\Http\Requests\CreateEventRequest;
 use App\Http\Requests\CreateGolfRequest;
 use App\Http\Requests\CreateMarketRequest;
 use App\Http\Requests\CreateQuestionRequest;
 use App\Http\Requests\UploadImageRequest;
+use App\Models\UserScoreImage;
 use App\Services\AdminService;
+use App\Services\ScoreService;
 use Illuminate\Http\Request;
 
 class AdminController extends AppBaseController
 {
     protected $adminService;
-    public function __construct(AdminService $adminService)
+    protected $scoreService;
+    public function __construct(AdminService $adminService, ScoreService $scoreService)
     {
         $this->adminService = $adminService;
+        $this->scoreService = $scoreService;
     }
 
     public function getReservationGolf(Request $request)
@@ -155,6 +163,22 @@ class AdminController extends AppBaseController
     public function deleteOldMarket($id)
     {
         $data = $this->adminService->deleteOldMarket($id);
+        return $this->sendResponse($data);
+    }
+
+    public function handleScoreImage(AdminHandleScoreImageRequest $request, $id)
+    {
+        $scoreImage = UserScoreImage::where('id', $id)->first();
+        if (!$scoreImage) {
+            throw new BusinessException('Không tìm thấy phiếu điểm', ScoreImageErrorCode::SCORE_IMAGE_NOT_FOUND);
+        }
+
+        $params = $request->all();
+        $params['id'] = $scoreImage->room_id;
+        $data = $this->scoreService->calculateScore($params, true);
+        $scoreImage->status = UserScoreImageStatus::COMPLETED_STATUS;
+        $scoreImage->save();
+
         return $this->sendResponse($data);
     }
 }

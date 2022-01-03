@@ -21,6 +21,7 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::post('/images', [AdminController::class, 'uploadImage']);
     Route::get('/score/images', [AdminController::class, 'getScoreImages']);
     Route::get('/score/images/{id}', [AdminController::class, 'getScoreImageDetail']);
+    Route::post('/score/images/{id}', [AdminController::class, 'handleScoreImage']);
     Route::get('/markets', [AdminController::class, 'getMarkets']);
     Route::get('/old/markets', [AdminController::class, 'getOldMarkets']);
     Route::delete('/old/markets/{id}', [AdminController::class, 'deleteOldMarket']);

@@ -11,10 +11,15 @@ class UserScoreImage extends Model
     protected $table = 'user_score_imgages';
     protected $fillable = [
         'user_id',
-        'image'
+        'image',
+        'room_id'
     ];
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
     }
 }

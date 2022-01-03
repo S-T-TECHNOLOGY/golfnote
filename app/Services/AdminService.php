@@ -28,6 +28,7 @@ use App\Models\Market;
 use App\Models\Notification;
 use App\Models\OldThing;
 use App\Models\Question;
+use App\Models\RoomPlayer;
 use App\Models\User;
 use App\Models\UserEventReservation;
 use App\Models\UserReservation;
@@ -217,8 +218,15 @@ class AdminService
 
     public function getScoreImageDetail($id)
     {
-        $scoreImage = UserScoreImage::find($id);
-        return new UserScoreImageResource($scoreImage);
+        $scoreImage = UserScoreImage::where('id', $id)->with('room', 'user')->first();
+        $userPlayers = RoomPlayer::select('user_id', 'name')->where('room_id', $scoreImage->room_id)->get();
+        $golf = Golf::select('id', 'name', 'address') ->where('id', $scoreImage->room->golf_id)->first();
+        return [
+            'id' => $scoreImage->id,
+            'image' => $scoreImage->image,
+            'users' => $userPlayers,
+            'golf' => $golf
+        ];
     }
 
     public function getMarkets($params)

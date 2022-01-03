@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use App\Constants\Consts;
+use App\Constants\RoomStatus;
 use App\Constants\UserAddFriendStatus;
 use App\Errors\AuthErrorCode;
 use App\Errors\EventErrorCode;
@@ -16,6 +17,7 @@ use App\Http\Resources\UserCollection;
 use App\Models\Event;
 use App\Models\Golf;
 use App\Models\OldThing;
+use App\Models\Room;
 use App\Models\User;
 use App\Models\UserClub;
 use App\Models\UserEventReservation;
@@ -164,6 +166,7 @@ class UserService
     {
         $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'score');
         $params['user_id'] = $user->id;
+        Room::where('id', $params['room_id'])->update(['status' => RoomStatus::HANDLE_SCORE]);
         UserScoreImage::create($params);
         return new \stdClass();
     }

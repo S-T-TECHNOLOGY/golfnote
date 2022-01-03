@@ -282,7 +282,8 @@ class AdminService
     {
         $data = [
             'title' => $params['title'],
-            'content' => $params['content']
+            'content' => $params['content'],
+            'type' => NotificationType::OTHER
         ];
 
         $data['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'notification');

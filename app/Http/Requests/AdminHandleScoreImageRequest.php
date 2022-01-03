@@ -24,7 +24,7 @@ class AdminHandleScoreImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'score' => 'array | required'
+            'scores' => 'array | required'
         ];
     }
 }

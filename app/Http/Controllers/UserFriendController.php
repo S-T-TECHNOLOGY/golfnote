@@ -6,6 +6,7 @@ use App\Http\Requests\UserAcceptFriendRequest;
 use App\Http\Requests\UserAddFriendRequest;
 use App\Http\Requests\UserCancelFriendRequest;
 use App\Services\UserFriendService;
+use Illuminate\Http\Request;
 use JWTAuth;
 
 class UserFriendController extends AppBaseController
@@ -56,6 +57,22 @@ class UserFriendController extends AppBaseController
             'user_id' => $user->id
         ];
         $data = $this->userFriendService->cancelRequest($params);
+        return $this->sendResponse($data);
+    }
+
+    public function getFriends(Request $request)
+    {
+        $user = JWTAuth::user();
+        $params = $request->all();
+        $data = $this->userFriendService->getFriends($params, $user);
+        return $this->sendResponse($data);
+    }
+
+    public function getRequestFriends(Request $request)
+    {
+        $user = JWTAuth::user();
+        $params = $request->all();
+        $data = $this->userFriendService->getRequestFriends($params, $user);
         return $this->sendResponse($data);
     }
 }

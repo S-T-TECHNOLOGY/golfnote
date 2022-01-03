@@ -4,11 +4,14 @@
 namespace App\Services;
 
 
+use App\Constants\Consts;
 use App\Constants\NotificationType;
 use App\Constants\UserAddFriendStatus;
+use App\Constants\UserFriendStatus;
 use App\Errors\UserFriendErrorCode;
 use App\Exceptions\BusinessException;
 use App\Http\Resources\NotificationResource;
+use App\Http\Resources\UserCollection;
 use App\Jobs\SendNotificationRequestFriend;
 use App\Models\Notification;
 use App\Models\User;
@@ -63,12 +66,14 @@ class UserFriendService
         $requestAddFriend = $this->getAddFriendRequest($params);
         $requestAddFriend->status = UserAddFriendStatus::ACCEPTED_STATUS;
         $requestAddFriend->save();
+        Notification::where('request_friend_id', $requestAddFriend->id)->delete();
         return new \stdClass();
     }
 
     public function rejectRequest($params)
     {
         $requestAddFriend = $this->getAddFriendRequest($params);
+        Notification::where('request_friend_id', $requestAddFriend->id)->delete();
         $requestAddFriend->delete();
         return new \stdClass();
     }
@@ -80,6 +85,50 @@ class UserFriendService
         return new \stdClass();
     }
 
+    public function getFriends($params, $user)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+
+        $requestFriend = UserRequestFriend::where(function ($query) use ($user) {
+            return $query->where('sender_id', $user->id)->orWhere('received_id', $user->id);
+        })->where('status', UserAddFriendStatus::ACCEPTED_STATUS)->get();
+
+        $userIds = $requestFriend->map(function ($friend) use ($user){
+           return $friend->sender_id ===  $user->id ? $friend->received_id : $friend->sender_id;
+        })->toArray();
+
+        $users = User::whereIn('id', $userIds)->when(!empty($key), function ($query) use ($key) {
+            return $query->where('name', 'like', '%' . $key .'%');
+        })->paginate($limit);
+
+        $users->map(function ($item) {
+            $item['friend_status'] = UserFriendStatus::FRIEND;
+            return $item;
+        });
+
+        return new UserCollection($users);
+    }
+
+    public function getRequestFriends($params, $user)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+
+        $userIds = UserRequestFriend::where('received_id', $user->id)
+            ->where('status', UserAddFriendStatus::PENDING_STATUS)->pluck('sender_id')->toArray();
+
+        $users = User::whereIn('id', $userIds)->when(!empty($key), function ($query) use ($key) {
+            return $query->where('name', 'like', '%' . $key .'%');
+        })->paginate($limit);
+
+        $users->map(function ($item) {
+            $item['friend_status'] = UserFriendStatus::RECEIVED_REQUEST;
+            return $item;
+        });
+
+        return new UserCollection($users);
+    }
     private function getAddFriendRequest($params)
     {
         $requestAddFriend = UserRequestFriend::where('sender_id', $params['sender_id'])->where('received_id', $params['user_id'])

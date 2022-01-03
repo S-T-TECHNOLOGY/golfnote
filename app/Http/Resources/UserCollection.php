@@ -21,6 +21,7 @@ class UserCollection extends ResourceCollection
         return [
             'datas' => UserResource::collection($this->collection),
             'next_page' => $next_page,
+            'total' => $this->total()
         ];
     }
 }

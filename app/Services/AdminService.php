@@ -299,6 +299,7 @@ class AdminService
         }
         $params['image'] = json_encode($images);
         $params['quantity_remain'] = $params['quantity'];
+        unset($params['images']);
         Market::where('id', $params['id'])->update($params);
 
         return new \stdClass();

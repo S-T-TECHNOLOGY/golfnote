@@ -60,6 +60,12 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function getGolfDetail($id)
+    {
+        $data = $this->adminService->getGolfDetail($id);
+        return $this->sendResponse($data);
+    }
+
     public function deleteGolf($id)
     {
         $data = $this->adminService->deleteGolf($id);

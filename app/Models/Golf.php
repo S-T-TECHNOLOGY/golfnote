@@ -22,4 +22,8 @@ class Golf extends Model
         'number_hole',
         'is_open'
     ];
+    public function holes()
+    {
+        return $this->hasMany(HoleImage::class);
+    }
 }

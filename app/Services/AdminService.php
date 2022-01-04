@@ -11,6 +11,7 @@ use App\Constants\UserScoreImageStatus;
 use App\Http\Resources\AdminEventCollection;
 use App\Http\Resources\AdminEventResource;
 use App\Http\Resources\AdminGolfCollection;
+use App\Http\Resources\AdminGolfDetailResource;
 use App\Http\Resources\AdminMarketCollection;
 use App\Http\Resources\AdminMarketResource;
 use App\Http\Resources\AdminOldThingCollection;
@@ -118,6 +119,12 @@ class AdminService
                 return $query->where('name', 'like', '%' . $key .'%');
             })->orderBy('created_at', 'desc')->paginate($limit);
         return new AdminGolfCollection($golfs);
+    }
+
+    public function getGolfDetail($id)
+    {
+        $golf = Golf::with('holes')->where('id', $id)->first();
+        return new AdminGolfDetailResource($golf);
     }
 
     public function deleteGolf($id)

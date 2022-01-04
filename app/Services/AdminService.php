@@ -9,6 +9,7 @@ use App\Constants\NotificationType;
 use App\Constants\ReservationStatus;
 use App\Constants\UserScoreImageStatus;
 use App\Http\Resources\AdminEventCollection;
+use App\Http\Resources\AdminEventResource;
 use App\Http\Resources\AdminGolfCollection;
 use App\Http\Resources\AdminMarketCollection;
 use App\Http\Resources\AdminMarketResource;
@@ -136,6 +137,12 @@ class AdminService
         return new AdminEventCollection($events);
     }
 
+    public function getEventDetail($id)
+    {
+        $event = Event::find($id);
+        return new AdminEventResource($event);
+    }
+
     public function deleteEvent($id)
     {
         Event::where('id', $id)->delete();
@@ -206,6 +213,17 @@ class AdminService
         $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'event');
         $params['quantity_remain'] = $params['quantity'];
         Event::create($params);
+        return new \stdClass();
+    }
+
+    public function editEvent($params)
+    {
+        if (Base64Utils::checkIsBase64($params['image'])) {
+            $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'event');
+        }
+        $params['quantity_remain'] = $params['quantity'];
+        Event::where('id', $params['id'])->update($params);
+
         return new \stdClass();
     }
 

@@ -80,6 +80,12 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function getEventDetail($id)
+    {
+        $data = $this->adminService->getEventDetail($id);
+        return $this->sendResponse($data);
+    }
+
     public function getQuestions(Request $request)
     {
         $params = $request->all();
@@ -135,6 +141,14 @@ class AdminController extends AppBaseController
     public function createEvent(CreateEventRequest $request)
     {
         $data = $this->adminService->createEvent($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function editEvent(CreateEventRequest $request, $id)
+    {
+        $params = $request->all();
+        $params['id'] = $id;
+        $data = $this->adminService->editEvent($params);
         return $this->sendResponse($data);
     }
 

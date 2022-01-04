@@ -16,6 +16,7 @@ use App\Http\Resources\AdminOldThingCollection;
 use App\Http\Resources\AdminQuestionCollection;
 use App\Http\Resources\AdminUserCollection;
 use App\Http\Resources\NotificationResource;
+use App\Http\Resources\QuestionResource;
 use App\Http\Resources\UserEventReservationCollection;
 use App\Http\Resources\UserReservationCollection;
 use App\Http\Resources\UserScoreImageCollection;
@@ -174,16 +175,28 @@ class AdminService
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
-        $reservations = Question::when(!empty($key), function ($query) use ($key) {
+        $questions = Question::when(!empty($key), function ($query) use ($key) {
                 return $query->where('question', 'like', '%' . $key .'%');
             })->orderBy('created_at', 'desc')->paginate($limit);
 
-        return new AdminQuestionCollection($reservations);
+        return new AdminQuestionCollection($questions);
+    }
+
+    public function getQuestionDetail($id)
+    {
+        $question = Question::find($id);
+        return new QuestionResource($question);
     }
 
     public function createQuestion($param)
     {
         Question::create($param);
+        return new \stdClass();
+    }
+
+    public function editQuestion($param)
+    {
+        Question::where('id', $param['id'])->update($param);
         return new \stdClass();
     }
 

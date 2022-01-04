@@ -87,10 +87,24 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function getQuestionDetail($id)
+    {
+        $data = $this->adminService->getQuestionDetail($id);
+        return $this->sendResponse($data);
+    }
+
     public function createQuestion(CreateQuestionRequest $request)
     {
         $params = $request->all();
         $data = $this->adminService->createQuestion($params);
+        return $this->sendResponse($data);
+    }
+
+    public function editQuestion(CreateQuestionRequest $request, $id)
+    {
+        $params = $request->all();
+        $params['id'] = $id;
+        $data = $this->adminService->editQuestion($params);
         return $this->sendResponse($data);
     }
 

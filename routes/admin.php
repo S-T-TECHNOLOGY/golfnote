@@ -15,6 +15,8 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::delete('/golfs/{id}', [AdminController::class, 'deleteGolf']);
     Route::post('/golf', [AdminController::class, 'createGolf']);
     Route::get('/questions', [AdminController::class, 'getQuestions']);
+    Route::get('/questions/{id}', [AdminController::class, 'getQuestionDetail']);
+    Route::put('/questions/{id}', [AdminController::class, 'editQuestion']);
     Route::get('/users', [AdminController::class, 'getUsers']);
     Route::delete('/questions/{id}', [AdminController::class, 'deleteQuestion']);
     Route::post('/questions', [AdminController::class, 'createQuestion']);

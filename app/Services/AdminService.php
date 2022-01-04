@@ -35,6 +35,7 @@ use App\Models\User;
 use App\Models\UserEventReservation;
 use App\Models\UserReservation;
 use App\Models\UserScoreImage;
+use App\Utils\Base64Utils;
 use App\Utils\UploadUtil;
 
 class AdminService
@@ -254,6 +255,12 @@ class AdminService
         return new AdminMarketCollection($markets);
     }
 
+    public function getMarketDetail($id)
+    {
+        $market = Market::find($id);
+        return new AdminMarketResource($market);
+    }
+
     public function getOldMarkets($params)
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
@@ -275,6 +282,24 @@ class AdminService
         $params['image'] = json_encode($images);
         $params['quantity_remain'] = $params['quantity'];
         Market::create($params);
+
+        return new \stdClass();
+    }
+
+    public function editMarket($params)
+    {
+        $images = [];
+        foreach ($params['images'] as $image) {
+            if (Base64Utils::checkIsBase64($image)) {
+                $url = UploadUtil::saveBase64ImageToStorage($image, 'market');
+                array_push($images, $url);
+            } else {
+                array_push($images, $image);
+            }
+        }
+        $params['image'] = json_encode($images);
+        $params['quantity_remain'] = $params['quantity'];
+        Market::where('id', $params['id'])->update($params);
 
         return new \stdClass();
     }

@@ -156,6 +156,12 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function getMarketDetail($id)
+    {
+        $data = $this->adminService->getMarketDetail($id);
+        return $this->sendResponse($data);
+    }
+
     public function getOldMarkets(Request $request)
     {
         $data = $this->adminService->getOldMarkets($request->all());
@@ -165,6 +171,14 @@ class AdminController extends AppBaseController
     public function createMarket(CreateMarketRequest $request)
     {
         $data = $this->adminService->createMarket($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function editMarket(CreateMarketRequest $request, $id)
+    {
+        $params = $request->all();
+        $params['id'] = $id;
+        $data = $this->adminService->editMarket($params);
         return $this->sendResponse($data);
     }
 

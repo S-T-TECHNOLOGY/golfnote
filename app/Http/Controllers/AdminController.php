@@ -248,4 +248,10 @@ class AdminController extends AppBaseController
         $data = $this->adminService->pushAllUserByTemplateNotification($id);
         return $this->sendResponse($data);
     }
+
+    public function deleteNotification($id)
+    {
+        $data = $this->adminService->deleteNotification($id);
+        return $this->sendResponse($data);
+    }
 }

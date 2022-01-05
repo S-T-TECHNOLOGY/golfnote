@@ -39,4 +39,5 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::post('/notifications', [AdminController::class, 'pushNotification']);
     Route::get('/notifications', [AdminController::class, 'getAdminNotifications']);
     Route::post('/notifications/{id}', [AdminController::class, 'pushAllUserByTemplateNotification']);
+    Route::delete('/notifications/{id}', [AdminController::class, 'deleteNotification']);
 });

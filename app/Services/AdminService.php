@@ -385,4 +385,10 @@ class AdminService
 
         return new \stdClass();
     }
+
+    public function deleteNotification($id)
+    {
+        AdminNotification::where('id', $id)->delete();
+        return new \stdClass();
+    }
 }

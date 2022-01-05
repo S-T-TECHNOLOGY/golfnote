@@ -42,6 +42,6 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::post('/notifications/{id}', [AdminController::class, 'pushAllUserByTemplateNotification']);
     Route::delete('/notifications/{id}', [AdminController::class, 'deleteNotification']);
     Route::get('/banners', [AdminController::class, 'getBanners']);
-    Route::delete('/banners/{id}', [AdminController::class, 'deleteBanner']);
+    Route::delete('/golf-banners/{id}', [AdminController::class, 'deleteBanner']);
     Route::post('/banners', [BannerController::class, 'create']);
 });

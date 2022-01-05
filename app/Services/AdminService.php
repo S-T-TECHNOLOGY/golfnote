@@ -354,7 +354,7 @@ class AdminService
 
         $data['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'notification');
         $users = User::whereNotNull('fcm_token')->get();
-        AdminNotification::create($params);
+        AdminNotification::create($data);
         SendNotificationAllUser::dispatch($users, $data);
 
         return new \stdClass();

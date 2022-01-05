@@ -14,6 +14,7 @@ use App\Http\Resources\AdminGolfCollection;
 use App\Http\Resources\AdminGolfDetailResource;
 use App\Http\Resources\AdminMarketCollection;
 use App\Http\Resources\AdminMarketResource;
+use App\Http\Resources\AdminNotificationCollection;
 use App\Http\Resources\AdminOldThingCollection;
 use App\Http\Resources\AdminQuestionCollection;
 use App\Http\Resources\AdminUserCollection;
@@ -25,6 +26,7 @@ use App\Http\Resources\UserScoreImageCollection;
 use App\Http\Resources\UserScoreImageResource;
 use App\Jobs\SendNotificationAllUser;
 use App\Jobs\SendNotificationReservationGolfSuccess;
+use App\Models\AdminNotification;
 use App\Models\Event;
 use App\Models\Golf;
 use App\Models\HoleImage;
@@ -352,7 +354,35 @@ class AdminService
 
         $data['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'notification');
         $users = User::whereNotNull('fcm_token')->get();
+        AdminNotification::create($params);
         SendNotificationAllUser::dispatch($users, $data);
+
+        return new \stdClass();
+    }
+
+    public function getAdminNotifications($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $notifications = AdminNotification::select('id', 'title', 'content', 'image')->when(!empty($key), function ($query) use ($key) {
+            return $query->where('title', 'like', '%' . $key .'%');
+        })->orderBy('created_at', 'desc')->paginate($limit);
+
+        return new AdminNotificationCollection($notifications);
+    }
+
+    public function pushAllUserByTemplateNotification($id)
+    {
+
+        $notification = AdminNotification::find($id);
+        $data = [
+            'title' => $notification->title,
+            'content' => $notification->content,
+            'image' => $notification->image
+        ];
+        $users = User::whereNotNull('fcm_token')->get();
+        SendNotificationAllUser::dispatch($users, $data);
+
         return new \stdClass();
     }
 }

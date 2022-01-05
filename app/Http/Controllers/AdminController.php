@@ -236,4 +236,16 @@ class AdminController extends AppBaseController
 
         return $this->sendResponse($data);
     }
+
+    public function getAdminNotifications(Request $request)
+    {
+        $data = $this->adminService->getAdminNotifications($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function pushAllUserByTemplateNotification($id)
+    {
+        $data = $this->adminService->pushAllUserByTemplateNotification($id);
+        return $this->sendResponse($data);
+    }
 }

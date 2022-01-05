@@ -24,10 +24,7 @@ class CreateBannerRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
-            'content' => 'required',
             'image' => 'required',
-            'expired_date' =>'required',
             'link' => 'required'
         ];
     }

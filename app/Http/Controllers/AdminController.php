@@ -254,4 +254,16 @@ class AdminController extends AppBaseController
         $data = $this->adminService->deleteNotification($id);
         return $this->sendResponse($data);
     }
+
+    public function getBanners()
+    {
+        $data = $this->adminService->getBanner();
+        return $this->sendResponse($data);
+    }
+
+    public function deleteBanner($id)
+    {
+        $data = $this->adminService->deleteBanner($id);
+        return $this->sendResponse($data);
+    }
 }

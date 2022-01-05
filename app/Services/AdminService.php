@@ -27,6 +27,7 @@ use App\Http\Resources\UserScoreImageResource;
 use App\Jobs\SendNotificationAllUser;
 use App\Jobs\SendNotificationReservationGolfSuccess;
 use App\Models\AdminNotification;
+use App\Models\Banner;
 use App\Models\Event;
 use App\Models\Golf;
 use App\Models\HoleImage;
@@ -389,6 +390,18 @@ class AdminService
     public function deleteNotification($id)
     {
         AdminNotification::where('id', $id)->delete();
+        return new \stdClass();
+    }
+
+    public function getBanner()
+    {
+        $banners = Banner::select('id', 'link', 'image')->get();
+        return $banners;
+    }
+
+    public function deleteBanner($id)
+    {
+        Banner::where('id', $id)->delete();
         return new \stdClass();
     }
 }

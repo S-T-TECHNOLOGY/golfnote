@@ -22,8 +22,7 @@ class BannerController extends AppBaseController
 
     public function getBanner()
     {
-        $now = date('Y-m-d');
-        $banner = Banner::select('id', 'image', 'link', 'title', 'content')->where('expired_date', '>=', $now)->first();
+        $banner = Banner::select('id', 'image', 'link', 'title', 'content')->orderBy('created_at', 'desc')->first();
         return $this->sendResponse($banner);
     }
 

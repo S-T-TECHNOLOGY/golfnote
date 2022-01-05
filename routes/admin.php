@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BannerController;
 
 Route::post('/login', [AuthController::class, 'loginAdmin']);
 Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
@@ -40,4 +41,7 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::get('/notifications', [AdminController::class, 'getAdminNotifications']);
     Route::post('/notifications/{id}', [AdminController::class, 'pushAllUserByTemplateNotification']);
     Route::delete('/notifications/{id}', [AdminController::class, 'deleteNotification']);
+    Route::get('/banners', [AdminController::class, 'getBanners']);
+    Route::delete('/banners/{id}', [AdminController::class, 'deleteBanner']);
+    Route::post('/banners', [BannerController::class, 'create']);
 });

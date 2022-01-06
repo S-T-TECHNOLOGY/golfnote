@@ -23,7 +23,7 @@ class AuthService
     public function register($params)
     {
         $params['password'] = Hash::make($params['password']);
-        $params['avatar'] = '/storage/avatar/default.jpeg';
+        $params['avatar'] = '/avatar/default.jpeg';
         $user = User::create($params);
         $code = Str::random(32);
         $mailOtpParams = [

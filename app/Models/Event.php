@@ -20,6 +20,7 @@ class Event extends Model
         'host',
         'organizational_unit',
         'caddie_fee',
-        'green_fee'
+        'green_fee',
+        'description'
     ];
 }

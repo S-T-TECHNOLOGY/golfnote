@@ -188,6 +188,39 @@ class AdminService
         return $golf;
     }
 
+    public function editGolf($params)
+    {
+        if (Base64Utils::checkIsBase64($params['image'])) {
+            $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'golf');
+        }
+
+        $params['is_open'] = 1;
+        $params['number_hole'] = sizeof($params['golf_courses']) * 9 ;
+        $courses = [];
+        $holeImages = [];
+
+        foreach ($params['golf_courses'] as  $course) {
+            array_push($courses, $course['name']);
+            $holes = collect($course['holes'])->map(function ($hole) use ($course) {
+                $hole['course'] = $course['name'];
+                return $hole;
+            })->toArray();
+            $holeImages = array_merge($holeImages, $holes);
+        }
+
+        $params['golf_courses'] = json_encode($courses);
+        $golf = Golf::where('id', $params['id'])->update($params);
+
+        $holeImages = collect($holeImages)->map(function ($hole) use ($params) {
+            $hole['golf_id'] = $params['id'];
+            return $hole;
+        })->toArray();
+        HoleImage::where('golf_id', $params['id'])->delete();
+        HoleImage::insert($holeImages);
+
+        return $golf;
+    }
+
 
     public function getQuestions($params)
     {

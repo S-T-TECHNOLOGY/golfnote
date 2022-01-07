@@ -79,6 +79,14 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function editGolf(CreateGolfRequest $request, $id)
+    {
+        $params = $request->all();
+        $params['id'] = $id;
+        $data = $this->adminService->editGolf($params);
+        return $this->sendResponse($data);
+    }
+
     public function getEvents(Request $request)
     {
         $params = $request->all();

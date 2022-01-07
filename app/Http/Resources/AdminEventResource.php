@@ -42,7 +42,8 @@ class AdminEventResource extends JsonResource
             'host' => $this->host,
             'organizational_unit' => $this->organizational_unit,
             'caddie_fee' => $this->caddie_fee,
-            'green_fee' => $this->green_fee
+            'green_fee' => $this->green_fee,
+            'description' => $this->description
         ];
     }
 }

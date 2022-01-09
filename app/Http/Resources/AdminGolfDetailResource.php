@@ -33,7 +33,8 @@ class AdminGolfDetailResource extends JsonResource
                     'golf_id' => $hole->golf_id,
                     'number_hole' => $hole->number_hole,
                     'image' => $hole->image,
-                    'course' => $hole->course
+                    'course' => $hole->course,
+                    'standard' => $hole->standard
                 ];
                 return $item;
             })

@@ -3,11 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GetHoleStandardRequest;
+use App\Models\GolfHole;
 use App\Models\HoleImage;
 
 class GolfHoleController extends AppBaseController
 {
-    public function getHoleByType(GetHoleStandardRequest $request)
+    public function getHoleByType($type)
+    {
+        $golfHoles = GolfHole::select('number_hole', 'standard')->where('type', $type)->get();
+        return $this->sendResponse($golfHoles);
+    }
+
+    public function getHoleByGolf(GetHoleStandardRequest $request)
     {
         $golfCourses = $request->golf_courses;
         $golfId = $request->golf_id;

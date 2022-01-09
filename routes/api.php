@@ -32,7 +32,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/cities', [CityController::class, 'getCities']);
 Route::post('/forgot_pass', [AuthController::class, 'forgotPassword']);
-Route::get('/golf_hole', [GolfHoleController::class, 'getHoleByType']);
+Route::get('/golf_hole/{type}', [GolfHoleController::class, 'getHoleByType']);
+Route::get('/golf_hole', [GolfHoleController::class, 'getHoleByGolf']);
 Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/banners', [BannerController::class, 'getBanner']);

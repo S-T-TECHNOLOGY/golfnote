@@ -46,7 +46,7 @@
     background-color: lightgrey;
   }
   body {
-    background-color: aliceblue;
+    background-color: #EAF2F2;
     text-align: center;
   }
   .content {
@@ -57,6 +57,7 @@
     padding: 30px 40px;
     text-align: center;
     position: absolute;
+    border-radius: 5px;
     top: 50%;
     left: 50%;
   }

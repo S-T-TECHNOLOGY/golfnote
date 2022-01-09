@@ -295,7 +295,11 @@ class AdminService
     public function getScoreImageDetail($id)
     {
         $scoreImage = UserScoreImage::where('id', $id)->with('room', 'user')->first();
-        $userPlayers = RoomPlayer::select('user_id', 'name')->where('room_id', $scoreImage->room_id)->get();
+        $userPlayers = RoomPlayer::select('user_id', 'name', 'phone')->where('room_id', $scoreImage->room_id)->get();
+        $userPlayers = $userPlayers->map(function ($player) {
+            $player['phone'] = $player['user_id'] ? $player['phone'] : '';
+            return $player;
+        })->toArray();
         $golf = Golf::select('id', 'name', 'address') ->where('id', $scoreImage->room->golf_id)->first();
         return [
             'id' => $scoreImage->id,

@@ -13,6 +13,7 @@ class HoleImage extends Model
         'golf_id',
         'image',
         'course',
-        'number_hole'
+        'number_hole',
+        'standard'
     ];
 }

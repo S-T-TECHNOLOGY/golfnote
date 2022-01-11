@@ -23,7 +23,12 @@ class OldThingResource extends JsonResource
             'sale_off' => $this->sale_off,
             'quantity' => $this->quantity,
             'quantity_remain' => $this->quantity_remain,
-            'description' => $this->description
+            'description' => $this->description,
+            'user' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+                'avatar' => $this->user->avatar
+            ]
         ];
     }
 }

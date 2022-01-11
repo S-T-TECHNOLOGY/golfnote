@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\NotificationType;
 use App\Constants\SettingType;
 use App\Models\Notification;
 use App\Services\NotificationService;
@@ -29,7 +30,7 @@ class NotificationController extends AppBaseController
         $user = JWTAuth::user();
         $user->setting_notification = $user->setting_notification ? SettingType::INACTIVE : SettingType::ACTIVE;
         $user->save();
-        $totalNotifications = Notification::where('user_id', $user->id)->where('is_read', 0)->count();
+        $totalNotifications = Notification::where('user_id', $user->id)->where('type', NotificationType::RECEIVED_REQUEST_FRIEND)->where('is_read', 0)->count();
         $user->notification_unread = $totalNotifications;
         return $this->sendResponse($user);
     }

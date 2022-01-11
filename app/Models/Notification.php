@@ -15,6 +15,7 @@ class Notification extends Model
         'golf_id',
         'event_id',
         'request_friend_id',
+        'info'
 
     ];
 

@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Services\OldThingService;
 use Illuminate\Http\Request;
+use JWTAuth;
 
 class OldThingController extends AppBaseController
 {
@@ -24,6 +25,13 @@ class OldThingController extends AppBaseController
     public function getDetail($id)
     {
         $oldThing = $this->oldThingService->getDetail($id);
+        return $this->sendResponse($oldThing);
+    }
+
+    public function soldOut($id)
+    {
+        $user = JWTAuth::user();
+        $oldThing = $this->oldThingService->soldOut($id,$user);
         return $this->sendResponse($oldThing);
     }
 

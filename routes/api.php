@@ -51,6 +51,7 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::get('/event/{id}', [EventController::class, 'getEventDetail']);
     Route::get('/old_things', [OldThingController::class, 'getAll']);
     Route::get('/old_thing/{id}', [OldThingController::class, 'getDetail']);
+    Route::put('/old_thing/{id}/soldout', [OldThingController::class, 'soldOut']);
     Route::get('/markets', [MarketController::class, 'getAll']);
     Route::get('/market/{id}', [MarketController::class, 'getDetail']);
     Route::post('/room', [RoomController::class, 'createRoom']);

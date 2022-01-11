@@ -34,4 +34,17 @@ class OldThingService
 
         return new OldThingResource($oldThing);
     }
+
+    public function soldOut($id, $user)
+    {
+        $oldThing = OldThing::where('id', $id)->where('user_id', $user->id)->first();
+        if (!$oldThing) {
+            throw new BusinessException('Không tìm thấy đồ cũ', OldThingErrorCode::OLD_THING_NOT_FOUND);
+        }
+
+        $oldThing->quantity_remain = 0;
+        $oldThing->save();
+
+        return new \stdClass();
+    }
 }

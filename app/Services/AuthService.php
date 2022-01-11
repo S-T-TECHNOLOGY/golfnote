@@ -11,6 +11,7 @@ use App\Mail\ForgotPassword;
 use App\Mail\SendOTP;
 use App\Models\Admin;
 use App\Models\MailOtp;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
@@ -60,6 +61,8 @@ class AuthService
         $user->fcm_token = $params['fcm_token'];
         $user->device = $params['device'];
         $user->save();
+        $totalNotifications = Notification::where('user_id', $user->id)->where('is_read', 0)->count();
+        $user->notification_unread = $totalNotifications;
 
         return [
             'access_token' => $token,

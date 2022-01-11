@@ -29,6 +29,8 @@ class NotificationController extends AppBaseController
         $user = JWTAuth::user();
         $user->setting_notification = $user->setting_notification ? SettingType::INACTIVE : SettingType::ACTIVE;
         $user->save();
+        $totalNotifications = Notification::where('user_id', $user->id)->where('is_read', 0)->count();
+        $user->notification_unread = $totalNotifications;
         return $this->sendResponse($user);
     }
 

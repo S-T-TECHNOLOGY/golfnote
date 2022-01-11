@@ -34,9 +34,9 @@ class NotificationResource extends JsonResource
             'user' => $this->type === NotificationType::RECEIVED_REQUEST_FRIEND ? $user : new \stdClass(),
             'golf' => $this->type === NotificationType::REGISTER_GOLF_SUCCESS ? new GolfResource($this->golf) : new \stdClass(),
             'event' => $this->type === NotificationType::REGISTER_EVENT_SUCCESS ? new EventResource($this->event) : new \stdClass(),
-            'title' => $this->type === NotificationType::OTHER ? $data['title'] : '',
-            'content' => $this->type === NotificationType::OTHER ? $data['content'] : '',
-            'image' => $this->type === NotificationType::OTHER ? $data['image'] : '',
+            'title' => $this->type === NotificationType::OTHER ? $data->title : '',
+            'content' => $this->type === NotificationType::OTHER ? $data->content : '',
+            'image' => $this->type === NotificationType::OTHER ? $data->image : '',
         ];
     }
 }

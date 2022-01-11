@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\SettingType;
 use App\Models\Notification;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -21,6 +22,14 @@ class NotificationController extends AppBaseController
         $user = JWTAuth::user();
         $notifications = $this->notificationService->getAll($params, $user);
         return $this->sendResponse($notifications);
+    }
+
+    public function settingNotification()
+    {
+        $user = JWTAuth::user();
+        $user->setting_notification = $user->setting_notification ? SettingType::INACTIVE : SettingType::ACTIVE;
+        $user->save();
+        return $this->sendResponse($user);
     }
 
     public function read($id)

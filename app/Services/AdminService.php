@@ -140,10 +140,10 @@ class AdminService
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
-        $now = date('Y-m-d H:i:s');
+        // $now = date('Y-m-d H:i:s');
         $events = Event::when(!empty($key), function ($query) use ($key) {
             return $query->where('name', 'like', '%' . $key .'%');
-        })->where('end_date', '>=', $now)->orderBy('id', 'desc')->paginate($limit);
+        })->orderBy('id', 'desc')->paginate($limit);
         return new AdminEventCollection($events);
     }
 

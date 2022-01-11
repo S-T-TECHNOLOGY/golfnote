@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Constants\NotificationType;
+use App\Models\Notification;
 use App\Traists\PushNotificationTraist;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -36,7 +38,15 @@ class SendNotificationAllUser implements ShouldQueue
     public function handle()
     {
         foreach ($this->users as $user) {
-            $this->pushMessage($user->fcm_token, $this->data, $user->device);
+            if ($user->setting_notification) {
+                $data = [
+                    'type' => NotificationType::OTHER,
+                    'user_id' => $user->id,
+                    'info' => json_encode($this->data)
+                ];
+                Notification::create($data);
+                $this->pushMessage($user->fcm_token, $this->data, $user->device);
+            }
         }
     }
 }

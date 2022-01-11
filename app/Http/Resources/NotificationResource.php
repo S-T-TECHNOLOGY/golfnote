@@ -22,6 +22,9 @@ class NotificationResource extends JsonResource
             $requestFriend = UserRequestFriend::where('id', $this->request_friend_id)->first();
             $user = User::select('id', 'name', 'avatar')->where('id', $requestFriend->sender_id)->first();
         }
+        if ($this->type === NotificationType::OTHER) {
+            $data = json_decode($this->info);
+        }
 
         return [
             'id' => $this->id,
@@ -30,7 +33,10 @@ class NotificationResource extends JsonResource
             'is_read' => $this->is_read,
             'user' => $this->type === NotificationType::RECEIVED_REQUEST_FRIEND ? $user : new \stdClass(),
             'golf' => $this->type === NotificationType::REGISTER_GOLF_SUCCESS ? new GolfResource($this->golf) : new \stdClass(),
-            'event' => $this->type === NotificationType::REGISTER_EVENT_SUCCESS ? new EventResource($this->event) : new \stdClass()
+            'event' => $this->type === NotificationType::REGISTER_EVENT_SUCCESS ? new EventResource($this->event) : new \stdClass(),
+            'title' => $this->type === NotificationType::OTHER ? $data['title'] : '',
+            'content' => $this->type === NotificationType::OTHER ? $data['content'] : '',
+            'image' => $this->type === NotificationType::OTHER ? $data['image'] : '',
         ];
     }
 }

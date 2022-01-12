@@ -47,7 +47,7 @@ class ScoreService
                 });
             }
             $completeHoles = collect($item['holes'])->filter(function ($hole) {
-                return $hole->total > 0;
+                return $hole['total'] > 0;
             })->toArray();
             $isCompleted = sizeof($completeHoles) === 9 ? true : false;
             $score = collect($item['holes'])->sum('total');

@@ -46,7 +46,7 @@ class ScoreService
                     return $user->id === $item['user_id'];
                 });
             }
-            $completeHoles = collect($item['holes'])->first(function ($hole) {
+            $completeHoles = collect($item['holes'])->filter(function ($hole) {
                 return $hole->total > 0;
             })->toArray();
             $isCompleted = sizeof($completeHoles) === 9 ? true : false;

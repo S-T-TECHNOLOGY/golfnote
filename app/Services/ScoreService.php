@@ -108,7 +108,7 @@ class ScoreService
         $scoreHistories = DB::table('room_scores')->join('rooms', 'room_scores.room_id', 'rooms.id')
             ->where('room_scores.user_id', $user->id)
             ->orderBy('rooms.created_at', 'desc')
-            ->select('rooms.created_at', 'room_scores.score', 'rooms.golf_id')
+            ->select('rooms.created_at', 'room_scores.score', 'rooms.golf_id', 'room_scores.room_id')
             ->get();
         $golfIds = collect($scoreHistories)->pluck('golf_id')->values();
         $golfCourses = Golf::whereIn('id', $golfIds)->get();
@@ -121,6 +121,7 @@ class ScoreService
            $history->time = Carbon::parse($item->created_at)->format('Y/m/d');
            $history->golf_name = $golfCourse->name;
            $history->golf_image = $golfCourse->image;
+           $history->room_id = $item->room_id;
            return $history;
         });
 

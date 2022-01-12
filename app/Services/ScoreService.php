@@ -37,24 +37,25 @@ class ScoreService
         })->map(function ($item) {
             return $item['user_id'];
         })->values();
-        $guestNumber = 0;
         $users = User::whereIn('id', $userIds)->get();
         $records = [];
+        $isCompleted = false;
         foreach ($scores as $item) {
             if ($item['user_id']) {
                 $user = collect($users)->first(function ($user) use ($item) {
                     return $user->id === $item['user_id'];
                 });
             }
+            $completeHoles = collect($item['holes'])->first(function ($hole) {
+                return $hole->total > 0;
+            })->toArray();
+            $isCompleted = sizeof($completeHoles) === 9 ? true : false;
             $score = collect($item['holes'])->sum('total');
-            if (!$item['user_id']) {
-                ++$guestNumber;
-            }
 
             $record = [
                 'room_id' => $params['id'],
                 'user_id' => $item['user_id'],
-                'name' => $item['user_id'] ? $user->name : 'Guest ' . $guestNumber,
+                'name' => $user->name,
                 'phone' => $item['user_id'] ? $user->phone : '',
                 'avatar' => $item['user_id'] ? $user->avatar : '',
                 'infor' => json_encode($item['holes']),
@@ -98,8 +99,9 @@ class ScoreService
          })->sortBy([
              ['score', 'asc']
         ])->values();
-
-        CalculateUserScoreSummary::dispatch($scores);
+        if ($isCompleted) {
+            CalculateUserScoreSummary::dispatch($scores);
+        }
         return $results;
     }
 

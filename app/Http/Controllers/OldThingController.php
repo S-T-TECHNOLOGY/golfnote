@@ -18,7 +18,8 @@ class OldThingController extends AppBaseController
 
     public function getAll(Request $request)
     {
-        $oldThings = $this->oldThingService->getAll($request->all());
+        $user = JWTAuth::user();
+        $oldThings = $this->oldThingService->getAll($request->all(), $user);
         return $this->sendResponse($oldThings);
     }
 

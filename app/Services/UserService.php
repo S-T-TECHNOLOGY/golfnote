@@ -14,6 +14,8 @@ use App\Exceptions\BusinessException;
 use App\Http\Resources\OldThingResource;
 use App\Http\Resources\UserClubResource;
 use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserReservationGolfCollection;
+use App\Http\Resources\UserReservationGolfResource;
 use App\Models\Event;
 use App\Models\Golf;
 use App\Models\OldThing;
@@ -25,7 +27,10 @@ use App\Models\UserRequestFriend;
 use App\Models\UserReservation;
 use App\Models\UserScoreImage;
 use App\Utils\Base64Utils;
+use App\Utils\FormatTime;
 use App\Utils\UploadUtil;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 
@@ -169,5 +174,38 @@ class UserService
         Room::where('id', $params['room_id'])->update(['status' => RoomStatus::HANDLE_SCORE]);
         UserScoreImage::create($params);
         return new \stdClass();
+    }
+
+    public function getReservationEventHistory($params, $user)
+    {
+        $key = isset($params['key']) ? $params['key'] : '';
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $fromDate = isset($params['from_date']) ? $params['from_date'] : '';
+        $toDate = isset($params['to_date']) ? $params['to_date'] : '';
+    }
+
+    public function getReservationGolfHistory($params, $user)
+    {
+        $key = isset($params['key']) ? $params['key'] : '';
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $fromDate = isset($params['from_date']) ? $params['from_date'] : '';
+        $toDate = isset($params['to_date']) ? $params['to_date'] : '';
+        $histories = DB::table('user_golf_reservations')
+            ->join('golfs', 'user_golf_reservations.id', '=', 'golfs.id')
+            ->where('user_golf_reservations.user_id', $user->id)
+            ->when(!empty($key), function ($query) use ($key) {
+                return $query->where('golfs.name', 'like', '%' . $key .'%');
+            })
+            ->when(!empty($fromDate), function ($query) use ($fromDate) {
+                return $query->whereDate('user_golf_reservations.created_at', '>=', Carbon::parse(FormatTime::convertDate($fromDate)));
+            })
+            ->when(!empty($toDate), function ($query) use ($toDate) {
+                return $query->whereDate('user_golf_reservations.created_at', '<=', Carbon::parse(FormatTime::convertDate($toDate)));
+            })
+            ->select('user_golf_reservations.id','user_golf_reservations.status', 'user_golf_reservations.created_at', 'golfs.name', 'golfs.address', 'golfs.id as golf_id')
+            ->orderBy('user_golf_reservations.created_at', 'desc')
+            ->paginate($limit);
+
+        return new UserReservationGolfCollection($histories);
     }
 }

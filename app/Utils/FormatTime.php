@@ -13,4 +13,9 @@ class FormatTime
         $min = $min < 10 ? '0' . $min : $time % 60;
         return $hour . ':' . $min;
     }
+
+    public static function convertDate($date)
+    {
+        return str_replace('/', '-', $date);
+    }
 }

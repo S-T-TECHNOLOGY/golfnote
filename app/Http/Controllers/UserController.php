@@ -127,4 +127,18 @@ class UserController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function getReservationGolfHistory(Request $request)
+    {
+        $user = JWTAuth::user();
+        $data = $this->userService->getReservationGolfHistory($request->all(), $user);
+        return $this->sendResponse($data);
+    }
+
+    public function getReservationEventHistory(Request $request)
+    {
+        $user = JWTAuth::user();
+        $data = $this->userService->getReservationEventHistory($request->all(), $user);
+        return $this->sendResponse($data);
+    }
+
 }

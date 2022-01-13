@@ -187,7 +187,7 @@ class UserService
             ->join('events', 'user_event_reservations.event_id', '=', 'events.id')
             ->where('user_event_reservations.user_id', $user->id)
             ->when(!empty($key), function ($query) use ($key) {
-                return $query->where('golfs.name', 'like', '%' . $key .'%');
+                return $query->where('events.name', 'like', '%' . $key .'%');
             })
             ->when(!empty($fromDate), function ($query) use ($fromDate) {
                 return $query->whereDate('user_event_reservations.created_at', '>=', Carbon::parse(FormatTime::convertDate($fromDate)));

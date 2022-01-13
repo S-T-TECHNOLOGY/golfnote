@@ -14,6 +14,7 @@ use App\Exceptions\BusinessException;
 use App\Http\Resources\OldThingResource;
 use App\Http\Resources\UserClubResource;
 use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserReservationEventCollection;
 use App\Http\Resources\UserReservationGolfCollection;
 use App\Http\Resources\UserReservationGolfResource;
 use App\Models\Event;
@@ -182,6 +183,23 @@ class UserService
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $fromDate = isset($params['from_date']) ? $params['from_date'] : '';
         $toDate = isset($params['to_date']) ? $params['to_date'] : '';
+        $histories = DB::table('user_event_reservations')
+            ->join('events', 'user_event_reservations.event_id', '=', 'events.id')
+            ->where('user_event_reservations.user_id', $user->id)
+            ->when(!empty($key), function ($query) use ($key) {
+                return $query->where('golfs.name', 'like', '%' . $key .'%');
+            })
+            ->when(!empty($fromDate), function ($query) use ($fromDate) {
+                return $query->whereDate('user_event_reservations.created_at', '>=', Carbon::parse(FormatTime::convertDate($fromDate)));
+            })
+            ->when(!empty($toDate), function ($query) use ($toDate) {
+                return $query->whereDate('user_event_reservations.created_at', '<=', Carbon::parse(FormatTime::convertDate($toDate)));
+            })
+            ->select('user_event_reservations.id','user_event_reservations.status', 'user_event_reservations.created_at', 'events.name', 'events.address', 'events.id as event_id')
+            ->orderBy('user_event_reservations.created_at', 'desc')
+            ->paginate($limit);
+
+        return new UserReservationEventCollection($histories);
     }
 
     public function getReservationGolfHistory($params, $user)
@@ -191,7 +209,7 @@ class UserService
         $fromDate = isset($params['from_date']) ? $params['from_date'] : '';
         $toDate = isset($params['to_date']) ? $params['to_date'] : '';
         $histories = DB::table('user_golf_reservations')
-            ->join('golfs', 'user_golf_reservations.id', '=', 'golfs.id')
+            ->join('golfs', 'user_golf_reservations.golf_id', '=', 'golfs.id')
             ->where('user_golf_reservations.user_id', $user->id)
             ->when(!empty($key), function ($query) use ($key) {
                 return $query->where('golfs.name', 'like', '%' . $key .'%');

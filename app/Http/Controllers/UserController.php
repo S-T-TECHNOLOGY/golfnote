@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constants\ActiveStatus;
+use App\Constants\NotificationType;
 use App\Errors\StoreErrorCode;
 use App\Exceptions\BusinessException;
 use App\Http\Requests\UserChangePasswordRequest;
@@ -13,6 +14,7 @@ use App\Http\Requests\UserReservationRequest;
 use App\Http\Requests\UserScoreImageRequest;
 use App\Http\Requests\UserSellOldThingRequest;
 use App\Http\Resources\UserProfileResource;
+use App\Models\Notification;
 use App\Models\Store;
 use App\Models\User;
 use App\Models\UserCheckIn;
@@ -45,6 +47,8 @@ class UserController extends AppBaseController
         $totalUser = User::where('active', ActiveStatus::ACTIVE)->pluck('id')->toArray();
         $user->total_user = sizeof($totalUser);
         $user->rank_no = empty($userRanking) ? 0 : $userRanking->rank_no;
+        $totalNotifications = Notification::where('user_id', $user->id)->where('type', NotificationType::RECEIVED_REQUEST_FRIEND)->where('is_read', 0)->count();
+        $user->notification_unread = $totalNotifications;
         return $this->sendResponse(new UserProfileResource($user));
     }
 

@@ -287,4 +287,10 @@ class AdminController extends AppBaseController
         $data = $this->adminService->createStore($request->all());
         return $this->sendResponse($data);
     }
+
+    public function deleteStore($id)
+    {
+        $data = $this->adminService->deleteStore($id);
+        return $this->sendResponse($data);
+    }
 }

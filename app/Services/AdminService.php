@@ -461,4 +461,10 @@ class AdminService
         return new \stdClass();
     }
 
+    public function deleteStore($id)
+    {
+        Store::where('id', $id)->delete();
+        return new \stdClass();
+    }
+
 }

@@ -10,6 +10,7 @@ use App\Constants\UserAddFriendStatus;
 use App\Errors\AuthErrorCode;
 use App\Errors\EventErrorCode;
 use App\Errors\GolfCourseErrorCode;
+use App\Errors\StoreErrorCode;
 use App\Exceptions\BusinessException;
 use App\Http\Resources\OldThingResource;
 use App\Http\Resources\UserClubResource;
@@ -21,7 +22,9 @@ use App\Models\Event;
 use App\Models\Golf;
 use App\Models\OldThing;
 use App\Models\Room;
+use App\Models\Store;
 use App\Models\User;
+use App\Models\UserCheckIn;
 use App\Models\UserClub;
 use App\Models\UserEventReservation;
 use App\Models\UserRequestFriend;
@@ -225,5 +228,22 @@ class UserService
             ->paginate($limit);
 
         return new UserReservationGolfCollection($histories);
+    }
+
+    public function checkInStore($id, $user)
+    {
+        $store = Store::find($id);
+        if (!$store) {
+            throw new BusinessException('Không tìm thấy cửa hàng', StoreErrorCode::STORE_NOT_FOUND);
+        }
+        $store->check_in = $store->check_in + 1;
+        $store->save();
+        $params = [
+            'store_id' => $id,
+            'user_id' => $user->id
+        ];
+        UserCheckIn::create($params);
+
+        return new \stdClass();
     }
 }

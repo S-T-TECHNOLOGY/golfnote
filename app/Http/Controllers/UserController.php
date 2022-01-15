@@ -15,6 +15,7 @@ use App\Http\Requests\UserSellOldThingRequest;
 use App\Http\Resources\UserProfileResource;
 use App\Models\Store;
 use App\Models\User;
+use App\Models\UserCheckIn;
 use App\Models\UserSummary;
 use App\Services\RoomService;
 use App\Services\UserService;
@@ -146,14 +147,9 @@ class UserController extends AppBaseController
 
     public function checkInStore($id)
     {
-        $store = Store::find($id);
-        if (!$store) {
-            throw new BusinessException('Không tìm thấy cửa hàng', StoreErrorCode::STORE_NOT_FOUND);
-        }
-
-        $store->check_in = $store->check_in + 1;
-        $store->save();
-        return $this->sendResponse(new \stdClass());
+        $user = JWTAuth::user();
+        $data = $this->userService->checkInStore($id, $user);
+        return $this->sendResponse($data);
     }
 
 }

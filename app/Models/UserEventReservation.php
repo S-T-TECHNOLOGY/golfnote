@@ -15,6 +15,7 @@ class UserEventReservation extends Model
         'user_name',
         'phone',
         'email',
+        'note',
         'status'
     ];
 

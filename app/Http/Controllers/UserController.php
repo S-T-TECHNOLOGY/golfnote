@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Constants\ActiveStatus;
+use App\Errors\StoreErrorCode;
+use App\Exceptions\BusinessException;
 use App\Http\Requests\UserChangePasswordRequest;
 use App\Http\Requests\UserCreateClubRequest;
 use App\Http\Requests\UserEditProfileRequest;
@@ -11,6 +13,7 @@ use App\Http\Requests\UserReservationRequest;
 use App\Http\Requests\UserScoreImageRequest;
 use App\Http\Requests\UserSellOldThingRequest;
 use App\Http\Resources\UserProfileResource;
+use App\Models\Store;
 use App\Models\User;
 use App\Models\UserSummary;
 use App\Services\RoomService;
@@ -139,6 +142,18 @@ class UserController extends AppBaseController
         $user = JWTAuth::user();
         $data = $this->userService->getReservationEventHistory($request->all(), $user);
         return $this->sendResponse($data);
+    }
+
+    public function checkInStore($id)
+    {
+        $store = Store::find($id);
+        if (!$store) {
+            throw new BusinessException('Không tìm thấy cửa hàng', StoreErrorCode::STORE_NOT_FOUND);
+        }
+
+        $store->check_in = $store->check_in + 1;
+        $store->save();
+        return $this->sendResponse(new \stdClass());
     }
 
 }

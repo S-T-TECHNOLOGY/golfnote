@@ -45,4 +45,6 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::get('/banners', [AdminController::class, 'getBanners']);
     Route::delete('/golf-banners/{id}', [AdminController::class, 'deleteBanner']);
     Route::post('/banners', [BannerController::class, 'create']);
+    Route::get('/stores', [AdminController::class, 'getStores']);
+    Route::post('/stores', [AdminController::class, 'createStore']);
 });

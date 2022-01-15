@@ -11,6 +11,7 @@ use App\Http\Requests\CreateEventRequest;
 use App\Http\Requests\CreateGolfRequest;
 use App\Http\Requests\CreateMarketRequest;
 use App\Http\Requests\CreateQuestionRequest;
+use App\Http\Requests\CreateStoreRequest;
 use App\Http\Requests\UploadImageRequest;
 use App\Models\UserScoreImage;
 use App\Services\AdminService;
@@ -272,6 +273,18 @@ class AdminController extends AppBaseController
     public function deleteBanner($id)
     {
         $data = $this->adminService->deleteBanner($id);
+        return $this->sendResponse($data);
+    }
+
+    public function getStores(Request $request)
+    {
+        $data = $this->adminService->getStores($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function createStore(CreateStoreRequest $request)
+    {
+        $data = $this->adminService->createStore($request->all());
         return $this->sendResponse($data);
     }
 }

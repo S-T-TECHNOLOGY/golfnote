@@ -78,4 +78,5 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::put('/user/friend/reject', [UserFriendController::class, 'rejectRequest']);
     Route::put('/user/friend/cancel', [UserFriendController::class, 'cancelRequest']);
     Route::put('/logout', [UserController::class, 'logout']);
+    Route::post('/user/store/{id}/check-in', [UserController::class, 'checkInStore']);
 });

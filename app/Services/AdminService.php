@@ -17,6 +17,7 @@ use App\Http\Resources\AdminMarketResource;
 use App\Http\Resources\AdminNotificationCollection;
 use App\Http\Resources\AdminOldThingCollection;
 use App\Http\Resources\AdminQuestionCollection;
+use App\Http\Resources\AdminStoreCollection;
 use App\Http\Resources\AdminUserCollection;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\QuestionResource;
@@ -36,6 +37,7 @@ use App\Models\Notification;
 use App\Models\OldThing;
 use App\Models\Question;
 use App\Models\RoomPlayer;
+use App\Models\Store;
 use App\Models\User;
 use App\Models\UserEventReservation;
 use App\Models\UserReservation;
@@ -441,4 +443,22 @@ class AdminService
         Banner::where('id', $id)->delete();
         return new \stdClass();
     }
+
+    public function getStores($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $stores = Store::when(!empty($key), function ($query) use ($key) {
+            return $query->where('name', 'like', '%' . $key .'%');
+        })->orderBy('created_at', 'desc')->paginate($limit);
+
+        return new AdminStoreCollection($stores);
+    }
+
+    public function createStore($params)
+    {
+        Store::create($params);
+        return new \stdClass();
+    }
+
 }

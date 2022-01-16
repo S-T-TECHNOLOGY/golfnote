@@ -49,13 +49,13 @@ class ScoreService
             $completeHoles = collect($item['holes'])->filter(function ($hole) {
                 return $hole['total'] > 0;
             })->toArray();
-            $isCompleted = sizeof($completeHoles) === 9 ? true : false;
+            $isCompleted = sizeof($completeHoles) === 18 ? true : false;
             $score = collect($item['holes'])->sum('total');
 
             $record = [
                 'room_id' => $params['id'],
                 'user_id' => $item['user_id'],
-                'name' => $user->name,
+                'name' => $item['user_id'] ? $user->name : $item['name'],
                 'phone' => $item['user_id'] ? $user->phone : '',
                 'avatar' => $item['user_id'] ? $user->avatar : '',
                 'infor' => json_encode($item['holes']),
@@ -77,7 +77,6 @@ class ScoreService
             return $record;
         })->all();
 
-        RoomScore::insert($datas);
         $room->status = RoomStatus::FINISHED_STATUS;
         $room->save();
 
@@ -99,9 +98,12 @@ class ScoreService
          })->sortBy([
              ['score', 'asc']
         ])->values();
+
         if ($isCompleted) {
             CalculateUserScoreSummary::dispatch($scores);
+            RoomScore::insert($datas);
         }
+
         return $results;
     }
 

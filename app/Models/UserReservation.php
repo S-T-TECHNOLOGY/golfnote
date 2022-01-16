@@ -17,7 +17,8 @@ class UserReservation extends Model
         'email',
         'date',
         'total_player',
-        'status'
+        'status',
+        'note'
     ];
 
     public function golf()

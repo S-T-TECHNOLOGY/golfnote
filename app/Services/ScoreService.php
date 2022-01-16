@@ -72,7 +72,9 @@ class ScoreService
                 'name' => $item['name'] ,
                 'phone' => $item['phone'] ,
                 'infor' => $item['infor'],
-                'score' => $item['score']
+                'score' => $item['score'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ];
             return $record;
         })->all();
@@ -111,7 +113,7 @@ class ScoreService
     {
         $scoreHistories = DB::table('room_scores')->join('rooms', 'room_scores.room_id', 'rooms.id')
             ->where('room_scores.user_id', $user->id)
-            ->orderBy('rooms.created_at', 'desc')
+            ->orderBy('room_scores.created_at', 'desc')
             ->select('rooms.created_at', 'room_scores.score', 'rooms.golf_id', 'room_scores.room_id')
             ->get();
         $golfIds = collect($scoreHistories)->pluck('golf_id')->values();

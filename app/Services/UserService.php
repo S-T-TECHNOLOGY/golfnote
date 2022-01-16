@@ -223,7 +223,7 @@ class UserService
             ->when(!empty($toDate), function ($query) use ($toDate) {
                 return $query->whereDate('user_golf_reservations.created_at', '<=', Carbon::parse(FormatTime::convertDate($toDate)));
             })
-            ->select('user_golf_reservations.id','user_golf_reservations.status', 'user_golf_reservations.created_at', 'golfs.name', 'golfs.address', 'golfs.id as golf_id')
+            ->select('user_golf_reservations.id','user_golf_reservations.status', 'user_golf_reservations.created_at', 'user_golf_reservations.date', 'golfs.name', 'golfs.address', 'golfs.id as golf_id')
             ->orderBy('user_golf_reservations.created_at', 'desc')
             ->paginate($limit);
 

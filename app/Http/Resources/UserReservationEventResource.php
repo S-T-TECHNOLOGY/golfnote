@@ -18,7 +18,7 @@ class UserReservationEventResource extends JsonResource
         return [
             'id' => $this->id,
             'status' => $this->status,
-            'created_at' => Carbon::parse($this->created_at)->format('H:i d/m/Y'),
+            'created_at' => Carbon::parse($this->created_at)->timestamp,
             'event' => [
                 'id' => $this->event_id,
                 'name' => $this->name,

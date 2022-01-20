@@ -102,8 +102,8 @@ class ScoreService
         ])->values();
 
         if ($isCompleted) {
-            CalculateUserScoreSummary::dispatch($scores);
             RoomScore::insert($datas);
+            CalculateUserScoreSummary::dispatch($scores);
         }
 
         return $results;

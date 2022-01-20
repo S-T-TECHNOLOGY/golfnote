@@ -44,7 +44,7 @@ class SendNotificationReservationGolfSuccess implements ShouldQueue
         $user = User::find($this->userId);
         $token = $user->fcm_token;
         $device = $user->device;
-        if (!empty($token)) {
+        if (!empty($token) && $user->setting_notification) {
             $this->pushMessage($token, $this->data, $device);
         }
 

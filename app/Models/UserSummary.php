@@ -11,13 +11,13 @@ class UserSummary extends Model
     protected $fillable = [
         'user_id',
         'total_round',
-        'total_course',
+        'avg_score',
         'total_partner',
         'high_score',
-        'total_score',
+        'last_score',
         'total_hio',
-        'total_fail',
-        'total_punish',
+        'set_error',
+        'punish',
         'visited_score',
         'handicap_score',
     ];

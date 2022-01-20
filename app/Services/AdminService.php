@@ -92,7 +92,7 @@ class AdminService
         $data = [
             'type' => NotificationType::REGISTER_GOLF_SUCCESS,
             'user_id' => $reservation->user_id,
-            'golf_id' => $id
+            'golf_id' => $reservation->golf_id
         ];
         $notification = Notification::create($data);
 
@@ -108,7 +108,7 @@ class AdminService
         $data = [
             'type' => NotificationType::REGISTER_EVENT_SUCCESS,
             'user_id' => $reservation->user_id,
-            'event_id' => $id
+            'event_id' => $reservation->event_id
         ];
         $notification = Notification::create($data);
 

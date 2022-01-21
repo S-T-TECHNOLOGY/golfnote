@@ -29,7 +29,7 @@ class BannerController extends AppBaseController
 
     public function getBanners()
     {
-        $banners = Banner::select('id', 'image', 'link', 'title', 'content')->orderBy('created_at', 'desc')->get();
+        $banners = Banner::select('id', 'image', 'link', 'title', 'content', 'type')->orderBy('created_at', 'desc')->get();
         return $this->sendResponse($banners);
     }
 

@@ -430,7 +430,7 @@ class AdminService
 
     public function getBanner()
     {
-        $banners = Banner::select('id', 'link', 'image')->get();
+        $banners = Banner::select('id', 'link', 'image', 'type')->get();
         return $banners;
     }
 

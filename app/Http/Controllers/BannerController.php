@@ -21,6 +21,12 @@ class BannerController extends AppBaseController
         return $this->sendResponse($banner);
     }
 
+    public function getBanner()
+    {
+        $banner = Banner::select('id', 'image', 'link', 'title', 'content')->where('type', BannerType::BANNER_TYPE)->orderBy('created_at', 'desc')->first();
+        return $this->sendResponse($banner);
+    }
+
     public function getBanners()
     {
         $banners = Banner::select('id', 'image', 'link', 'title', 'content')->orderBy('created_at', 'desc')->get();

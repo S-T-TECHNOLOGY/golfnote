@@ -25,7 +25,8 @@ class CreateBannerRequest extends FormRequest
     {
         return [
             'image' => 'required',
-            'link' => 'required'
+            'link' => 'required',
+            'type' => 'required'
         ];
     }
 }

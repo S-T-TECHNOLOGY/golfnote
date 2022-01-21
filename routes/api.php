@@ -36,7 +36,7 @@ Route::get('/golf_hole/{type}', [GolfHoleController::class, 'getHoleByType']);
 Route::post('/golf_hole', [GolfHoleController::class, 'getHoleByGolf']);
 Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::get('/user', [UserController::class, 'getUser']);
-    Route::get('/banners', [BannerController::class, 'getBanner']);
+    Route::get('/banners', [BannerController::class, 'getBanners']);
     Route::get('/ranking', [RankingController::class, 'getRanking']);
     Route::get('/user', [UserController::class, 'getUser']);
     Route::put('/user/profile', [UserController::class, 'editProfile']);

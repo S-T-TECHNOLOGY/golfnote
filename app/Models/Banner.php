@@ -13,7 +13,8 @@ class Banner extends Model
         'title',
         'content',
         'link',
-        'expired_date'
+        'expired_date',
+        'type'
     ];
 }
 

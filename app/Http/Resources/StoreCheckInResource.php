@@ -15,7 +15,7 @@ class StoreCheckInResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'time' => $this->created_at,
+            'time' => $this->created_at->format('Y-m-d H:i:s'),
             'name' => $this->user->name,
             'phone' => $this->user->phone
         ];

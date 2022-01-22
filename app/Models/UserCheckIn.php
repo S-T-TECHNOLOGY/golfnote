@@ -13,4 +13,8 @@ class UserCheckIn extends Model
         'user_id',
         'store_id'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

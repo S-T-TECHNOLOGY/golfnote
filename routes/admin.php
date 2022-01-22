@@ -48,4 +48,6 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::get('/stores', [AdminController::class, 'getStores']);
     Route::post('/stores', [AdminController::class, 'createStore']);
     Route::delete('/stores/{id}', [AdminController::class, 'deleteStore']);
+    Route::get('/stores/{id}', [AdminController::class, 'getStoreDetail']);
+    Route::get('/stores/{id}/checkin', [AdminController::class, 'getStoreCheckIn']);
 });

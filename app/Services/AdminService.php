@@ -21,6 +21,7 @@ use App\Http\Resources\AdminStoreCollection;
 use App\Http\Resources\AdminUserCollection;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\QuestionResource;
+use App\Http\Resources\StoreCheckInCollection;
 use App\Http\Resources\UserEventReservationCollection;
 use App\Http\Resources\UserReservationCollection;
 use App\Http\Resources\UserScoreImageCollection;
@@ -39,6 +40,7 @@ use App\Models\Question;
 use App\Models\RoomPlayer;
 use App\Models\Store;
 use App\Models\User;
+use App\Models\UserCheckIn;
 use App\Models\UserEventReservation;
 use App\Models\UserReservation;
 use App\Models\UserScoreImage;
@@ -51,8 +53,7 @@ class AdminService
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
-        $reservations = UserReservation::where('status', ReservationStatus::PENDING_STATUS)
-            ->when(!empty($key), function ($query) use ($key) {
+        $reservations = UserReservation::when(!empty($key), function ($query) use ($key) {
                 return $query->where('email', 'like', '%' . $key .'%');
             })
             ->with('golf')->orderBy('created_at', 'desc')->paginate($limit);
@@ -75,8 +76,7 @@ class AdminService
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
-        $reservations = UserEventReservation::where('status', ReservationStatus::PENDING_STATUS)
-            ->when(!empty($key), function ($query) use ($key) {
+        $reservations = UserEventReservation::when(!empty($key), function ($query) use ($key) {
                 return $query->where('email', 'like', '%' . $key .'%');
             })
             ->with('event')->orderBy('created_at', 'desc')->paginate($limit);
@@ -461,6 +461,19 @@ class AdminService
     {
         Store::where('id', $id)->delete();
         return new \stdClass();
+    }
+
+    public function getStoreDetail($id)
+    {
+        $store = Store::find($id);
+        return $store;
+    }
+
+    public function getStoreCheckIn($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $histories = UserCheckIn::where('store_id', $params['id'])->orderBy('created_at', 'desc')->paginate($limit);
+        return new StoreCheckInCollection($histories);
     }
 
 }

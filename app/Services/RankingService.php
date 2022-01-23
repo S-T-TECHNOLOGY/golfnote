@@ -47,7 +47,7 @@ class RankingService
             return $query->selectRaw('*, RANK () OVER ( ORDER BY handicap_score) as rank_no');
         })->when(sizeof($userIds), function ($query) use ($userIds) {
             return $query->whereIn('user_id', $userIds);
-        })->with('user')->paginate($limit);
+        })->where('handicap_score', '>', 0)->with('user')->paginate($limit);
 
         return new RankingCollection($rankingUsers);
     }

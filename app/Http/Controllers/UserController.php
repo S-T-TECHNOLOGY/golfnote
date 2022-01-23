@@ -40,7 +40,7 @@ class UserController extends AppBaseController
         $user = JWTAuth::user();
         $rankingUsers = UserSummary::when(true, function ($query) {
             return $query->selectRaw('*, RANK () OVER ( ORDER BY handicap_score) as rank_no');
-        })->get();
+        })->where('handicap_score', '>', 0)->get();
         $userRanking = collect($rankingUsers)->first(function ($item) use ($user) {
             return $item->user_id === $user->id;
         });

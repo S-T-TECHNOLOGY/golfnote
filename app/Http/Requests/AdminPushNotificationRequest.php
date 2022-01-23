@@ -24,7 +24,6 @@ class AdminPushNotificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => 'string',
             'title' => 'required',
             'content' => 'required'
         ];

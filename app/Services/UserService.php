@@ -93,14 +93,19 @@ class UserService
     public function findByPhone($params)
     {
         $users = $params['users'];
+        $users = collect($users)->map(function ($item) {
+            $item['phone'] = str_replace(' ', '', $item['phone']);
+            return $item;
+        })->map(function ($item){
+            $item['phone'] =str_replace('+84', '0', $item['phone']);
+            return $item;
+        })->map(function ($item) {
+            $item['phone'] =str_replace('+82', '0', $item['phone']);
+            return $item;
+        })->toArray();
+
         $phones = collect($users)->map(function ($item) {
            return $item['phone'];
-        })->map(function ($item) {
-            return str_replace(' ', '', $item);
-        })->map(function ($item){
-            return str_replace('+84', '0', $item);
-        })->map(function ($item) {
-            return str_replace('+82', '0', $item);
         })->values()->toArray();
         $fundedUsers = User::when(sizeof($phones), function ($query) use ($phones) {
             return $query->whereIn('phone', $phones);

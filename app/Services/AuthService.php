@@ -62,7 +62,7 @@ class AuthService
         $user->fcm_token = $params['fcm_token'];
         $user->device = $params['device'];
         $user->save();
-        $totalNotifications = Notification::where('user_id', $user->id)->where('type', NotificationType::RECEIVED_REQUEST_FRIEND)->where('is_read', 0)->count();
+        $totalNotifications = Notification::where('user_id', $user->id)->where('type', '!=', NotificationType::RECEIVED_REQUEST_FRIEND)->where('is_read', 0)->count();
         $user->notification_unread = $totalNotifications;
 
         return [

@@ -29,8 +29,7 @@ class UserReservationRequest extends FormRequest
             'phone' => 'string | required',
             'total_player' => 'integer | required',
             'user_name' => 'string | required',
-            'date' => 'required',
-            'note' => 'string'
+            'date' => 'required'
         ];
     }
 }

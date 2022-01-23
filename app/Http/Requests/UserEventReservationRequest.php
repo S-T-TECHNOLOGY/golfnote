@@ -27,8 +27,7 @@ class UserEventReservationRequest extends FormRequest
             'event_id' => 'required',
             'email' => 'required | email',
             'phone' => 'string | required',
-            'user_name' => 'string | required',
-            'note' => 'string'
+            'user_name' => 'string | required'
         ];
     }
 }

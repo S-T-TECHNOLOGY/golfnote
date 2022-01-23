@@ -136,7 +136,7 @@ class UserService
                 return $fundedUser;
             }
             $user['id']  = 0;
-            $user['avatar'] = '';
+            $user['avatar'] = '/avatar/default.jpeg';
             $user['address'] = '';
             $user['friend_status'] = -1;
             return $user;

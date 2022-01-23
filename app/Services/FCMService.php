@@ -29,6 +29,7 @@ class FCMService
             "body" => "Send Notification",
             'sound' => config('firebase.sound')
         ];
+        $data["click_action"] = "FLUTTER_NOTIFICATION_CLICK";
 
         if ($device === $this->apiConfig['device']['ios']) {
             $fields = [

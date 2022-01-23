@@ -43,6 +43,10 @@ class RoomService
             'golf_courses' => json_encode($params['golf_courses'])
         ];
 
+        if ($params['type'] == 0) {
+            $roomParams['status'] = RoomStatus::HANDLE_SCORE_PENDING;
+        }
+
         $room = Room::create($roomParams);
         $userIds = collect($players)->filter(function ($player) {
             return $player['user_id'] > 0;

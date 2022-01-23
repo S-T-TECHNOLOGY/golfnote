@@ -90,6 +90,62 @@ class UserService
         return new UserCollection($users);
     }
 
+    public function findByPhone($params)
+    {
+        $users = $params['users'];
+        $phones = collect($users)->map(function ($item) {
+           return $item['phone'];
+        })->values()->toArray();
+        $fundedUsers = User::when(sizeof($phones), function ($query) use ($phones) {
+            return $query->whereIn('phone', $phones);
+        })->where('active', 1)
+            ->where('id', '!=', $params['user_id'])
+            ->select('name', 'id', 'gender', 'avatar', 'phone', 'address')
+            ->get();
+        $friendRequests = UserRequestFriend::where(function ($query) use ($params) {
+            return $query->where('sender_id', $params['user_id'] )
+                ->orWhere('received_id', $params['user_id']);
+        })->get();
+        $fundedUsers->map(function ($user) use ($friendRequests, $params) {
+            $friendStatus = 0;
+            $requestFriend = collect($friendRequests)->first(function ($item) use ($params, $user) {
+                return ($item['sender_id'] === $params['user_id'] && $item['received_id'] === $user->id)
+                    || ($item['received_id'] === $params['user_id'] && $item['sender_id'] === $user->id);
+            });
+            if ($requestFriend) {
+                if ($requestFriend['status'] === UserAddFriendStatus::ACCEPTED_STATUS) {
+                    $friendStatus = 3;
+                } else {
+                    if ($requestFriend['sender_id'] === $params['user_id']) {
+                        $friendStatus = 1;
+                    } else {
+                        $friendStatus = 2;
+                    }
+                }
+            }
+
+            $user->friend_status = $friendStatus;
+            return $user;
+        });
+
+        $users = collect($users)->map(function ($user) use ($fundedUsers) {
+            $fundedUser = $fundedUsers->first(function ($item) use ($user){
+                return $item['phone'] === $user['phone'];
+            });
+            if ($fundedUser) {
+                return $fundedUser;
+            }
+            $user['id']  = 0;
+            $user['avatar'] = '';
+            $user['address'] = '';
+            $user['friend_status'] = -1;
+            return $user;
+        })->toArray();
+
+        return $users;
+
+    }
+
     public function changePassword($params, $user)
     {
         $checkOldPass = Hash::check($params['old_password'], $user->password);

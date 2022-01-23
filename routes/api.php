@@ -44,6 +44,7 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::get('/user/reservation-golf/histories', [UserController::class, 'getReservationGolfHistory']);
     Route::get('/user/reservation-event/histories', [UserController::class, 'getReservationEventHistory']);
     Route::get('/users', [UserController::class, 'find']);
+    Route::post('/users/phone', [UserController::class, 'findByPhone']);
     Route::get('/golfs', [GolfController::class, 'getGolfs']);
     Route::post('/golf/{id}/courses', [GolfController::class, 'getGolfCourses']);
     Route::get('/clubs', [ClubController::class, 'getAll']);

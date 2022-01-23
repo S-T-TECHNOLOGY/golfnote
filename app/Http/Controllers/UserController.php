@@ -6,6 +6,7 @@ use App\Constants\ActiveStatus;
 use App\Constants\NotificationType;
 use App\Errors\StoreErrorCode;
 use App\Exceptions\BusinessException;
+use App\Http\Requests\FindUserByPhoneRequest;
 use App\Http\Requests\UserChangePasswordRequest;
 use App\Http\Requests\UserCreateClubRequest;
 use App\Http\Requests\UserEditProfileRequest;
@@ -58,6 +59,15 @@ class UserController extends AppBaseController
         $params = $request->all();
         $params['user_id'] = $user->id;
         $users = $this->userService->find($params);
+        return $this->sendResponse($users);
+    }
+
+    public function findByPhone(FindUserByPhoneRequest $request)
+    {
+        $user = JWTAuth::user();
+        $params = $request->all();
+        $params['user_id'] = $user->id;
+        $users = $this->userService->findByPhone($params);
         return $this->sendResponse($users);
     }
 

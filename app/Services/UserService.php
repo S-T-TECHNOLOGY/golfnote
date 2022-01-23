@@ -95,6 +95,12 @@ class UserService
         $users = $params['users'];
         $phones = collect($users)->map(function ($item) {
            return $item['phone'];
+        })->map(function ($item) {
+            return str_replace(' ', '', $item);
+        })->map(function ($item){
+            return str_replace('+84', '0', $item);
+        })->map(function ($item) {
+            return str_replace('+82', '0', $item);
         })->values()->toArray();
         $fundedUsers = User::when(sizeof($phones), function ($query) use ($phones) {
             return $query->whereIn('phone', $phones);
@@ -140,7 +146,9 @@ class UserService
             $user['address'] = '';
             $user['friend_status'] = -1;
             return $user;
-        })->toArray();
+        })->sortBy([
+            ['friend_status', 'desc'],
+        ])->toArray();
 
         return $users;
 

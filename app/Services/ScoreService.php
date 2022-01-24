@@ -102,6 +102,14 @@ class ScoreService
         ])->values();
 
         if ($isCompleted) {
+            $draftScoreParams = [
+                'infor' => json_encode($params['scores']),
+                'room_id' => $params['id'],
+                'hole_current' => 18
+            ];
+            RoomDraftScore::updateOrCreate(
+                ['room_id' => $params['id']],
+                $draftScoreParams);
             RoomScore::insert($datas);
             CalculateUserScoreSummary::dispatch($scores);
         }

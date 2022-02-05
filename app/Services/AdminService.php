@@ -34,6 +34,7 @@ use App\Models\Event;
 use App\Models\Golf;
 use App\Models\HoleImage;
 use App\Models\Market;
+use App\Models\News;
 use App\Models\Notification;
 use App\Models\OldThing;
 use App\Models\Question;
@@ -476,6 +477,29 @@ class AdminService
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $histories = UserCheckIn::where('store_id', $params['id'])->orderBy('created_at', 'desc')->paginate($limit);
         return new StoreCheckInCollection($histories);
+    }
+
+    public function createNews($params)
+    {
+        $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'news');
+        News::create($params);
+        return new \stdClass();
+    }
+
+    public function updateNews($params)
+    {
+        if (Base64Utils::checkIsBase64($params['image'])) {
+            $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'news');
+        }
+
+        News::where('id', $params['id'])->update($params);
+        return new \stdClass();
+    }
+
+    public function deleteNews($id)
+    {
+        News::where('id', $id)->delete();
+        return new \stdClass();
     }
 
 }

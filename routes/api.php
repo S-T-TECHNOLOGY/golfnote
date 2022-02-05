@@ -17,6 +17,7 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\NewsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -80,4 +81,5 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::put('/user/friend/cancel', [UserFriendController::class, 'cancelRequest']);
     Route::put('/logout', [UserController::class, 'logout']);
     Route::post('/user/store/{id}/check-in', [UserController::class, 'checkInStore']);
+    Route::get('/news', [NewsController::class, 'getAll']);
 });

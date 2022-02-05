@@ -10,8 +10,10 @@ use App\Http\Requests\AdminPushNotificationRequest;
 use App\Http\Requests\CreateEventRequest;
 use App\Http\Requests\CreateGolfRequest;
 use App\Http\Requests\CreateMarketRequest;
+use App\Http\Requests\CreateNewsRequest;
 use App\Http\Requests\CreateQuestionRequest;
 use App\Http\Requests\CreateStoreRequest;
+use App\Http\Requests\UpdateNewsRequest;
 use App\Http\Requests\UploadImageRequest;
 use App\Models\UserScoreImage;
 use App\Services\AdminService;
@@ -305,6 +307,27 @@ class AdminController extends AppBaseController
         $params = $request->all();
         $params['id'] = $id;
         $data = $this->adminService->getStoreCheckIn($params);
+        return $this->sendResponse($data);
+    }
+
+    public function createNews(CreateNewsRequest $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->createNews($params);
+        return $this->sendResponse($data);
+    }
+
+    public function updateNews(UpdateNewsRequest $request, $id)
+    {
+        $params = $request->all();
+        $params['id'] = $id;
+        $data = $this->adminService->updateNews($params);
+        return $this->sendResponse($data);
+    }
+
+    public function deleteNews($id)
+    {
+        $data = $this->adminService->deleteNews($id);
         return $this->sendResponse($data);
     }
 }

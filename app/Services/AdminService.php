@@ -8,12 +8,16 @@ use App\Constants\Consts;
 use App\Constants\NotificationType;
 use App\Constants\ReservationStatus;
 use App\Constants\UserScoreImageStatus;
+use App\Errors\NewsErrorCode;
+use App\Exceptions\BusinessException;
 use App\Http\Resources\AdminEventCollection;
 use App\Http\Resources\AdminEventResource;
 use App\Http\Resources\AdminGolfCollection;
 use App\Http\Resources\AdminGolfDetailResource;
 use App\Http\Resources\AdminMarketCollection;
 use App\Http\Resources\AdminMarketResource;
+use App\Http\Resources\AdminNewsCollection;
+use App\Http\Resources\AdminNewsResource;
 use App\Http\Resources\AdminNotificationCollection;
 use App\Http\Resources\AdminOldThingCollection;
 use App\Http\Resources\AdminQuestionCollection;
@@ -500,6 +504,28 @@ class AdminService
     {
         News::where('id', $id)->delete();
         return new \stdClass();
+    }
+
+    public function getNews($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $news = News::when(!empty($key), function ($query) use ($key) {
+            return $query->where('title', 'like', '%' . $key .'%');
+        })->orderBy('created_at', 'desc')->paginate($limit);
+
+        return new AdminNewsCollection($news);
+    }
+
+    public function getNewsDetail($id)
+    {
+
+        $news = News::find($id);
+        if (!$news) {
+            throw new BusinessException('News not found',NewsErrorCode::NEWS_NOT_FOUND);
+        }
+
+        return new AdminNewsResource($news);
     }
 
 }

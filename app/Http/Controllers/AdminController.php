@@ -330,4 +330,16 @@ class AdminController extends AppBaseController
         $data = $this->adminService->deleteNews($id);
         return $this->sendResponse($data);
     }
+
+    public function getNews(Request $request)
+    {
+        $data = $this->adminService->getNews($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function getNewsDetail($id)
+    {
+        $data = $this->adminService->getNewsDetail($id);
+        return $this->sendResponse($data);
+    }
 }

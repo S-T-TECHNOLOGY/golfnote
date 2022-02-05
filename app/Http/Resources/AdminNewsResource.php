@@ -19,7 +19,8 @@ class AdminNewsResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'image' => $this->image,
-            'content' => $this->content
+            'content' => $this->content,
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }
 }

@@ -7,7 +7,7 @@ use App\Http\Resources\NewsCollection;
 use App\Models\News;
 use Illuminate\Http\Request;
 
-class NewsController extends Controller
+class NewsController extends AppBaseController
 {
     public function getAll(Request $request)
     {
@@ -20,6 +20,6 @@ class NewsController extends Controller
                     ->orWhere('description', 'like', '%'.$key.'%');
             });
         })->paginate($limit);
-        return new NewsCollection($news);
+        return $this->sendResponse(new NewsCollection($news));
     }
 }

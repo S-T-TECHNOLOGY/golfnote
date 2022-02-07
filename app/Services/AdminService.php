@@ -62,7 +62,7 @@ class AdminService
         $status = isset($params['status']) ? $params['status'] : '';
         $reservations = UserReservation::when(!empty($key), function ($query) use ($key) {
                 return $query->where('email', 'like', '%' . $key .'%');
-            })->when(!empty($type), function ($query) use ($status) {
+            })->when(!empty($status), function ($query) use ($status) {
                 return $query->where('status', $status);
             })->with('golf')->orderBy('created_at', 'desc')->paginate($limit);
 
@@ -87,7 +87,7 @@ class AdminService
         $status = isset($params['status']) ? $params['status'] : '';
         $reservations = UserEventReservation::when(!empty($key), function ($query) use ($key) {
                 return $query->where('email', 'like', '%' . $key .'%');
-            })->when(!empty($type), function ($query) use ($status) {
+            })->when(!empty($status), function ($query) use ($status) {
                 return $query->where('status', $status);
             })->with('event')->orderBy('created_at', 'desc')->paginate($limit);
 

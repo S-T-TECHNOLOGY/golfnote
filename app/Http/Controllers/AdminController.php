@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Constants\UserScoreImageStatus;
 use App\Errors\ScoreImageErrorCode;
 use App\Exceptions\BusinessException;
+use App\Exports\CheckInStoreExport;
 use App\Http\Requests\AdminHandleScoreImageRequest;
 use App\Http\Requests\AdminPushNotificationRequest;
 use App\Http\Requests\CreateEventRequest;
@@ -15,10 +16,13 @@ use App\Http\Requests\CreateQuestionRequest;
 use App\Http\Requests\CreateStoreRequest;
 use App\Http\Requests\UpdateNewsRequest;
 use App\Http\Requests\UploadImageRequest;
+use App\Models\Store;
 use App\Models\UserScoreImage;
 use App\Services\AdminService;
 use App\Services\ScoreService;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class AdminController extends AppBaseController
 {
@@ -341,5 +345,11 @@ class AdminController extends AppBaseController
     {
         $data = $this->adminService->getNewsDetail($id);
         return $this->sendResponse($data);
+    }
+
+    public function exportStoreCheckIn($id)
+    {
+        $store = Store::find($id);
+        return Excel::download(new CheckInStoreExport($id, $store->name), $store->name . '.xlsx');
     }
 }

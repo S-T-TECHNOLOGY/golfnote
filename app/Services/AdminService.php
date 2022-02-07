@@ -128,7 +128,7 @@ class AdminService
         $key = isset($params['key']) ? $params['key'] : '';
         $golfs = Golf::when(!empty($key), function ($query) use ($key) {
                 return $query->where('name', 'like', '%' . $key .'%');
-            })->where('status', ActiveStatus::ACTIVE)->orderBy('created_at', 'desc')->paginate($limit);
+            })->where('is_open', ActiveStatus::ACTIVE)->orderBy('created_at', 'desc')->paginate($limit);
         return new AdminGolfCollection($golfs);
     }
 
@@ -141,7 +141,7 @@ class AdminService
     public function deleteGolf($id)
     {
         Golf::where('id', $id)->update([
-            'status' => ActiveStatus::INACTIVE
+            'is_open' => ActiveStatus::INACTIVE
         ]);
         return new \stdClass();
     }

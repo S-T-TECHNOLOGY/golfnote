@@ -13,10 +13,6 @@ class AddStatusGolfsAndEventsTable extends Migration
      */
     public function up()
     {
-        Schema::table('golfs', function (Blueprint $table) {
-            $table->smallInteger('status')->default(1);
-        });
-
         Schema::table('events', function (Blueprint $table) {
             $table->smallInteger('status')->default(1);
         });

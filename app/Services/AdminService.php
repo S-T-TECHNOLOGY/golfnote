@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Constants\ActiveStatus;
 use App\Constants\Consts;
 use App\Constants\NotificationType;
 use App\Constants\ReservationStatus;
@@ -127,7 +128,7 @@ class AdminService
         $key = isset($params['key']) ? $params['key'] : '';
         $golfs = Golf::when(!empty($key), function ($query) use ($key) {
                 return $query->where('name', 'like', '%' . $key .'%');
-            })->orderBy('created_at', 'desc')->paginate($limit);
+            })->where('status', ActiveStatus::ACTIVE)->orderBy('created_at', 'desc')->paginate($limit);
         return new AdminGolfCollection($golfs);
     }
 
@@ -139,7 +140,9 @@ class AdminService
 
     public function deleteGolf($id)
     {
-        Golf::where('id', $id)->delete();
+        Golf::where('id', $id)->update([
+            'status' => ActiveStatus::INACTIVE
+        ]);
         return new \stdClass();
     }
 
@@ -150,7 +153,7 @@ class AdminService
         // $now = date('Y-m-d H:i:s');
         $events = Event::when(!empty($key), function ($query) use ($key) {
             return $query->where('name', 'like', '%' . $key .'%');
-        })->orderBy('id', 'desc')->paginate($limit);
+        })->where('status', ActiveStatus::ACTIVE)->orderBy('id', 'desc')->paginate($limit);
         return new AdminEventCollection($events);
     }
 
@@ -162,7 +165,9 @@ class AdminService
 
     public function deleteEvent($id)
     {
-        Event::where('id', $id)->delete();
+        Event::where('id', $id)->update([
+            'status' => ActiveStatus::INACTIVE
+        ]);
         return new \stdClass();
     }
 

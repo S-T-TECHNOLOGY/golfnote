@@ -136,7 +136,8 @@ class RoomService
             'golf_courses' => json_decode($room->golf_courses),
             'time_updated' => empty($draftScore) ? Carbon::parse($room->created_at)->timestamp : Carbon::parse($draftScore->updated_at)->timestamp,
             'hole_current' => empty($draftScore) ? 0 : $draftScore->hole_current,
-            'scores' => empty($draftScore) ? $scores : json_decode($draftScore->infor)
+            'scores' => empty($draftScore) ? $scores : json_decode($draftScore->infor),
+            'holes' => empty($draftScore) ? [] : json_decode($draftScore->holes),
         ];
     }
 

@@ -12,6 +12,7 @@ class RoomDraftScore extends Model
     protected $fillable = [
         'room_id',
         'infor',
-        'hole_current'
+        'hole_current',
+        'holes'
     ];
 }

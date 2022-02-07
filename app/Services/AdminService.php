@@ -59,11 +59,11 @@ class AdminService
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
-        $type = isset($params['type']) ? $params['key'] : '';
+        $status = isset($params['status']) ? $params['status'] : '';
         $reservations = UserReservation::when(!empty($key), function ($query) use ($key) {
                 return $query->where('email', 'like', '%' . $key .'%');
-            })->when(!empty($type), function ($query) use ($type) {
-                return $query->where('status', $type);
+            })->when(!empty($type), function ($query) use ($status) {
+                return $query->where('status', $status);
             })->with('golf')->orderBy('created_at', 'desc')->paginate($limit);
 
         return new UserReservationCollection($reservations);
@@ -84,11 +84,11 @@ class AdminService
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
-        $type = isset($params['type']) ? $params['key'] : '';
+        $status = isset($params['status']) ? $params['status'] : '';
         $reservations = UserEventReservation::when(!empty($key), function ($query) use ($key) {
                 return $query->where('email', 'like', '%' . $key .'%');
-            })->when(!empty($type), function ($query) use ($type) {
-                return $query->where('status', $type);
+            })->when(!empty($type), function ($query) use ($status) {
+                return $query->where('status', $status);
             })->with('event')->orderBy('created_at', 'desc')->paginate($limit);
 
         return new UserEventReservationCollection($reservations);

@@ -150,7 +150,6 @@ class ScoreService
         }
 
         $params['infor'] = json_encode($params['scores']);
-        $params['holes'] = json_encode($params['holes']);
         $params['updated_at'] =  Carbon::now()->format('d/m/Y h:m:s');
         RoomDraftScore::updateOrCreate(
             ['room_id' => $params['room_id']],

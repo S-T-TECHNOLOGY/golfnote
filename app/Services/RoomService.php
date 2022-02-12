@@ -46,6 +46,10 @@ class RoomService
         if ($params['type'] == 0) {
             $roomParams['status'] = RoomStatus::HANDLE_SCORE_PENDING;
         }
+        $ownerRoom = [
+            'user_id' => $user->id
+        ];
+        array_unshift($players, $ownerRoom);
 
         $room = Room::create($roomParams);
         $userIds = collect($players)->filter(function ($player) {
@@ -53,26 +57,21 @@ class RoomService
         })->pluck('user_id')->all();
         array_unshift($userIds, $user->id);
 
-        $guests = collect($players)->filter(function ($player) {
-            return $player['user_id'] === 0;
-        })->map(function ($player) use ($room) {
+        $users = User::whereIn('id', $userIds)->get();
+        $players = collect($players)->map(function ($player) use ($room, $users) {
             $player['room_id'] = $room->id;
+            if ($player['user_id']) {
+                $user = $users->first(function ($item) use ($player) {
+                    return $item->id == $player['user_id'];
+                });
+                $player['name'] = $user->name;
+                $player['phone'] = $user->phone;
+            }
+
             return $player;
         })->all();
 
-        $users = User::whereIn('id', $userIds)->get();
-        $members = collect($users)->map(function ($user) use ($room) {
-            $member = [
-                'room_id' => $room->id,
-                'user_id' => $user->id,
-                'name' => $user->name,
-                'phone' => $user->phone
-            ];
 
-            return $member;
-        })->all();
-
-        $players = array_merge($members, $guests);
         RoomPlayer::insert($players);
 
         $players = collect($players)->filter(function ($player) use ($user) {

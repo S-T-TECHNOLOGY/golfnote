@@ -110,14 +110,20 @@ class RoomService
         $userIdPlayers = collect($players)->filter(function ($player) {
             return $player->user_id > 0;
         })->pluck('user_id')->toArray();
-        $guestPlayer = collect($players)->filter(function ($player) {
-            return $player->user_id == 0;
-        })->map(function ($player) {
-            $player['avatar'] = '';
+        $userPlayers = User::whereIn('id', $userIdPlayers)->get();
+        $roomPlayers = collect($players)->map(function ($player) use ($userPlayers) {
+            if (!$player->user_id) {
+                $player->avatar = '';
+            } else {
+                $user = $userPlayers->first(function ($item) use ($player) {
+                   return $player->user_id == $item->id;
+                });
+                $player->name = $user->name;
+                $player->phone = $user->phone;
+                $player->avatar = $user->avatar;
+            }
             return $player;
         })->toArray();
-        $userPlayers = DB::table('users')->selectRaw('id as user_id, name, phone, avatar')->whereIn('id', $userIdPlayers)->get();
-        $roomPlayers = array_merge($guestPlayer, $userPlayers->toArray());
         $draftScore = RoomDraftScore::where('room_id', $id)->first();
         $holes = GolfHole::select('id', 'number_hole', 'standard')->where('type', 18)->get();
         $scores = [];

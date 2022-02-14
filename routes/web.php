@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\ActiveAccountController;
+use App\Http\Controllers\HomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,3 +16,4 @@ use \App\Http\Controllers\ActiveAccountController;
 */
 
 Route::get('/confirm-email', [ActiveAccountController::class, 'activate']);
+Route::get('/about', [HomController::class, 'about']);

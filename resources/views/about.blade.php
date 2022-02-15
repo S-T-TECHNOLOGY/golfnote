@@ -33,7 +33,10 @@
   <p>- Golf course reservation</p>
   <p>- Used market / golf market</p>
   <p>- Guide to clubs and affiliates</p>
-
+  <div>
+    <p><b>Contact</b></p>
+    <p>Email: golfnote2022@gmail.com</p>
+  </div>
 </div>
 </body>
 </html>

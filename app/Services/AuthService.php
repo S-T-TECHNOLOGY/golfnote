@@ -25,6 +25,8 @@ class AuthService
     public function register($params)
     {
         $params['password'] = Hash::make($params['password']);
+        $params['gender'] = isset($params['gender']) ? $params['gender'] : 0;
+        $params['address'] = isset($params['gender']) ? $params['address'] : 'Việt Nam (Miền Bắc)';
         $params['avatar'] = '/avatar/default.jpeg';
         $user = User::create($params);
         $code = Str::random(32);

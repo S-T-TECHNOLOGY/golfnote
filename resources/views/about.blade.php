@@ -36,6 +36,8 @@
   <div>
     <p><b>Contact</b></p>
     <p>Email: golfnote2022@gmail.com</p>
+    <p>Phone: 02432018339</p>
+    <p>Address: Lô 95 TT4, khu đô thị Mỹ Đình sông Đà, phường Mỹ Đình 1, quận Nam Từ Liêm, Hà Nội</p>
   </div>
 </div>
 </body>

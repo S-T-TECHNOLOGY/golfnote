@@ -311,13 +311,22 @@ class AdminService
     public function getScoreImageDetail($id)
     {
         $scoreImage = UserScoreImage::where('id', $id)->with('room', 'user')->first();
+        $golfCourses = json_decode($scoreImage->room->golf_courses);
+        $holeCourseA = HoleImage::select('number_hole', 'standard')->where('golf_id', $scoreImage->room->golf_id)->where('course', $golfCourses[0])->get();
+        $holeCourseB = HoleImage::select('number_hole', 'standard')->where('golf_id', $scoreImage->room->golf_id)->where('course', $golfCourses[1])->get();
+        $holeCourseB = $holeCourseB->map(function ($hole) {
+            $hole['number_hole'] = $hole['number_hole'] + 9;
+            return $hole;
+        })->toArray();
+        $golfHoles = array_merge($holeCourseA->toArray(), $holeCourseB);
         $userPlayers = RoomPlayer::select('user_id', 'name', 'phone')->where('room_id', $scoreImage->room_id)->where('user_id', '>', 0)->get();
         $golf = Golf::select('id', 'name', 'address') ->where('id', $scoreImage->room->golf_id)->first();
         return [
             'id' => $scoreImage->id,
             'image' => $scoreImage->image,
             'users' => $userPlayers,
-            'golf' => $golf
+            'golf' => $golf,
+            'holes' => $golfHoles
         ];
     }
 

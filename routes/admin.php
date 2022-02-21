@@ -8,8 +8,10 @@ Route::post('/login', [AuthController::class, 'loginAdmin']);
 Route::group(['middleware' => []], function () {
     Route::get('/golf/reservations', [AdminController::class, 'getReservationGolf']);
     Route::put('/golf/reservations/{id}', [AdminController::class, 'reservationGolfSuccess']);
+    Route::delete('/golf/reservations/{id}', [AdminController::class, 'cancelReservationGolf']);
     Route::get('/event/reservations', [AdminController::class, 'getReservationEvent']);
     Route::put('/event/reservations/{id}', [AdminController::class, 'reservationEventSuccess']);
+    Route::delete('/event/reservations/{id}', [AdminController::class, 'cancelReservationEvent']);
     Route::get('/golfs', [AdminController::class, 'getGolfs']);
     Route::get('/events', [AdminController::class, 'getEvents']);
     Route::get('/events/{id}', [AdminController::class, 'getEventDetail']);

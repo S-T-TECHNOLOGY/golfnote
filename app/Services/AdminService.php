@@ -126,6 +126,22 @@ class AdminService
         return new \stdClass();
     }
 
+    public function cancelReservationEvent($id)
+    {
+        $reservation = UserEventReservation::find($id);
+        $reservation->status = ReservationStatus::CANCELED_STATUS;
+        $reservation->save();
+        return new \stdClass();
+    }
+
+    public function cancelReservationGolf($id)
+    {
+        $reservation = UserReservation::find($id);
+        $reservation->status = ReservationStatus::CANCELED_STATUS;
+        $reservation->save();
+        return new \stdClass();
+    }
+
     public function getGolfs($params)
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;

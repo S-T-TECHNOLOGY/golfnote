@@ -60,6 +60,18 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function cancelReservationEvent($id)
+    {
+        $data = $this->adminService->reservationEventSuccess($id);
+        return $this->sendResponse($data);
+    }
+
+    public function cancelReservationGolf($id)
+    {
+        $data = $this->adminService->cancelReservationGolf($id);
+        return $this->sendResponse($data);
+    }
+
     public function getGolfs(Request $request)
     {
         $params = $request->all();

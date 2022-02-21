@@ -346,6 +346,12 @@ class AdminService
         ];
     }
 
+    public function deleteScoreImage($id)
+    {
+        UserScoreImage::where('id', $id)->delete();
+        return new \stdClass();
+    }
+
     public function getMarkets($params)
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;

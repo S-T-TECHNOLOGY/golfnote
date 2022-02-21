@@ -31,6 +31,7 @@ Route::group(['middleware' => []], function () {
     Route::post('/images', [AdminController::class, 'uploadImage']);
     Route::get('/score/images', [AdminController::class, 'getScoreImages']);
     Route::get('/score/images/{id}', [AdminController::class, 'getScoreImageDetail']);
+    Route::delete('/score/images/{id}', [AdminController::class, 'deleteScoreImage']);
     Route::post('/score/images/{id}', [AdminController::class, 'handleScoreImage']);
     Route::get('/markets', [AdminController::class, 'getMarkets']);
     Route::get('/markets/{id}', [AdminController::class, 'getMarketDetail']);

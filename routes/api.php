@@ -64,6 +64,8 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::post('/user/score/image', [UserController::class, 'uploadScoreImage']);
     Route::post('/room/{id}/draft-score', [ScoreController::class, 'logDraftScore']);
     Route::post('/user/reservation', [UserController::class, 'reservationGolf']);
+    Route::delete('/user/reservations/{id}', [UserController::class, 'cancelReservationGolf']);
+    Route::post('/user/reservation-event/{id}', [UserController::class, 'cancelReservationEvent']);
     Route::post('/user/reservation-event', [UserController::class, 'reservationEvent']);
     Route::post('/user/old-thing', [UserController::class, 'sellOldThing']);
     Route::post('/user/club', [UserController::class, 'createClub']);

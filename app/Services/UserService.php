@@ -5,11 +5,13 @@ namespace App\Services;
 
 
 use App\Constants\Consts;
+use App\Constants\ReservationStatus;
 use App\Constants\RoomStatus;
 use App\Constants\UserAddFriendStatus;
 use App\Errors\AuthErrorCode;
 use App\Errors\EventErrorCode;
 use App\Errors\GolfCourseErrorCode;
+use App\Errors\ReservationError;
 use App\Errors\StoreErrorCode;
 use App\Exceptions\BusinessException;
 use App\Http\Resources\OldThingResource;
@@ -313,6 +315,30 @@ class UserService
         ];
         UserCheckIn::create($params);
 
+        return new \stdClass();
+    }
+
+    public function cancelReservationGolf($id, $user)
+    {
+        $reservationGolf = UserReservation::where('id', $id)->where('user_id', $user->id)->where('status', ReservationStatus::PENDING_STATUS)->first();
+        if (!$reservationGolf) {
+            throw new BusinessException('Không tìm thấy đăng ký sân golf', ReservationError::RESERVATION_NOT_FOUND);
+        }
+
+        $reservationGolf->status =ReservationStatus::CANCELED_STATUS;
+        $reservationGolf->save();
+        return new \stdClass();
+    }
+
+    public function cancelReservationEvent($id, $user)
+    {
+        $reservationEvent = UserEventReservation::where('id', $id)->where('user_id', $user->id)->where('status', ReservationStatus::PENDING_STATUS)->first();
+        if (!$reservationEvent) {
+            throw new BusinessException('Không tìm thấy đăng ký sự kiện', ReservationError::RESERVATION_NOT_FOUND);
+        }
+
+        $reservationEvent->status =ReservationStatus::CANCELED_STATUS;
+        $reservationEvent->save();
         return new \stdClass();
     }
 }

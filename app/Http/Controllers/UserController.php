@@ -166,4 +166,18 @@ class UserController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function cancelReservationGolf($id)
+    {
+        $user = JWTAuth::user();
+        $data = $this->userService->cancelReservationGolf($id, $user);
+        return $this->sendResponse($data);
+    }
+
+    public function cancelReservationEvent($id)
+    {
+        $user = JWTAuth::user();
+        $data = $this->userService->cancelReservationEvent($id, $user);
+        return $this->sendResponse($data);
+    }
+
 }

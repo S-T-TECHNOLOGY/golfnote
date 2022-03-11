@@ -15,7 +15,7 @@ class ChangeKakaoClubsTable extends Migration
     {
         Schema::table('user_clubs', function (Blueprint $table) {
             $table->string('kakaotalk_link')->nullable()->change();
-        })
+        });
     }
 
     /**

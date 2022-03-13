@@ -68,7 +68,11 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::delete('/user/reservation-event/{id}', [UserController::class, 'cancelReservationEvent']);
     Route::post('/user/reservation-event', [UserController::class, 'reservationEvent']);
     Route::post('/user/old-thing', [UserController::class, 'sellOldThing']);
+    Route::put('/user/old-thing/{id}', [UserController::class, 'editOldThing']);
+    Route::delete('/user/old-thing/{id}', [UserController::class, 'deleteOldThing']);
     Route::post('/user/club', [UserController::class, 'createClub']);
+    Route::put('/user/club/{id}', [UserController::class, 'editClub']);
+    Route::delete('/user/club/{id}', [UserController::class, 'deleteClub']);
     Route::get('/user/room-playing', [UserController::class, 'getRoomPlaying']);
     Route::get('/user/notifications', [NotificationController::class, 'getAll']);
     Route::put('/user/setting-notification', [NotificationController::class, 'settingNotification']);

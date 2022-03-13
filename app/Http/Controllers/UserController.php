@@ -105,6 +105,25 @@ class UserController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function editOldThing(UserSellOldThingRequest $request, $id)
+    {
+        $user = JWTAuth::user();
+        $params = $request->all();
+        $params['user_id'] = $user->id;
+        $params['id'] = $id;
+        $data = $this->userService->editOldThing($params);
+        return $this->sendResponse($data);
+    }
+
+    public function deleteOldThing($id)
+    {
+        $user = JWTAuth::user();
+        $params['user_id'] = $user->id;
+        $params['id'] = $id;
+        $data = $this->userService->deleteOldThing($params);
+        return $this->sendResponse($data);
+    }
+
     public function getRoomPlaying()
     {
         $user = JWTAuth::user();
@@ -118,6 +137,25 @@ class UserController extends AppBaseController
         $user = JWTAuth::user();
         $params['user_id'] = $user->id;
         $data = $this->userService->createClub($params);
+        return $this->sendResponse($data);
+    }
+
+    public function editClub(UserCreateClubRequest $request, $id)
+    {
+        $params = $request->all();
+        $user = JWTAuth::user();
+        $params['user_id'] = $user->id;
+        $params['id'] = $id;
+        $data = $this->userService->editClub($params);
+        return $this->sendResponse($data);
+    }
+
+    public function deleteClub($id)
+    {
+        $user = JWTAuth::user();
+        $params['user_id'] = $user->id;
+        $params['id'] = $id;
+        $data = $this->userService->deleteClub($params);
         return $this->sendResponse($data);
     }
 

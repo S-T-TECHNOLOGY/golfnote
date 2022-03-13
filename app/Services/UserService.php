@@ -9,8 +9,10 @@ use App\Constants\ReservationStatus;
 use App\Constants\RoomStatus;
 use App\Constants\UserAddFriendStatus;
 use App\Errors\AuthErrorCode;
+use App\Errors\ClubErrorCode;
 use App\Errors\EventErrorCode;
 use App\Errors\GolfCourseErrorCode;
+use App\Errors\OldThingErrorCode;
 use App\Errors\ReservationError;
 use App\Errors\StoreErrorCode;
 use App\Exceptions\BusinessException;
@@ -219,17 +221,67 @@ class UserService
         return new OldThingResource($oldThing);
     }
 
+    public function editOldThing($params)
+    {
+        $oldThing = OldThing::where('id', $params['id'])->where('user_id', $params['user_id'])->first();
+        if (!$oldThing) {
+            throw new BusinessException('Không tìm thấy chợ cũ', OldThingErrorCode::OLD_THING_NOT_FOUND);
+        }
+        $images = [];
+        foreach ($params['images'] as $image) {
+            if (Base64Utils::checkIsBase64($image)) {
+                $image = UploadUtil::saveBase64ImageToStorage($image, 'thing');
+            }
+            array_push($images, $image);
+        }
+        $params['image'] = json_encode($images);
+
+        $oldThing->update($params);
+
+        return new OldThingResource($oldThing);
+    }
+
+    public function deleteOldThing($params)
+    {
+        OldThing::where('id', $params['id'])->where('user_id', $params['user_id'])->delete();
+
+        return new \stdClass();
+    }
+
     public function createClub($params)
     {
         $images = [];
         foreach ($params['images'] as $image) {
-            $urlImage = UploadUtil::saveBase64ImageToStorage($image, 'thing');
+            $urlImage = UploadUtil::saveBase64ImageToStorage($image, 'club');
             array_push($images, $urlImage);
         }
         $params['images'] = json_encode($images);
         $club = UserClub::create($params);
 
         return new UserClubResource($club);
+    }
+
+    public function editClub($params) {
+        $club = UserClub::where('id', $params['id'])->where('user_id', $params['user_id'])->first();
+        if (!$club) {
+            throw new BusinessException('Không tìm thấy club', ClubErrorCode::CLUB_NOT_FOUND);
+        }
+        $images = [];
+        foreach ($params['images'] as $image) {
+            if (Base64Utils::checkIsBase64($image)) {
+                $image = UploadUtil::saveBase64ImageToStorage($image, 'club');
+            }
+            array_push($images, $image);
+        }
+        $params['images'] = json_encode($images);
+        $club->update($params);
+
+        return new UserClubResource($club);
+    }
+
+    public function deleteClub($params) {
+        UserClub::where('id', $params['id'])->where('user_id', $params['user_id'])->delete();
+        return new \stdClass();
     }
 
     public function editProfile($params, $user)

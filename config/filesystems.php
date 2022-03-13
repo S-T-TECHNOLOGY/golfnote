@@ -105,6 +105,12 @@ return [
             'root' => storage_path('app/public/notification'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
+        ],
+        'club' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/club'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
         ]
 
     ],

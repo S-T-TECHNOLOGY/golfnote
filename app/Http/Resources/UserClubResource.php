@@ -16,6 +16,7 @@ class UserClubResource extends JsonResource
     {
         return [
             'user' => [
+                'id' => $this->user->id,
                 'name' => $this->user->name,
                 'address' => $this->user->address,
                 'avatar' => $this->user->avatar,

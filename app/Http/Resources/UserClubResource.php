@@ -21,6 +21,7 @@ class UserClubResource extends JsonResource
                 'address' => $this->user->address,
                 'avatar' => $this->user->avatar,
             ],
+            'id' => $this->id,
             'name' => $this->name,
             'introduction' => $this->introduction,
             'kakaotalk_link' => $this->kakaotalk_link,

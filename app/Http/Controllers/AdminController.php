@@ -79,6 +79,35 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    //manual score
+    public function searchGolfs(Request $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->searchGolfs($params);
+        return $this->sendResponse($data);
+    }
+
+    public function searchUsers(Request $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->searchUsers($params);
+        return $this->sendResponse($data);
+    }
+
+    public function getHolesByGolfCourse(Request $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->getHolesByGolfCourse($params);
+        return $this->sendResponse($data);
+    }
+
+    public function handleScoresManual(Request $request) {
+        $params = $request->all();
+        $data = $this->adminService->handleScoresManual($params);
+
+        return $this->sendResponse($data);
+    }
+
     public function getGolfDetail($id)
     {
         $data = $this->adminService->getGolfDetail($id);

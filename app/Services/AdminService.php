@@ -8,13 +8,16 @@ use App\Constants\ActiveStatus;
 use App\Constants\Consts;
 use App\Constants\NotificationType;
 use App\Constants\ReservationStatus;
+use App\Constants\RoomStatus;
 use App\Constants\UserScoreImageStatus;
 use App\Errors\NewsErrorCode;
+use App\Errors\RoomErrorCode;
 use App\Exceptions\BusinessException;
 use App\Http\Resources\AdminEventCollection;
 use App\Http\Resources\AdminEventResource;
 use App\Http\Resources\AdminGolfCollection;
 use App\Http\Resources\AdminGolfDetailResource;
+use App\Http\Resources\AdminGolfResource;
 use App\Http\Resources\AdminMarketCollection;
 use App\Http\Resources\AdminMarketResource;
 use App\Http\Resources\AdminNewsCollection;
@@ -24,6 +27,7 @@ use App\Http\Resources\AdminOldThingCollection;
 use App\Http\Resources\AdminQuestionCollection;
 use App\Http\Resources\AdminStoreCollection;
 use App\Http\Resources\AdminUserCollection;
+use App\Http\Resources\GolfResource;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\QuestionResource;
 use App\Http\Resources\StoreCheckInCollection;
@@ -43,7 +47,10 @@ use App\Models\News;
 use App\Models\Notification;
 use App\Models\OldThing;
 use App\Models\Question;
+use App\Models\Room;
+use App\Models\RoomDraftScore;
 use App\Models\RoomPlayer;
+use App\Models\RoomScore;
 use App\Models\Store;
 use App\Models\User;
 use App\Models\UserCheckIn;
@@ -52,6 +59,8 @@ use App\Models\UserReservation;
 use App\Models\UserScoreImage;
 use App\Utils\Base64Utils;
 use App\Utils\UploadUtil;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminService
 {
@@ -61,10 +70,12 @@ class AdminService
         $key = isset($params['key']) ? $params['key'] : '';
         $status = isset($params['status']) ? $params['status'] : '';
         $reservations = UserReservation::when(!empty($key), function ($query) use ($key) {
-                return $query->where('email', 'like', '%' . $key .'%');
-            })->when(strlen($status), function ($query) use ($status) {
-                return $query->where('status', $status);
-            })->with('golf')->orderBy('created_at', 'desc')->paginate($limit);
+            return $query->where(function ($q) use ($key) {
+                return $q->where('email', 'like', '%' . $key .'%')->orWhere('user_name', 'like', '%' . $key .'%')->orWhere('phone', 'like', '%' . $key .'%');
+            });
+        })->when(strlen($status), function ($query) use ($status) {
+            return $query->where('status', $status);
+        })->with('golf')->orderBy('created_at', 'desc')->paginate($limit);
 
         return new UserReservationCollection($reservations);
     }
@@ -74,8 +85,8 @@ class AdminService
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
         $users = User::when(!empty($key), function ($query) use ($key) {
-                return $query->where('name', 'like', '%' . $key .'%');
-            })->paginate($limit);
+            return $query->where('name', 'like', '%' . $key .'%');
+        })->paginate($limit);
 
         return new AdminUserCollection($users);
     }
@@ -86,10 +97,10 @@ class AdminService
         $key = isset($params['key']) ? $params['key'] : '';
         $status = isset($params['status']) ? $params['status'] : '';
         $reservations = UserEventReservation::when(!empty($key), function ($query) use ($key) {
-                return $query->where('email', 'like', '%' . $key .'%');
-            })->when(strlen($status), function ($query) use ($status) {
-                return $query->where('status', $status);
-            })->with('event')->orderBy('created_at', 'desc')->paginate($limit);
+            return $query->where('email', 'like', '%' . $key .'%');
+        })->when(strlen($status), function ($query) use ($status) {
+            return $query->where('status', $status);
+        })->with('event')->orderBy('created_at', 'desc')->paginate($limit);
 
         return new UserEventReservationCollection($reservations);
     }
@@ -147,9 +158,95 @@ class AdminService
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
         $golfs = Golf::when(!empty($key), function ($query) use ($key) {
-                return $query->where('name', 'like', '%' . $key .'%');
-            })->where('is_open', ActiveStatus::ACTIVE)->orderBy('created_at', 'desc')->paginate($limit);
+            return $query->where('name', 'like', '%' . $key .'%');
+        })->where('is_open', ActiveStatus::ACTIVE)->orderBy('created_at', 'desc')->paginate($limit);
         return new AdminGolfCollection($golfs);
+    }
+
+    //manual score
+    public function searchGolfs($params)
+    {
+        $keyword = isset($params['keyword']) ? $params['keyword'] : '';
+        $golfs = Golf::when(!empty($keyword), function ($query) use ($keyword) {
+            return $query->where('name', 'like', '%' . $keyword .'%');
+        })->where('is_open', ActiveStatus::ACTIVE)->orderBy('created_at', 'desc')->get();
+        foreach ($golfs as $golf) {
+            $golf->golf_courses = json_decode($golf->golf_courses);
+        }
+        return [
+            'data' => $golfs
+        ];
+    }
+    public function searchUsers($params)
+    {
+        $keyword = isset($params['keyword']) ? $params['keyword'] : '';
+        $users = User::when(!empty($keyword), function ($query) use ($keyword) {
+            return $query->where('name', 'like', '%' . $keyword .'%')
+                ->orWhere('account_name', 'like', '%' . $keyword .'%')
+                ->orWhere('email', 'like', '%' . $keyword .'%')
+                ->orWhere('phone', 'like', '%' . $keyword .'%');
+        })->where('active', ActiveStatus::ACTIVE)->orderBy('created_at', 'desc')->get();
+        return [
+            'data' => $users
+        ];
+    }
+    public function getHolesByGolfCourse($params)
+    {
+        $holeCourseA = HoleImage::select('number_hole', 'standard')->where('golf_id', $params['golf_id'])->where('course', $params['course_a'])->get();
+        $holeCourseB = HoleImage::select('number_hole', 'standard')->where('golf_id', $params['golf_id'])->where('course', $params['course_b'])->get();
+        $holeCourseB = $holeCourseB->map(function ($hole) {
+            $hole['number_hole'] = $hole['number_hole'] + 9;
+            return $hole;
+        })->toArray();
+        $golfHoles = array_merge($holeCourseA->toArray(), $holeCourseB);
+        return [
+            'holes' => $golfHoles
+        ];
+    }
+
+    public function handleScoresManual($params) {
+        DB::beginTransaction();
+        if (count($params['scores']) > Consts::NUMBER_SLOT_MAX_ROOM - 1) {
+            throw new BusinessException('Maximum of 5 players in a room.', RoomErrorCode::MAXIMUM_SLOT_IN_ROOM_ERROR);
+        }
+        //create room
+        $roomParams = [
+            'owner_id' => $params['owner_id'],
+            'golf_id' => $params['golf_id'],
+            'status' => RoomStatus::FINISHED_STATUS,
+            'golf_courses' => json_encode($params['golf_courses'])
+        ];
+        $room = Room::create($roomParams);
+        $draftScoreData = [
+            'infor' => json_encode($params['scores']),
+            'room_id' => $room->id,
+            'hole_current' => 18
+        ];
+        RoomDraftScore::create($draftScoreData);
+        foreach ($params['scores'] as $score) {
+            $roomPlayerParams = [
+                'room_id' => $room->id,
+                'user_id' => $score['user_id'],
+                'name' => $score['name'],
+                'phone' => $score['phone'],
+            ];
+            RoomPlayer::create($roomPlayerParams);
+
+            $score_total = collect($score['holes'])->sum('total');
+            $scoreData = [
+                'room_id' => $room->id,
+                'user_id' => $score['user_id'],
+                'name' => $score['name'],
+                'phone' => $score['phone'],
+                'infor' => json_encode($score['holes']),
+                'score' => $score_total,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ];
+            RoomScore::create($scoreData);
+        }
+        DB::commit();
+        return true;
     }
 
     public function getGolfDetail($id)
@@ -259,8 +356,8 @@ class AdminService
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
         $questions = Question::when(!empty($key), function ($query) use ($key) {
-                return $query->where('question', 'like', '%' . $key .'%');
-            })->orderBy('created_at', 'desc')->paginate($limit);
+            return $query->where('question', 'like', '%' . $key .'%');
+        })->orderBy('created_at', 'desc')->paginate($limit);
 
         return new AdminQuestionCollection($questions);
     }

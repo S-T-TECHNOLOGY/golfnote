@@ -97,7 +97,9 @@ class AdminService
         $key = isset($params['key']) ? $params['key'] : '';
         $status = isset($params['status']) ? $params['status'] : '';
         $reservations = UserEventReservation::when(!empty($key), function ($query) use ($key) {
-            return $query->where('email', 'like', '%' . $key .'%');
+            return $query->where(function ($q) use ($key) {
+                return $q->where('email', 'like', '%' . $key .'%')->orWhere('user_name', 'like', '%' . $key .'%')->orWhere('phone', 'like', '%' . $key .'%');
+            });
         })->when(strlen($status), function ($query) use ($status) {
             return $query->where('status', $status);
         })->with('event')->orderBy('created_at', 'desc')->paginate($limit);

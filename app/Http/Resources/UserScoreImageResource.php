@@ -17,11 +17,13 @@ class UserScoreImageResource extends JsonResource
         return [
             'id' => $this->id,
             'image' => $this->image,
+            'status' => $this->status,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'user' => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
-                'email' => $this->user->email
+                'email' => $this->user->email,
+                'phone' => $this->user->phone,
             ]
         ];
     }

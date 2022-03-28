@@ -220,6 +220,26 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function getScoreImageDetailEdit($id)
+    {
+        $data = $this->adminService->getScoreImageDetailEdit($id);
+        return $this->sendResponse($data);
+    }
+
+    public function handleEditScoreImage(AdminHandleScoreImageRequest $request, $id)
+    {
+        $scoreImage = UserScoreImage::where('id', $id)->first();
+        if (!$scoreImage) {
+            throw new BusinessException('Không tìm thấy phiếu điểm', ScoreImageErrorCode::SCORE_IMAGE_NOT_FOUND);
+        }
+
+        $params = $request->all();
+        $params['id'] = $scoreImage->room_id;
+        $data = $this->adminService->handleEditScoreImage($params);
+
+        return $this->sendResponse($data);
+    }
+
     public function getScoreImageDetail($id)
     {
         $data = $this->adminService->getScoreImageDetail($id);

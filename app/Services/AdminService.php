@@ -418,7 +418,15 @@ class AdminService
     public function getScoreImages($params)
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
-        $scoreImages = UserScoreImage::where('status', UserScoreImageStatus::PENDING_STATUS)->with('user')->paginate($limit);
+        $key = isset($params['key']) ? $params['key'] : '';
+        $status = isset($params['status']) ? $params['status'] : '';
+        $scoreImages = UserScoreImage::join('users', 'users.id', '=', 'user_score_images.user_id')
+            ->select('user_score_images.*')
+            ->where(function ($q) use ($key) {
+                return $q->where('users.email', 'like', '%' . $key .'%')->orWhere('users.name', 'like', '%' . $key .'%')->orWhere('users.phone', 'like', '%' . $key .'%');
+            });
+        if ($status !== '') $scoreImages = $scoreImages->where('status', $status);
+        $scoreImages = $scoreImages->with('user')->orderBy('status', 'ASC')->orderBy('created_at', 'DESC')->paginate($limit);
 
         return new UserScoreImageCollection($scoreImages);
     }
@@ -443,6 +451,84 @@ class AdminService
             'golf' => $golf,
             'holes' => $golfHoles
         ];
+    }
+
+    public function getScoreImageDetailEdit($id)
+    {
+        $scoreImage = UserScoreImage::where('id', $id)->with('room', 'user')->first();
+        $golfCourses = json_decode($scoreImage->room->golf_courses);
+        $holeCourseA = HoleImage::select('number_hole', 'standard')->where('golf_id', $scoreImage->room->golf_id)->where('course', $golfCourses[0])->get();
+        $holeCourseB = HoleImage::select('number_hole', 'standard')->where('golf_id', $scoreImage->room->golf_id)->where('course', $golfCourses[1])->get();
+        $holeCourseB = $holeCourseB->map(function ($hole) {
+            $hole['number_hole'] = $hole['number_hole'] + 9;
+            return $hole;
+        })->toArray();
+        $golfHoles = array_merge($holeCourseA->toArray(), $holeCourseB);
+        foreach ($golfHoles as $hole) {
+            $hole['total'] = 0;
+            $hole['put'] = 0;
+            $hole['short'] = 0;
+            $hole['penalty'] = 0;
+        }
+        $userPlayers = RoomPlayer::select('user_id', 'name', 'phone')->where('room_id', $scoreImage->room_id)->where('user_id', '>', 0)->get();
+
+        foreach ($userPlayers as $user) {
+            $roomScore = RoomScore::where('user_id', $user->user_id)->where('room_id', $scoreImage->room_id)->first();
+            if ($roomScore) {
+                $user->holes = json_decode($roomScore->infor);
+            } else {
+                $user->holes = $golfHoles;
+            }
+        }
+        $golf = Golf::select('id', 'name', 'address') ->where('id', $scoreImage->room->golf_id)->first();
+        return [
+            'id' => $scoreImage->id,
+            'image' => $scoreImage->image,
+            'users' => $userPlayers,
+            'golf' => $golf,
+        ];
+    }
+
+    public function handleEditScoreImage($params) {
+        DB::beginTransaction();
+        $draftScoreParams = [
+            'infor' => json_encode($params['scores']),
+            'room_id' => $params['id'],
+            'hole_current' => 18
+        ];
+        RoomDraftScore::updateOrCreate(
+            ['room_id' => $params['id']],
+            $draftScoreParams);
+        foreach ($params['scores'] as $score) {
+            $roomPlayerParams = [
+                'room_id' => $params['id'],
+                'user_id' => $score['user_id'],
+                'name' => $score['name'],
+                'phone' => $score['phone'],
+            ];
+            RoomPlayer::updateOrCreate(
+                ['room_id' => $params['id'], 'user_id' => $score['user_id']],
+                $roomPlayerParams
+            );
+
+            $score_total = collect($score['holes'])->sum('total');
+            $scoreData = [
+                'room_id' => $params['id'],
+                'user_id' => $score['user_id'],
+                'name' => $score['name'],
+                'phone' => $score['phone'],
+                'infor' => json_encode($score['holes']),
+                'score' => $score_total,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ];
+            RoomScore::updateOrCreate(
+                ['room_id' => $params['id'], 'user_id' => $score['user_id']],
+                $scoreData
+            );
+        }
+        DB::commit();
+        return true;
     }
 
     public function deleteScoreImage($id)

@@ -33,6 +33,9 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::get('/score/images/{id}', [AdminController::class, 'getScoreImageDetail']);
     Route::delete('/score/images/{id}', [AdminController::class, 'deleteScoreImage']);
     Route::post('/score/images/{id}', [AdminController::class, 'handleScoreImage']);
+
+    Route::get('/score/images/edit/{id}', [AdminController::class, 'getScoreImageDetailEdit']);
+    Route::post('/score/images/edit/{id}', [AdminController::class, 'handleEditScoreImage']);
     //manual score
     Route::get('/search-golfs', [AdminController::class, 'searchGolfs']);
     Route::get('/search-users', [AdminController::class, 'searchUsers']);

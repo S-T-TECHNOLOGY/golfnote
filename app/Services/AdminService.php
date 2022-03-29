@@ -292,6 +292,7 @@ class AdminService
 
     public function createGolf($params)
     {
+        DB::beginTransaction();
         $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'golf');
         $params['is_open'] = 1;
         $params['number_hole'] = sizeof($params['golf_courses']) * 9 ;
@@ -315,12 +316,14 @@ class AdminService
             return $hole;
         })->toArray();
         HoleImage::insert($holeImages);
+        DB::commit();
 
         return $golf;
     }
 
     public function editGolf($params)
     {
+        DB::beginTransaction();
         if (Base64Utils::checkIsBase64($params['image'])) {
             $params['image'] = UploadUtil::saveBase64ImageToStorage($params['image'], 'golf');
         }
@@ -348,7 +351,7 @@ class AdminService
         })->toArray();
         HoleImage::where('golf_id', $params['id'])->delete();
         HoleImage::insert($holeImages);
-
+        DB::commit();
         return $golf;
     }
 

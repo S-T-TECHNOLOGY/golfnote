@@ -31,16 +31,16 @@ class AuthService
         $params['gender'] = isset($params['gender']) ? $params['gender'] : 0;
         $params['address'] = isset($params['gender']) ? $params['address'] : 'Việt Nam (Miền Bắc)';
         $params['avatar'] = '/avatar/default.jpeg';
-        $params['active'] = ActiveStatus::ACTIVE;
+        //$params['active'] = ActiveStatus::ACTIVE;
         $user = User::create($params);
-//        $code = Str::random(32);
-//        $mailOtpParams = [
-//            'user_id' => $user->id,
-//            'code' => $code,
-//            'type' => MailOtpType::TYPE_REGISTER
-//        ];
-//        MailOtp::create($mailOtpParams);
-//        Mail::queue(new SendOTP($user->email, $code, MailOtpType::TYPE_REGISTER));
+        $code = Str::random(32);
+        $mailOtpParams = [
+            'user_id' => $user->id,
+            'code' => $code,
+            'type' => MailOtpType::TYPE_REGISTER
+        ];
+        MailOtp::create($mailOtpParams);
+        Mail::queue(new SendOTP($user->email, $code, MailOtpType::TYPE_REGISTER));
         return $user;
     }
 

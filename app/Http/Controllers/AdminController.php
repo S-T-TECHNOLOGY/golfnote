@@ -79,6 +79,35 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    //manual score
+    public function searchGolfs(Request $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->searchGolfs($params);
+        return $this->sendResponse($data);
+    }
+
+    public function searchUsers(Request $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->searchUsers($params);
+        return $this->sendResponse($data);
+    }
+
+    public function getHolesByGolfCourse(Request $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->getHolesByGolfCourse($params);
+        return $this->sendResponse($data);
+    }
+
+    public function handleScoresManual(Request $request) {
+        $params = $request->all();
+        $data = $this->adminService->handleScoresManual($params);
+
+        return $this->sendResponse($data);
+    }
+
     public function getGolfDetail($id)
     {
         $data = $this->adminService->getGolfDetail($id);
@@ -188,6 +217,26 @@ class AdminController extends AppBaseController
     public function getScoreImages(Request $request)
     {
         $data = $this->adminService->getScoreImages($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function getScoreImageDetailEdit($id)
+    {
+        $data = $this->adminService->getScoreImageDetailEdit($id);
+        return $this->sendResponse($data);
+    }
+
+    public function handleEditScoreImage(AdminHandleScoreImageRequest $request, $id)
+    {
+        $scoreImage = UserScoreImage::where('id', $id)->first();
+        if (!$scoreImage) {
+            throw new BusinessException('Không tìm thấy phiếu điểm', ScoreImageErrorCode::SCORE_IMAGE_NOT_FOUND);
+        }
+
+        $params = $request->all();
+        $params['id'] = $scoreImage->room_id;
+        $data = $this->adminService->handleEditScoreImage($params);
+
         return $this->sendResponse($data);
     }
 

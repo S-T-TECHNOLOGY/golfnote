@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserScoreImage extends Model
 {
     use HasFactory;
-    protected $table = 'user_score_imgages';
+    protected $table = 'user_score_images';
     protected $fillable = [
         'user_id',
         'image',

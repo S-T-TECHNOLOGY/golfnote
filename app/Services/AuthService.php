@@ -4,9 +4,12 @@
 namespace App\Services;
 
 
+use App\Constants\ActiveStatus;
 use App\Constants\MailOtpType;
 use App\Constants\NotificationType;
+use App\Constants\UserSocialType;
 use App\Errors\AuthErrorCode;
+use App\Errors\AuthSocialErrorCode;
 use App\Exceptions\BusinessException;
 use App\Mail\ForgotPassword;
 use App\Mail\SendOTP;
@@ -28,15 +31,16 @@ class AuthService
         $params['gender'] = isset($params['gender']) ? $params['gender'] : 0;
         $params['address'] = isset($params['gender']) ? $params['address'] : 'Việt Nam (Miền Bắc)';
         $params['avatar'] = '/avatar/default.jpeg';
+        $params['active'] = ActiveStatus::ACTIVE;
         $user = User::create($params);
-        $code = Str::random(32);
-        $mailOtpParams = [
-            'user_id' => $user->id,
-            'code' => $code,
-            'type' => MailOtpType::TYPE_REGISTER
-        ];
-        MailOtp::create($mailOtpParams);
-        Mail::queue(new SendOTP($user->email, $code, MailOtpType::TYPE_REGISTER));
+//        $code = Str::random(32);
+//        $mailOtpParams = [
+//            'user_id' => $user->id,
+//            'code' => $code,
+//            'type' => MailOtpType::TYPE_REGISTER
+//        ];
+//        MailOtp::create($mailOtpParams);
+//        Mail::queue(new SendOTP($user->email, $code, MailOtpType::TYPE_REGISTER));
         return $user;
     }
 
@@ -71,6 +75,45 @@ class AuthService
             'access_token' => $token,
             'user' => $user
         ];
+    }
+
+    public function loginSocial($params)
+    {
+        $user = User::where('social_id', $params['social_id'])->where('social_type', $params['social_type'])->first();
+        if (!$user) {
+            $email = isset($params['email']) ? $params['email'] : '';
+            $phone = isset($params['phone']) ? $params['phone'] : '';
+            $name = isset($params['name']) ? $params['name'] : '';
+            if (empty($email) || empty($phone) || empty($name)) {
+                throw new BusinessException("Social not created", AuthSocialErrorCode::SOCIAL_ID_NOT_CREATE);
+            }
+
+            $userByEmail = User::where('email', $email)->first();
+            if ($userByEmail) {
+                throw new BusinessException("Email already exists", AuthSocialErrorCode::EMAIL_ALREADY_EXITS);
+            }
+
+            $params['password'] = Hash::make('');
+            $params['account_name'] = '';
+            $params['active'] = ActiveStatus::ACTIVE;
+            $params['avatar'] = '/avatar/default.jpeg';
+            $user = User::create($params);
+        } else {
+            $user->fcm_token = $params['fcm_token'];
+            $user->device = $params['device'];
+            $user->save();
+        }
+
+        $token = JWTAuth::fromUser($user);
+        $totalNotifications = Notification::where('user_id', $user->id)->where('type', '!=', NotificationType::RECEIVED_REQUEST_FRIEND)->where('is_read', 0)->count();
+        $user->notification_unread = $totalNotifications;
+
+        return [
+            'access_token' => $token,
+            'user' => $user
+        ];
+
+
     }
 
     public function forgotPassword($params)

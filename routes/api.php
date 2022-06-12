@@ -31,6 +31,7 @@ use App\Http\Controllers\NewsController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login/social', [AuthController::class, 'loginSocial']);
 Route::get('/cities', [CityController::class, 'getCities']);
 Route::post('/forgot_pass', [AuthController::class, 'forgotPassword']);
 Route::get('/golf_hole/{type}', [GolfHoleController::class, 'getHoleByType']);

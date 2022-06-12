@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Constants\ActiveStatus;
 use App\Constants\Consts;
 use App\Constants\ReservationStatus;
 use App\Constants\RoomStatus;
@@ -397,7 +398,7 @@ class UserService
     public function deactive()
     {
         $user = JWTAuth::user();
-        $user->active = 0;
+        $user->active = ActiveStatus::INACTIVE;
         $user->fcm_token = '';
         $user->save();
         OldThing::where('user_id', $user->id)->where('quantity_remain', '>', 0)->update(['quantity_remain' => 0]);

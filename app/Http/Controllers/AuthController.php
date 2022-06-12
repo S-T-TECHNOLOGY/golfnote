@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminLoginRequest;
 use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\LoginSocialRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Services\AuthService;
@@ -27,6 +28,12 @@ class AuthController extends AppBaseController
     public function login(LoginRequest $request)
     {
         $data = $this->authService->login($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function loginSocial(LoginSocialRequest $request)
+    {
+        $data = $this->authService->loginSocial($request->all());
         return $this->sendResponse($data);
     }
 

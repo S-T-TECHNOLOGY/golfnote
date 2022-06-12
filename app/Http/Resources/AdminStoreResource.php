@@ -18,7 +18,8 @@ class AdminStoreResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'address' => $this->address,
-            'check_in' => $this->check_in
+            'check_in' => $this->check_in,
+            'event' => $this->event ? $this->event : ''
         ];
     }
 }

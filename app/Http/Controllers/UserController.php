@@ -218,4 +218,10 @@ class UserController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function deactive()
+    {
+        $data = $this->userService->deactive();
+        return $this->sendResponse($data);
+    }
+
 }

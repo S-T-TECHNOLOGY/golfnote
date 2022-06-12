@@ -393,4 +393,15 @@ class UserService
         $reservationEvent->save();
         return new \stdClass();
     }
+
+    public function deactive()
+    {
+        $user = JWTAuth::user();
+        $user->active = 0;
+        $user->fcm_token = '';
+        $user->save();
+        OldThing::where('user_id', $user->id)->where('quantity_remain', '>', 0)->update(['quantity_remain' => 0]);
+        JWTAuth::invalidate(JWTAuth::getToken());
+        return new \stdClass();
+    }
 }

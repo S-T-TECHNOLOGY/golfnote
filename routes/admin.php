@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BannerController;
 
 Route::post('/login', [AuthController::class, 'loginAdmin']);
+Route::get('/stores/{id}/export', [AdminController::class, 'exportStoreCheckIn']);
 Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::get('/golf/reservations', [AdminController::class, 'getReservationGolf']);
     Route::put('/golf/reservations/{id}', [AdminController::class, 'reservationGolfSuccess']);
@@ -62,7 +63,6 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::delete('/stores/{id}', [AdminController::class, 'deleteStore']);
     Route::get('/stores/{id}', [AdminController::class, 'getStoreDetail']);
     Route::get('/stores/{id}/checkin', [AdminController::class, 'getStoreCheckIn']);
-    Route::get('/stores/{id}/export', [AdminController::class, 'exportStoreCheckIn']);
     Route::post('/news', [AdminController::class, 'createNews']);
     Route::get('/news', [AdminController::class, 'getNews']);
     Route::get('/news/{id}', [AdminController::class, 'getNewsDetail']);

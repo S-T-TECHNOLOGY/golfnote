@@ -11,6 +11,7 @@ class Store extends Model
     protected $fillable = [
         'name',
         'address',
+        'event',
         'check_in'
     ];
 }

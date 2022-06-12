@@ -25,7 +25,8 @@ class CreateStoreRequest extends FormRequest
     {
         return [
             'name' => 'string | required',
-            'address' => 'string | required'
+            'address' => 'string | required',
+            'event' => 'string | required'
         ];
     }
 }

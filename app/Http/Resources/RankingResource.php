@@ -20,6 +20,7 @@ class RankingResource extends JsonResource
             'avatar' => $this->user->avatar,
             'phone' => $this->user->phone,
             'address' => $this->user->address,
+            'active' => $this->user->active,
             'total_round' => $this->total_round,
             'avg_score' => $this->avg_score,
             'total_partner' => $this->total_partner,

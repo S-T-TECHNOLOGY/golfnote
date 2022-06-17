@@ -10,6 +10,7 @@ use App\Constants\NotificationType;
 use App\Constants\ReservationStatus;
 use App\Constants\RoomStatus;
 use App\Constants\UserScoreImageStatus;
+use App\Errors\AdminErrorCode;
 use App\Errors\NewsErrorCode;
 use App\Errors\RoomErrorCode;
 use App\Exceptions\BusinessException;
@@ -61,6 +62,7 @@ use App\Utils\Base64Utils;
 use App\Utils\UploadUtil;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AdminService
 {
@@ -754,6 +756,33 @@ class AdminService
         }
 
         return new AdminNewsResource($news);
+    }
+
+    public function createUser($users)
+    {
+        $dataUsers = [];
+        foreach ($users as $user) {
+            $email = $user[0];
+            $userByEmail = User::where('email', $email)->first();
+            if ($userByEmail) {
+                throw new BusinessException($email . " already exists", AdminErrorCode::USER_EMAIL_EXISTS);
+            }
+            $dataUser = [
+                'email' => $email,
+                'password' => Hash::make($user[1]),
+                'name' => $user[2],
+                'account_name' => $user[3],
+                'phone' => $user[4],
+                'address' => $user[5],
+                'active' => ActiveStatus::ACTIVE,
+                'avatar' => '/avatar/default.jpeg'
+            ];
+            array_push($dataUsers, $dataUser);
+        }
+
+        User::insert($dataUsers);
+
+        return new \stdClass();
     }
 
 }

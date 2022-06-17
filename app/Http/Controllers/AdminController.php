@@ -6,6 +6,7 @@ use App\Constants\UserScoreImageStatus;
 use App\Errors\ScoreImageErrorCode;
 use App\Exceptions\BusinessException;
 use App\Exports\CheckInStoreExport;
+use App\Http\Requests\AdminCreateUserRequest;
 use App\Http\Requests\AdminHandleScoreImageRequest;
 use App\Http\Requests\AdminPushNotificationRequest;
 use App\Http\Requests\CreateEventRequest;
@@ -22,6 +23,7 @@ use App\Services\AdminService;
 use App\Services\ScoreService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 
 class AdminController extends AppBaseController
@@ -418,5 +420,15 @@ class AdminController extends AppBaseController
     {
         $store = Store::find($id);
         return Excel::download(new CheckInStoreExport($id, $store->name), $store->name . '.xlsx');
+    }
+
+    public function createUser(AdminCreateUserRequest $request)
+    {
+        $arrayInfos = Excel::toArray([], $request->file('users'));
+        $users = collect($arrayInfos[0])->filter(function ($item) {
+           return !in_array('name', $item) || !in_array('password', $item);
+        })->toArray();
+        $data = $this->adminService->createUser($users);
+        return $this->sendResponse($data);
     }
 }

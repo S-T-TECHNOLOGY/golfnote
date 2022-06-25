@@ -99,6 +99,9 @@ class AuthService
             $params['avatar'] = '/avatar/default.jpeg';
             $user = User::create($params);
         } else {
+            if (!$user->active) {
+                throw new BusinessException('Tài khoản chưa được kích hoạt', AuthErrorCode::USER_NOT_ACTIVE);
+            }
             $user->fcm_token = $params['fcm_token'];
             $user->device = $params['device'];
             $user->save();

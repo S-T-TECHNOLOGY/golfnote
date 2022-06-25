@@ -14,6 +14,8 @@ class Event extends Model
         'image',
         'start_date',
         'end_date',
+        'start_date_noti',
+        'end_date_noti',
         'quantity',
         'quantity_remain',
         'join_fee',

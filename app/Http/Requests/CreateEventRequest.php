@@ -34,6 +34,8 @@ class CreateEventRequest extends FormRequest
             'green_fee' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
+            'start_date_noti' => 'required',
+            'end_date_noti' => 'required',
             'description' => 'required',
             'image' => 'required'
         ];

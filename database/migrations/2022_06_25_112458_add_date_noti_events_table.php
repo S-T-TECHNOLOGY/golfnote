@@ -14,8 +14,8 @@ class AddDateNotiEventsTable extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->dateTime('start_date_noti');
-            $table->dateTime('end_date_noti');
+            $table->dateTime('start_date_noti')->default(\Carbon\Carbon::now());
+            $table->dateTime('end_date_noti')->default(\Carbon\Carbon::now());
         });
     }
 

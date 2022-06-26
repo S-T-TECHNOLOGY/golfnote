@@ -59,7 +59,8 @@ class UserService
         $users = User::when(!empty($key), function ($query) use ($key) {
             return $query->where(function ($query) use ($key) {
                 return $query->where('account_name', 'like', '%' . $key . '%')
-                            ->orWhere('phone', 'like', '%' . $key . '%');
+                            ->orWhere('phone', 'like', '%' . $key . '%')
+                            ->orWhere('name', 'like', '%' . $key . '%');
             });
         })->when(sizeof($phones), function ($query) use ($phones) {
             return $query->whereIn('phone', $phones);

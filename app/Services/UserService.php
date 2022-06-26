@@ -23,6 +23,7 @@ use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserReservationEventCollection;
 use App\Http\Resources\UserReservationGolfCollection;
 use App\Http\Resources\UserReservationGolfResource;
+use App\Jobs\RemoveUserInformation;
 use App\Models\Event;
 use App\Models\Golf;
 use App\Models\OldThing;
@@ -398,11 +399,9 @@ class UserService
     public function deactive()
     {
         $user = JWTAuth::user();
-        $user->active = ActiveStatus::INACTIVE;
-        $user->fcm_token = '';
-        $user->save();
-        OldThing::where('user_id', $user->id)->where('quantity_remain', '>', 0)->update(['quantity_remain' => 0]);
         JWTAuth::invalidate(JWTAuth::getToken());
+        RemoveUserInformation::dispatch($user->id);
+        $user->delete();
         return new \stdClass();
     }
 }

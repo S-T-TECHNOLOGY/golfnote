@@ -27,7 +27,9 @@ class UpdateNewsRequest extends FormRequest
             'title' => 'string | required',
             'description' => 'string | required',
             'image' => 'string | required',
-            'content' => 'string | required'
+            'content' => 'string | required',
+            'start_date' => 'required',
+            'end_date' => 'required',
         ];
     }
 }

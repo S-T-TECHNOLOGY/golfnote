@@ -9,6 +9,7 @@ use App\Models\UserClub;
 use App\Models\UserEventReservation;
 use App\Models\UserRequestFriend;
 use App\Models\UserReservation;
+use App\Models\UserScoreImage;
 use App\Models\UserSummary;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -46,6 +47,7 @@ class RemoveUserInformation implements ShouldQueue
         UserReservation::where('user_id', $this->userId)->delete();
         UserEventReservation::where('user_id', $this->userId)->delete();
         UserCheckIn::where('user_id', $this->userId)->delete();
+        UserScoreImage::where('user_id', $this->userId)->delete();
         UserSummary::where('user_id', $this->userId)->delete();
         UserRequestFriend::where(function ($query) use ($userId){
             return $query->where('sender_id', $userId)->orWhere('received_id', $userId);

@@ -19,7 +19,7 @@ class MarketResource extends JsonResource
             'name' => $this->name,
             'image' => json_decode($this->image),
             'status' => !$this->quantity_remain ? 0 : 1,
-            'price' => (int) $this->price * (100 - $this->sale_off)/100,
+            'price' => intval( $this->price * (100 - $this->sale_off)/100),
             'phone' => $this->phone,
             'sale_off' => $this->sale_off,
             'quantity' => $this->quantity,

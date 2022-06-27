@@ -18,7 +18,7 @@ class AdminMarketResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'image' => json_decode($this->image),
-            'price' => (int)($this->price),
+            'price' => intval($this->price),
             'phone' => $this->phone,
             'sale_off' => $this->sale_off,
             'quantity' => $this->quantity,

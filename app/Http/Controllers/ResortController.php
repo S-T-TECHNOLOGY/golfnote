@@ -19,4 +19,10 @@ class ResortController extends AppBaseController
         $markets = $this->resortService->getAll($request->all());
         return $this->sendResponse($markets);
     }
+
+    public function getDetail($id)
+    {
+        $market = $this->resortService->getDetail($id);
+        return $this->sendResponse($market);
+    }
 }

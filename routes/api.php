@@ -58,6 +58,7 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::get('/questions', [QuestionController::class, 'getAll']);
     Route::put('/old_thing/{id}/soldout', [OldThingController::class, 'soldOut']);
     Route::get('/market/{id}', [MarketController::class, 'getDetail']);
+    Route::get('/resorts/{id}', [ResortController::class, 'getDetail']);
     Route::get('/old_thing/{id}', [OldThingController::class, 'getDetail']);
     Route::get('/event/{id}', [EventController::class, 'getEventDetail']);
     Route::get('/golf/{id}', [GolfController::class, 'getGolfCourseDetail']);

@@ -28,6 +28,8 @@ use App\Http\Resources\AdminNewsResource;
 use App\Http\Resources\AdminNotificationCollection;
 use App\Http\Resources\AdminOldThingCollection;
 use App\Http\Resources\AdminQuestionCollection;
+use App\Http\Resources\AdminResortCollection;
+use App\Http\Resources\AdminResortResource;
 use App\Http\Resources\AdminStoreCollection;
 use App\Http\Resources\AdminUserCollection;
 use App\Http\Resources\GolfResource;
@@ -51,6 +53,7 @@ use App\Models\News;
 use App\Models\Notification;
 use App\Models\OldThing;
 use App\Models\Question;
+use App\Models\Resort;
 use App\Models\Room;
 use App\Models\RoomDraftScore;
 use App\Models\RoomPlayer;
@@ -615,6 +618,37 @@ class AdminService
         return new \stdClass();
     }
 
+    public function getResorts($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $resorts = Resort::when(!empty($key), function ($query) use ($key) {
+            return $query->where('name', 'like', '%' . $key .'%');
+        })->orderBy('created_at', 'desc')->paginate($limit);
+
+        return new AdminResortCollection($resorts);
+    }
+
+    public function getResortDetail($id)
+    {
+        $market = Resort::find($id);
+        return new AdminResortResource($market);
+    }
+
+    public function createResort($params)
+    {
+        $images = [];
+        foreach ($params['images'] as $image) {
+            $url = UploadUtil::saveBase64ImageToStorage($image, 'resort');
+            array_push($images, $url);
+        }
+        $params['image'] = json_encode($images);
+        $params['quantity_remain'] = $params['quantity'];
+        Resort::create($params);
+
+        return new \stdClass();
+    }
+
     public function editMarket($params)
     {
         $images = [];
@@ -630,6 +664,25 @@ class AdminService
         $params['quantity_remain'] = $params['quantity'];
         unset($params['images']);
         Market::where('id', $params['id'])->update($params);
+
+        return new \stdClass();
+    }
+
+    public function editResort($params)
+    {
+        $images = [];
+        foreach ($params['images'] as $image) {
+            if (Base64Utils::checkIsBase64($image)) {
+                $url = UploadUtil::saveBase64ImageToStorage($image, 'resort');
+                array_push($images, $url);
+            } else {
+                array_push($images, $image);
+            }
+        }
+        $params['image'] = json_encode($images);
+        $params['quantity_remain'] = $params['quantity'];
+        unset($params['images']);
+        Resort::where('id', $params['id'])->update($params);
 
         return new \stdClass();
     }

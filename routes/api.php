@@ -18,6 +18,7 @@ use App\Http\Controllers\RankingController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\ResortController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -41,6 +42,7 @@ Route::get('/golfs', [GolfController::class, 'getGolfs']);
 Route::get('/events', [EventController::class, 'getAll']);
 Route::get('/old_things', [OldThingController::class, 'getAll']);
 Route::get('/markets', [MarketController::class, 'getAll']);
+Route::get('/resorts', [ResortController::class, 'getAll']);
 Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::get('/ranking', [RankingController::class, 'getRanking']);

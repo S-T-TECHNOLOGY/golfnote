@@ -14,6 +14,7 @@ use App\Http\Requests\CreateGolfRequest;
 use App\Http\Requests\CreateMarketRequest;
 use App\Http\Requests\CreateNewsRequest;
 use App\Http\Requests\CreateQuestionRequest;
+use App\Http\Requests\CreateResortRequest;
 use App\Http\Requests\CreateStoreRequest;
 use App\Http\Requests\UpdateNewsRequest;
 use App\Http\Requests\UploadImageRequest;
@@ -302,6 +303,32 @@ class AdminController extends AppBaseController
     public function deleteMarket($id)
     {
         $data = $this->adminService->deleteMarket($id);
+        return $this->sendResponse($data);
+    }
+
+    public function getResorts(Request $request)
+    {
+        $data = $this->adminService->getResorts($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function getResortDetail($id)
+    {
+        $data = $this->adminService->getResortDetail($id);
+        return $this->sendResponse($data);
+    }
+
+    public function createResort(CreateResortRequest $request)
+    {
+        $data = $this->adminService->createResort($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function editResort(CreateResortRequest $request, $id)
+    {
+        $params = $request->all();
+        $params['id'] = $id;
+        $data = $this->adminService->editMarket($params);
         return $this->sendResponse($data);
     }
 

@@ -94,6 +94,12 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'resort' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/resort'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
         'news' => [
             'driver' => 'local',
             'root' => storage_path('app/public/news'),

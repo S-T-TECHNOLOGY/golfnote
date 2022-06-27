@@ -6,11 +6,13 @@ namespace App\Services;
 
 use App\Constants\ActiveStatus;
 use App\Constants\Consts;
+use App\Constants\HandicapRequestStatus;
 use App\Constants\NotificationType;
 use App\Constants\ReservationStatus;
 use App\Constants\RoomStatus;
 use App\Constants\UserScoreImageStatus;
 use App\Errors\AdminErrorCode;
+use App\Errors\AdminHandicapError;
 use App\Errors\NewsErrorCode;
 use App\Errors\RoomErrorCode;
 use App\Exceptions\BusinessException;
@@ -33,6 +35,7 @@ use App\Http\Resources\NotificationResource;
 use App\Http\Resources\QuestionResource;
 use App\Http\Resources\StoreCheckInCollection;
 use App\Http\Resources\UserEventReservationCollection;
+use App\Http\Resources\UserHandicapRequestCollection;
 use App\Http\Resources\UserReservationCollection;
 use App\Http\Resources\UserScoreImageCollection;
 use App\Http\Resources\UserScoreImageResource;
@@ -56,8 +59,10 @@ use App\Models\Store;
 use App\Models\User;
 use App\Models\UserCheckIn;
 use App\Models\UserEventReservation;
+use App\Models\UserHandicapRequest;
 use App\Models\UserReservation;
 use App\Models\UserScoreImage;
+use App\Models\UserSummary;
 use App\Utils\Base64Utils;
 use App\Utils\UploadUtil;
 use Carbon\Carbon;
@@ -91,6 +96,32 @@ class AdminService
         })->paginate($limit);
 
         return new AdminUserCollection($users);
+    }
+
+    public function getUserHandicapRequest($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $userHandicapRequests = UserHandicapRequest::join('users', 'users.id', '=', 'user_handicap_requests.user_id')
+                ->select('users.name', 'users.phone', 'users.email', 'user_handicap_requests.user_id', 'user_handicap_requests.id')
+                ->when(!empty($key), function ($query) use ($key) {
+                    return $query->where('users.name', 'like', '%' . $key . '%');
+                })->where('status', HandicapRequestStatus::PENDING)->paginate($limit);
+
+        return new UserHandicapRequestCollection($userHandicapRequests);
+    }
+
+    public function resetHandicap($id) {
+        $handicapRequest = UserHandicapRequest::where('id', $id)->where('status', HandicapRequestStatus::PENDING)->first();
+        if (!$handicapRequest) {
+            throw new BusinessException('Handicap request not found', AdminHandicapError::HANDICAP_NOT_FOUND);
+        }
+        $handicapRequest->status = HandicapRequestStatus::COMPLETED;
+        $handicapRequest->save();
+
+        UserSummary::where('user_id', $handicapRequest->user_id)->delete();
+
+        return new \stdClass();
     }
 
     public function getReservationEvent($params)

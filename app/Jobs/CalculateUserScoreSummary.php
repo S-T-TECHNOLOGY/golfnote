@@ -51,7 +51,7 @@ class CalculateUserScoreSummary implements ShouldQueue
             $totalMatch = sizeof($scores);
             $handicapScore = 0;
             $scores = collect($scores)->sortBy('score');
-            if ($totalMatch >= 5 && $totalMatch <= 6) {
+            if ($totalMatch >= 3 && $totalMatch <= 6) {
                 $handicapScore = $scores->skip(0)->take(1)->avg('score');
             }
 

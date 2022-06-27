@@ -224,4 +224,10 @@ class UserController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function resetHandicap()
+    {
+        $data = $this->userService->resetHandicap();
+        return $this->sendResponse($data);
+    }
+
 }

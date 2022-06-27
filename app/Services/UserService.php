@@ -33,9 +33,11 @@ use App\Models\User;
 use App\Models\UserCheckIn;
 use App\Models\UserClub;
 use App\Models\UserEventReservation;
+use App\Models\UserHandicapRequest;
 use App\Models\UserRequestFriend;
 use App\Models\UserReservation;
 use App\Models\UserScoreImage;
+use App\Models\UserSummary;
 use App\Utils\Base64Utils;
 use App\Utils\FormatTime;
 use App\Utils\UploadUtil;
@@ -403,6 +405,16 @@ class UserService
         JWTAuth::invalidate(JWTAuth::getToken());
         RemoveUserInformation::dispatch($user->id);
         $user->delete();
+        return new \stdClass();
+    }
+
+    public function resetHandicap()
+    {
+        $user = JWTAuth::user();
+        $data = [
+            'user_id' => $user->id
+        ];
+        UserHandicapRequest::create($data);
         return new \stdClass();
     }
 }

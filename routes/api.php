@@ -88,6 +88,7 @@ Route::group(['middleware' => ['assign.guard:users','jwt.auth']], function () {
     Route::put('/user/friend/cancel', [UserFriendController::class, 'cancelRequest']);
     Route::put('/logout', [UserController::class, 'logout']);
     Route::delete('/user/deactive', [UserController::class, 'deactive']);
+    Route::post('/user/handicap/reset', [UserController::class, 'resetHandicap']);
     Route::post('/user/store/{id}/check-in', [UserController::class, 'checkInStore']);
     Route::get('/news', [NewsController::class, 'getAll']);
 });

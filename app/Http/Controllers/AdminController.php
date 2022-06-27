@@ -202,6 +202,18 @@ class AdminController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function getUserHandicapRequest(Request $request)
+    {
+        $data = $this->adminService->getUserHandicapRequest($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function resetHandicap($id)
+    {
+        $data = $this->adminService->resetHandicap($id);
+        return $this->sendResponse($data);
+    }
+
     public function createEvent(CreateEventRequest $request)
     {
         $data = $this->adminService->createEvent($request->all());

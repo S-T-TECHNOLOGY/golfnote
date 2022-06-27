@@ -19,7 +19,7 @@ class ResortResource extends JsonResource
             'name' => $this->name,
             'image' => json_decode($this->image),
             'status' => !$this->quantity_remain ? 0 : 1,
-            'price' => $this->price * (100 - $this->sale_off)/100,
+            'price' => route($this->price * (100 - $this->sale_off)/100),
             'phone' => $this->phone,
             'sale_off' => $this->sale_off,
             'quantity' => $this->quantity,

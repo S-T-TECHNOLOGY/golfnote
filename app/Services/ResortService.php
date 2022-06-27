@@ -25,11 +25,11 @@ class ResortService
 
     public function getDetail($id)
     {
-        $market = Resort::find($id);
-        if (!$market) {
+        $resort = Resort::find($id);
+        if (!$resort) {
             throw new BusinessException('Resort not found', ResortErrorCode::RESORT_NOT_FOUND);
         }
 
-        return new ResortResource($market);
+        return new ResortResource($resort);
     }
 }

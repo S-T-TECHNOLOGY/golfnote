@@ -18,7 +18,7 @@ class AdminResortResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'image' => json_decode($this->image),
-            'price' => round($this->price),
+            'price' => (int)($this->price),
             'phone' => $this->phone,
             'sale_off' => $this->sale_off,
             'quantity' => $this->quantity,

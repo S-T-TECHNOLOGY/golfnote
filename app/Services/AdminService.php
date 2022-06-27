@@ -687,6 +687,13 @@ class AdminService
         return new \stdClass();
     }
 
+    public function deleteResort($id)
+    {
+        Resort::where('id', $id)->delete();
+        return new \stdClass();
+    }
+
+
     public function deleteMarket($id)
     {
         Market::where('id', $id)->delete();

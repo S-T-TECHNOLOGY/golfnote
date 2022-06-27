@@ -53,6 +53,7 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::get('/resorts/{id}', [AdminController::class, 'getResortDetail']);
     Route::put('/resorts/{id}', [AdminController::class, 'editResort']);
     Route::post('/resorts', [AdminController::class, 'createResort']);
+    Route::delete('/resorts/{id}', [AdminController::class, 'deleteResort']);
     Route::get('/old/markets', [AdminController::class, 'getOldMarkets']);
     Route::delete('/old/markets/{id}', [AdminController::class, 'deleteOldMarket']);
     Route::post('/markets', [AdminController::class, 'createMarket']);

@@ -17,3 +17,4 @@ use App\Http\Controllers\HomController;
 
 Route::get('/confirm-email', [ActiveAccountController::class, 'activate']);
 Route::get('/about', [HomController::class, 'about']);
+Route::get('/golfnote/{file}', [HomController::class, 'previewFile']);

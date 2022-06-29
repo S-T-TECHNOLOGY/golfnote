@@ -117,6 +117,12 @@ return [
             'root' => storage_path('app/public/club'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
+        ],
+        'golfnote' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/golfnote'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
         ]
 
     ],

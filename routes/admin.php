@@ -76,4 +76,5 @@ Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::get('/news/{id}', [AdminController::class, 'getNewsDetail']);
     Route::put('/news/{id}', [AdminController::class, 'updateNews']);
     Route::delete('/news/{id}', [AdminController::class, 'deleteNews']);
+    Route::post('/files', [AdminController::class, 'uploadFile']);
 });

@@ -476,4 +476,11 @@ class AdminController extends AppBaseController
         $data = $this->adminService->createUser($users);
         return $this->sendResponse($data);
     }
+
+    public function uploadFile(Request $request)
+    {
+        $file = $request->file('file');
+        $data = $this->adminService->uploadFile($file);
+        return $this->sendResponse($data);
+    }
 }

@@ -11,7 +11,7 @@ class UploadUtil
     public static function saveFileToStorage ($file, $pathFolder, $prefixName = null) {
         $storagePath = 'public' . DIRECTORY_SEPARATOR . $pathFolder;
 
-        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $filename = $file->getClientOriginalName();
         if (!empty($prefixName)) {
             $filename = $prefixName . '.' .$filename;
         }

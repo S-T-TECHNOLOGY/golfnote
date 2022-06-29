@@ -10,7 +10,6 @@ use App\Constants\HandicapRequestStatus;
 use App\Constants\NotificationType;
 use App\Constants\ReservationStatus;
 use App\Constants\RoomStatus;
-use App\Constants\UserScoreImageStatus;
 use App\Errors\AdminErrorCode;
 use App\Errors\AdminHandicapError;
 use App\Errors\NewsErrorCode;
@@ -20,7 +19,6 @@ use App\Http\Resources\AdminEventCollection;
 use App\Http\Resources\AdminEventResource;
 use App\Http\Resources\AdminGolfCollection;
 use App\Http\Resources\AdminGolfDetailResource;
-use App\Http\Resources\AdminGolfResource;
 use App\Http\Resources\AdminMarketCollection;
 use App\Http\Resources\AdminMarketResource;
 use App\Http\Resources\AdminNewsCollection;
@@ -32,7 +30,6 @@ use App\Http\Resources\AdminResortCollection;
 use App\Http\Resources\AdminResortResource;
 use App\Http\Resources\AdminStoreCollection;
 use App\Http\Resources\AdminUserCollection;
-use App\Http\Resources\GolfResource;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\QuestionResource;
 use App\Http\Resources\StoreCheckInCollection;
@@ -40,7 +37,6 @@ use App\Http\Resources\UserEventReservationCollection;
 use App\Http\Resources\UserHandicapRequestCollection;
 use App\Http\Resources\UserReservationCollection;
 use App\Http\Resources\UserScoreImageCollection;
-use App\Http\Resources\UserScoreImageResource;
 use App\Jobs\SendNotificationAllUser;
 use App\Jobs\SendNotificationReservationGolfSuccess;
 use App\Models\AdminNotification;
@@ -874,6 +870,12 @@ class AdminService
         User::insert($dataUsers);
 
         return new \stdClass();
+    }
+
+    public function uploadFile($file)
+    {
+        $link = UploadUtil::saveFileToStorage($file, 'golfnote');
+        return $link;
     }
 
 }

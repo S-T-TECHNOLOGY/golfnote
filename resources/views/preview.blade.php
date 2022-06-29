@@ -19,7 +19,7 @@
 </head>
 <body>
 <div class="content-container">
-  <iframe src='https://docs.google.com/viewer?url={{$link}}&embedded=true' frameborder='0' width="100%" height="100%"></iframe>
+  <iframe src='https://view.officeapps.live.com/op/embed.aspx?src={{$link}}&embedded=true' frameborder='0' width="100%" height="100%"></iframe>
 </div>
 </body>
 </html>

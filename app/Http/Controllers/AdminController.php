@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\AdminRole;
 use App\Constants\UserScoreImageStatus;
 use App\Errors\ScoreImageErrorCode;
 use App\Exceptions\BusinessException;
@@ -24,7 +25,7 @@ use App\Services\AdminService;
 use App\Services\ScoreService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-
+use JWTAuth;
 
 
 class AdminController extends AppBaseController
@@ -40,6 +41,10 @@ class AdminController extends AppBaseController
     public function getReservationGolf(Request $request)
     {
         $params = $request->all();
+        $user = JWTAuth::users();
+        if ($user === AdminRole::GOLF_OWNER) {
+            $params['golf_id'] = $user->golf_id;
+        }
         $data = $this->adminService->getReservationGolf($params);
         return $this->sendResponse($data);
     }

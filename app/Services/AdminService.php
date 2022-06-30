@@ -74,6 +74,7 @@ class AdminService
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
+        $golfId = isset($params['golf_id']) ? $params['golf_id'] : 0;
         $status = isset($params['status']) ? $params['status'] : '';
         $reservations = UserReservation::when(!empty($key), function ($query) use ($key) {
             return $query->where(function ($q) use ($key) {
@@ -81,6 +82,8 @@ class AdminService
             });
         })->when(strlen($status), function ($query) use ($status) {
             return $query->where('status', $status);
+        })->when($golfId, function ($query) use ($golfId) {
+            return $query->where('golf_id', $golfId);
         })->with('golf')->orderBy('created_at', 'desc')->paginate($limit);
 
         return new UserReservationCollection($reservations);

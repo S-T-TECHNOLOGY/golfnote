@@ -13,7 +13,9 @@ class Admin extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name',
         'email',
-        'password'
+        'password',
+        'role',
+        'golf_id'
     ];
 
     protected $hidden = [

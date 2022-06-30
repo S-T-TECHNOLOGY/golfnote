@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Constants\ActiveStatus;
 use App\Constants\NotificationType;
-use App\Errors\StoreErrorCode;
-use App\Exceptions\BusinessException;
 use App\Http\Requests\FindUserByPhoneRequest;
 use App\Http\Requests\UserChangePasswordRequest;
 use App\Http\Requests\UserCreateClubRequest;
@@ -16,9 +14,7 @@ use App\Http\Requests\UserScoreImageRequest;
 use App\Http\Requests\UserSellOldThingRequest;
 use App\Http\Resources\UserProfileResource;
 use App\Models\Notification;
-use App\Models\Store;
 use App\Models\User;
-use App\Models\UserCheckIn;
 use App\Models\UserSummary;
 use App\Services\RoomService;
 use App\Services\UserService;

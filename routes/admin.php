@@ -8,6 +8,8 @@ Route::post('/login', [AuthController::class, 'loginAdmin']);
 Route::get('/stores/{id}/export', [AdminController::class, 'exportStoreCheckIn']);
 Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::get('/golf/reservations', [AdminController::class, 'getReservationGolf']);
+});
+Route::group(['middleware' => ['assign.guard:admins','jwt.auth', 'role.manager']], function () {
     Route::put('/golf/reservations/{id}', [AdminController::class, 'reservationGolfSuccess']);
     Route::delete('/golf/reservations/{id}', [AdminController::class, 'cancelReservationGolf']);
     Route::get('/event/reservations', [AdminController::class, 'getReservationEvent']);

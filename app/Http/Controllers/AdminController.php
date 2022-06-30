@@ -42,7 +42,7 @@ class AdminController extends AppBaseController
     {
         $params = $request->all();
         $user = JWTAuth::user();
-        if ($user === AdminRole::GOLF_OWNER) {
+        if ($user->role === AdminRole::GOLF_OWNER) {
             $params['golf_id'] = $user->golf_id;
         }
         $data = $this->adminService->getReservationGolf($params);

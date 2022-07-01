@@ -11,6 +11,7 @@ use App\Http\Requests\AdminCreateUserRequest;
 use App\Http\Requests\AdminHandleScoreImageRequest;
 use App\Http\Requests\AdminPushNotificationRequest;
 use App\Http\Requests\CreateEventRequest;
+use App\Http\Requests\CreateGolfAccountRequest;
 use App\Http\Requests\CreateGolfRequest;
 use App\Http\Requests\CreateMarketRequest;
 use App\Http\Requests\CreateNewsRequest;
@@ -486,6 +487,26 @@ class AdminController extends AppBaseController
     {
         $file = $request->file('file');
         $data = $this->adminService->uploadFile($file);
+        return $this->sendResponse($data);
+    }
+
+    public function getGolfAccount(Request $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->getGolfAccount($params);
+        return $this->sendResponse($data);
+    }
+
+    public function createGolfAccount(CreateGolfAccountRequest $request)
+    {
+        $params = $request->all();
+        $data = $this->adminService->createGolfAccount($params);
+        return $this->sendResponse($data);
+    }
+
+    public function deleteGolfAccount($id)
+    {
+        $data = $this->adminService->deleteGolfAccount($id);
         return $this->sendResponse($data);
     }
 }

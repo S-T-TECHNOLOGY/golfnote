@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use App\Constants\ActiveStatus;
+use App\Constants\AdminRole;
 use App\Constants\Consts;
 use App\Constants\HandicapRequestStatus;
 use App\Constants\NotificationType;
@@ -30,6 +31,7 @@ use App\Http\Resources\AdminResortCollection;
 use App\Http\Resources\AdminResortResource;
 use App\Http\Resources\AdminStoreCollection;
 use App\Http\Resources\AdminUserCollection;
+use App\Http\Resources\GolfAccountCollection;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\QuestionResource;
 use App\Http\Resources\StoreCheckInCollection;
@@ -39,6 +41,7 @@ use App\Http\Resources\UserReservationCollection;
 use App\Http\Resources\UserScoreImageCollection;
 use App\Jobs\SendNotificationAllUser;
 use App\Jobs\SendNotificationReservationGolfSuccess;
+use App\Models\Admin;
 use App\Models\AdminNotification;
 use App\Models\Banner;
 use App\Models\Event;
@@ -879,6 +882,38 @@ class AdminService
     {
         $link = UploadUtil::saveFileToStorage($file, 'golfnote');
         return $link;
+    }
+
+    public function getGolfAccount($params)
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
+        $key = isset($params['key']) ? $params['key'] : '';
+        $golfAccount = Admin::select('admins.id', 'admins.email', 'admins.name', 'golfs.id as golf_id', 'golfs.name as golf_name')
+            ->join('golfs', 'admins.golf_id', 'golfs.id')
+            ->when(!empty($key), function ($query) use ($key) {
+                return $query->where('admins.name', 'like', '%' . $key .'%');
+            })->where('admins.role', AdminRole::GOLF_OWNER)->orderBy('admins.created_at', 'desc')->paginate($limit);
+
+        return new GolfAccountCollection($golfAccount);
+    }
+
+    public function createGolfAccount($params)
+    {
+        $golfAccount = Admin::where('email', $params['email'])->where('role', AdminRole::GOLF_OWNER)->first();
+        if ($golfAccount) {
+            throw new BusinessException('Email already exists', AdminErrorCode::USER_EMAIL_EXISTS);
+        }
+
+        $params['role'] = AdminRole::GOLF_OWNER;
+        Admin::create($params);
+
+        return new \stdClass();
+    }
+
+    public function deleteGolfAccount($id)
+    {
+        Admin::where('id', $id)->where('role', AdminRole::GOLF_OWNER)->delete();
+        return new \stdClass();
     }
 
 }

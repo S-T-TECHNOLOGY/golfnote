@@ -903,6 +903,7 @@ class AdminService
         if ($golfAccount) {
             throw new BusinessException('Email already exists', AdminErrorCode::USER_EMAIL_EXISTS);
         }
+        $params['password'] = Hash::make($params['password']);
 
         $params['role'] = AdminRole::GOLF_OWNER;
         Admin::create($params);

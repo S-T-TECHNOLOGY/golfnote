@@ -25,6 +25,7 @@ class CreateGolfAccountRequest extends FormRequest
     {
         return [
             'email' => 'required',
+            'password' => 'required',
             'name' => 'required',
             'golf_id' => 'required'
         ];

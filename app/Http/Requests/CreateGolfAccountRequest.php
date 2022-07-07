@@ -27,7 +27,8 @@ class CreateGolfAccountRequest extends FormRequest
             'email' => 'required',
             'password' => 'required',
             'name' => 'required',
-            'golf_id' => 'required'
+            'golf_id' => 'required',
+            'phone' => 'required'
         ];
     }
 }

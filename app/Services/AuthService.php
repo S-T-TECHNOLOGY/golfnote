@@ -149,7 +149,7 @@ class AuthService
         if (!$token) {
             throw new BusinessException('Password không đúng', AuthErrorCode::PASSWORD_WRONG);
         }
-        $user = Admin::select('id', 'name', 'email', 'role')->where('email', $params['email'])->first();
+        $user = Admin::select('id', 'name', 'email', 'role', 'golf_id')->where('email', $params['email'])->first();
 
         return [
             'access_token' => $token,

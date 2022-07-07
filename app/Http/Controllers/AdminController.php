@@ -477,11 +477,7 @@ class AdminController extends AppBaseController
 
     public function exportGolfReservation(Request $request)
     {
-        $user = JWTAuth::user();
-        $golfId = 0;
-        if ($user->role === AdminRole::GOLF_OWNER) {
-            $golfId = $user->golf_id;
-        }
+        $golfId = $request->get('golf_id', 0);
         $status = $request->get('status', '');
         return  Excel::download(new GolfReservation($status, $golfId), 'golf_reservation.xlsx');
     }

@@ -14,17 +14,22 @@ class GolfReservation implements FromCollection, WithHeadings, WithMapping
     * @return \Illuminate\Support\Collection
     */
     protected $status;
-    public function __construct($status)
+    protected $golfId;
+    public function __construct($status, $golfId)
     {
         $this->status  = $status;
+        $this->golfId = $golfId;
     }
 
 
     public function collection()
     {
         $status = $this->status;
+        $golfId = $this->golfId;
         $reservations = UserReservation::when(strlen($status), function ($query) use ($status) {
             return $query->where('status', $status);
+        })->when($golfId, function ($query) use ($golfId) {
+            return $query->where('golf_id', $golfId);
         })->with('golf')->orderBy('created_at', 'desc')->get();
 
         return $reservations;

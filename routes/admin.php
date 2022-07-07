@@ -6,6 +6,8 @@ use App\Http\Controllers\BannerController;
 
 Route::post('/login', [AuthController::class, 'loginAdmin']);
 Route::get('/stores/{id}/export', [AdminController::class, 'exportStoreCheckIn']);
+Route::get('/golf-reservation/export', [AdminController::class, 'exportGolfReservation']);
+Route::get('/event-reservation/export', [AdminController::class, 'exportEventReservation']);
 Route::group(['middleware' => ['assign.guard:admins','jwt.auth']], function () {
     Route::get('/golf/reservations', [AdminController::class, 'getReservationGolf']);
 });

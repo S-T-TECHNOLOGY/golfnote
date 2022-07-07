@@ -7,6 +7,8 @@ use App\Constants\UserScoreImageStatus;
 use App\Errors\ScoreImageErrorCode;
 use App\Exceptions\BusinessException;
 use App\Exports\CheckInStoreExport;
+use App\Exports\EventReservation;
+use App\Exports\GolfReservation;
 use App\Http\Requests\AdminCreateUserRequest;
 use App\Http\Requests\AdminHandleScoreImageRequest;
 use App\Http\Requests\AdminPushNotificationRequest;
@@ -471,6 +473,18 @@ class AdminController extends AppBaseController
     {
         $store = Store::find($id);
         return Excel::download(new CheckInStoreExport($id, $store->name), $store->name . '.xlsx');
+    }
+
+    public function exportGolfReservation(Request $request)
+    {
+        $status = $request->get('status', '');
+        return  Excel::download(new GolfReservation($status), 'golf_reservation.xlsx');
+    }
+
+    public function exportEventReservation(Request $request)
+    {
+        $status = $request->get('status', '');
+        return  Excel::download(new EventReservation($status), 'event_reservation.xlsx');
     }
 
     public function createUser(AdminCreateUserRequest $request)

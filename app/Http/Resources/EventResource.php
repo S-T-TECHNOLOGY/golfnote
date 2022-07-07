@@ -18,6 +18,8 @@ class EventResource extends JsonResource
     {
         $dateStart = Carbon::parse($this->start_date);
         $dateEnd = Carbon::parse($this->end_date);
+        $dateStartNoti = Carbon::parse($this->start_date_noti);
+        $dateEndNoti = Carbon::parse($this->end_date_noti);
         $status = EventStatus::IN_COMING;
 
         if ($dateStart->isPast()) {
@@ -36,6 +38,8 @@ class EventResource extends JsonResource
             'status' => $status,
             'start_date' => $dateStart->format('Y/m/d'),
             'end_date' => $dateEnd->format('Y/m/d'),
+            'start_date_noti' => $dateStartNoti->format('Y/m/d'),
+            'end_date_noti' => $dateEndNoti->format('Y/m/d'),
             'join_fee' => $this->join_fee,
             'quantity' => $this->quantity,
             'quantity_remain' => $this->quantity_remain,

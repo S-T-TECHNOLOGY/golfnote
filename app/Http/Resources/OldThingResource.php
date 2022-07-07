@@ -27,7 +27,8 @@ class OldThingResource extends JsonResource
             'user' => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
-                'avatar' => $this->user->avatar
+                'avatar' => $this->user->avatar,
+                'phone' => $this->user->phone
             ]
         ];
     }

@@ -81,27 +81,12 @@ class AuthService
     {
         $user = User::where('social_id', $params['social_id'])->where('social_type', $params['social_type'])->first();
         if (!$user) {
-            $email = isset($params['email']) ? $params['email'] : '';
-            $phone = isset($params['phone']) ? $params['phone'] : '';
-            $name = isset($params['name']) ? $params['name'] : '';
-            if (empty($email) || empty($phone) || empty($name)) {
-                throw new BusinessException("Social not created", AuthSocialErrorCode::SOCIAL_ID_NOT_CREATE);
-            }
-
-            $userByEmail = User::where('email', $email)->first();
-            if ($userByEmail) {
-                throw new BusinessException("Email already exists", AuthSocialErrorCode::EMAIL_ALREADY_EXITS);
-            }
-
             $params['password'] = Hash::make('');
             $params['account_name'] = '';
             $params['active'] = ActiveStatus::ACTIVE;
             $params['avatar'] = '/avatar/default.jpeg';
             $user = User::create($params);
         } else {
-            if (!$user->active) {
-                throw new BusinessException('Tài khoản chưa được kích hoạt', AuthErrorCode::USER_NOT_ACTIVE);
-            }
             $user->fcm_token = $params['fcm_token'];
             $user->device = $params['device'];
             $user->save();

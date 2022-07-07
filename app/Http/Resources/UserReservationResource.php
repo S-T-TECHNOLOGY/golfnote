@@ -17,6 +17,7 @@ class UserReservationResource extends JsonResource
         return [
             'id' => $this->id,
             'user_name' => $this->user_name,
+            'user_id' => $this->user_id,
             'email' => $this->email,
             'phone' => $this->phone,
             'date' => $this->date,

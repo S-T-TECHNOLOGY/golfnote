@@ -17,7 +17,8 @@ class StoreCheckInResource extends JsonResource
         return [
             'time' => $this->created_at->format('Y-m-d H:i:s'),
             'name' => $this->user->name,
-            'phone' => $this->user->phone
+            'phone' => $this->user->phone,
+            'user_id' => $this->user->id
         ];
     }
 }

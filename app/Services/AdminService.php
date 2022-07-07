@@ -888,7 +888,7 @@ class AdminService
     {
         $limit = isset($params['limit']) ? $params['limit'] : Consts::LIMIT_DEFAULT;
         $key = isset($params['key']) ? $params['key'] : '';
-        $golfAccount = Admin::select('admins.id', 'admins.email', 'admins.name', 'golfs.id as golf_id', 'golfs.name as golf_name')
+        $golfAccount = Admin::select('admins.id', 'admins.email', 'admins.name', 'admins.phone', 'golfs.id as golf_id', 'golfs.name as golf_name')
             ->join('golfs', 'admins.golf_id', 'golfs.id')
             ->when(!empty($key), function ($query) use ($key) {
                 return $query->where('admins.name', 'like', '%' . $key .'%');

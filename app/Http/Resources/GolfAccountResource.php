@@ -18,6 +18,7 @@ class GolfAccountResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'phone' => !empty($this->phone) ? $this->phone : '',
             'golf' => [
                 'id' => $this->golf_id,
                 'name' => $this->golf_name

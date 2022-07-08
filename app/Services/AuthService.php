@@ -84,6 +84,7 @@ class AuthService
             $params['password'] = Hash::make('');
             $params['account_name'] = '';
             $params['active'] = ActiveStatus::ACTIVE;
+            $params['gender'] = 0;
             $params['avatar'] = '/avatar/default.jpeg';
             $user = User::create($params);
         } else {

@@ -128,7 +128,7 @@ class ScoreService
         $golfCourses = Golf::whereIn('id', $golfIds)->get();
         $data = collect($scoreHistories)->map(function ($item) use ($golfCourses) {
            $history = new \stdClass();
-           $history->score = (int)$item->score;
+           $history->score = floor($item->score);
            $golfCourse = collect($golfCourses)->first(function ($golf) use ($item) {
                return $golf->id === $item->golf_id;
            });

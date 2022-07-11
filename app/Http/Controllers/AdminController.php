@@ -336,7 +336,7 @@ class AdminController extends AppBaseController
     {
         $params = $request->all();
         $params['id'] = $id;
-        $data = $this->adminService->editMarket($params);
+        $data = $this->adminService->editResort($params);
         return $this->sendResponse($data);
     }
 

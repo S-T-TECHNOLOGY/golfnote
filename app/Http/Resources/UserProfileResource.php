@@ -24,7 +24,7 @@ class UserProfileResource extends JsonResource
             'total_round' => !$this->userSummary ? 0 : $this->userSummary->total_round,
             'avg_score' => !$this->userSummary ? 0 : (int)$this->userSummary->avg_score,
             'total_partner' => !$this->userSummary ? 0 : $this->userSummary->total_partner,
-            'high_score' => !$this->userSummary ? 0 : $this->userSummary->high_score,
+            'high_score' => !$this->userSummary ? 0 : (int)$this->userSummary->high_score,
             'last_score' => !$this->userSummary ? 0 : (int)$this->userSummary->last_score,
             'total_hio' => !$this->userSummary ? 0 : $this->userSummary->total_hio,
             'set_error' => !$this->userSummary ? 0 : $this->userSummary->set_error,

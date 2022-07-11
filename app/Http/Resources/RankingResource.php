@@ -24,7 +24,7 @@ class RankingResource extends JsonResource
             'total_round' => $this->total_round,
             'avg_score' => (int)$this->avg_score,
             'total_partner' => (int)$this->total_partner,
-            'high_score' => $this->high_score,
+            'high_score' => (int)$this->high_score,
             'last_score' => (int)$this->last_score,
             'total_hio' => $this->total_hio,
             'set_error' => $this->set_error,

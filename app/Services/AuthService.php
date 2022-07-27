@@ -87,11 +87,12 @@ class AuthService
             $params['active'] = ActiveStatus::ACTIVE;
             $params['gender'] = 0;
             $params['avatar'] = '/avatar/default.jpeg';
-            $email = !isEmpty($params['email']) ? $params['email'] : '';
+            $email = isset($params['email']) ? $params['email'] : '';
             $userByEmail = User::where('email', $email)->first();
             if ($userByEmail) {
                 $params['email'] = "";
             }
+
 
             $user = User::create($params);
         } else {

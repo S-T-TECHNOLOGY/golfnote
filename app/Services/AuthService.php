@@ -90,7 +90,7 @@ class AuthService
             $email = !isEmpty($params['email']) ? $params['email'] : '';
             $userByEmail = User::where('email', $email)->first();
             if ($userByEmail) {
-                throw new BusinessException("Email đã tồn tại", AuthErrorCode::EMAIL_WRONG);
+                $params['email'] = "";
             }
 
             $user = User::create($params);

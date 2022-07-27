@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use JWTAuth;
+use function PHPUnit\Framework\isEmpty;
 
 class AuthService
 {
@@ -86,6 +87,12 @@ class AuthService
             $params['active'] = ActiveStatus::ACTIVE;
             $params['gender'] = 0;
             $params['avatar'] = '/avatar/default.jpeg';
+            $email = !isEmpty($params['email']) ? $params['email'] : '';
+            $userByEmail = User::where('email', $email)->first();
+            if ($userByEmail) {
+                throw new BusinessException("Email đã tồn tại", AuthErrorCode::EMAIL_WRONG);
+            }
+
             $user = User::create($params);
         } else {
             $user->fcm_token = $params['fcm_token'];

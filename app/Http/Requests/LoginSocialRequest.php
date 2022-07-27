@@ -25,7 +25,7 @@ class LoginSocialRequest extends FormRequest
     public function rules()
     {
         return [
-            'social_type' => 'required|in:' . UserSocialType::FB_TYPE . ',' . UserSocialType::GOOGLE_TYPE . ',' . UserSocialType::KAKAOTALK_TYPE,
+            'social_type' => 'required|in:' . UserSocialType::FB_TYPE . ',' . UserSocialType::GOOGLE_TYPE . ',' . UserSocialType::KAKAOTALK_TYPE . ',' . UserSocialType::APPLE_TYPE,
             'social_id' => 'required',
             'fcm_token' => 'required',
             'device' => 'required'

@@ -204,7 +204,7 @@ class UserService
             throw new BusinessException('Không tìm thấy sự kiện', EventErrorCode::EVENT_NOT_FOUND);
         }
 
-        $reservation = UserEventReservation::where('user_id', $params['user_id'])->first();
+        $reservation = UserEventReservation::where('user_id', $params['user_id'])->where('event_id',$params['event_id'])->first();
         if ($reservation) {
             throw new BusinessException('Bạn đã đăng ký sự kiện', EventErrorCode::USER_REGISTERED_EVENT);
         }

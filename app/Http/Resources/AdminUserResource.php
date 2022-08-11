@@ -23,6 +23,7 @@ class AdminUserResource extends JsonResource
             'address' => $this->address,
             'email' => $this->email,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'handicap_score' => !$this->userSummary ? 0 : $this->userSummary->handicap_score,
         ];
     }
 }

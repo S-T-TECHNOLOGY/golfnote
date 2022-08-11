@@ -24,6 +24,7 @@ class UserScoreImageResource extends JsonResource
                 'name' => $this->user->name,
                 'email' => $this->user->email,
                 'phone' => $this->user->phone,
+                'handicap_score' => !$this->user->userSummary ? 0 : $this->user->userSummary->handicap_score,
             ]
         ];
     }

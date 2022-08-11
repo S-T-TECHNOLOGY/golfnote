@@ -18,6 +18,7 @@ class UserEventReservationResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'user_name' => $this->user_name,
+            'handicap_score' => !$this->user->userSummary ? 0 : $this->user->userSummary->handicap_score,
             'email' => $this->email,
             'phone' => $this->phone,
             'note' => $this->note,

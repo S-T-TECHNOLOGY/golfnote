@@ -25,4 +25,9 @@ class UserReservation extends Model
     {
         return $this->belongsTo(Golf::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

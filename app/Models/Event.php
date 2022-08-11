@@ -25,4 +25,9 @@ class Event extends Model
         'green_fee',
         'description'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -19,7 +19,7 @@ class UserReservationResource extends JsonResource
             'user_name' => $this->user_name,
             'user_id' => $this->user_id,
             'email' => $this->email,
-            'handicap_score' => !$this->user->userSummary ? 0 : $this->user->userSummary->handicap_score,
+            'handicap_score' => empty($this->user->userSummary) ? 0 : $this->user->userSummary->handicap_score,
             'phone' => $this->phone,
             'date' => $this->date,
             'total_player' => $this->total_player,

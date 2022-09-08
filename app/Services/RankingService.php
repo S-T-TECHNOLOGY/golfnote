@@ -21,7 +21,7 @@ class RankingService
         $type =  isset($params['type']) ? $params['type'] : RankingType::FRIEND_TYPE;
         $userIds = [];
         if ($type === RankingType::GENDER_TYPE) {
-            $userIds = User::where('gender', $user->gender)->pluck('id')->toArray();
+            $userIds = User::where('gender', 0)->pluck('id')->toArray();
         }
 
         if ($type === RankingType::AREA_TYPE) {
@@ -44,7 +44,7 @@ class RankingService
         }
 
         $rankingUsers = UserSummary::when(true, function ($query) {
-            return $query->selectRaw('*, RANK () OVER ( ORDER BY handicap_score) as rank_no');
+            return $query->selectRaw('*, RANK() OVER (ORDER BY handicap_score) as rank_no');
         })->when(sizeof($userIds), function ($query) use ($userIds) {
             return $query->whereIn('user_id', $userIds);
         })->where('handicap_score', '>', 0)->with('user')->paginate($limit);
